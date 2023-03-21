@@ -2,7 +2,6 @@
 **[Installation](#installation)** |
 **[Configuration](#configuration)** |
 **[Deployment](#deployment)** |
-**[Contributing](#contributing)** |
 **[License](#license-mit)**
 
 # [Jupyterhub on K8s with GPU support](https://github.com/fhswf/jupyterhub)
@@ -22,7 +21,9 @@ We are using a custom multi authenticator to allow for multiple authentication m
 | [Keycloak (Generic OAuth)](https://github.com/jupyterhub/oauthenticator/blob/main/oauthenticator/generic.py) | Login with SSO and standard account login |
 | [LTI Authenticator](https://github.com/jupyterhub/ltiauthenticator) | Login with Moodle |
 
-### Spawner
+## Deployment
 TODO
-
-## Installation
+ 
+## License
+This Repository [MIT](https://github.com/fhswf/Jupyterhub-K8s/blob/main/LICENSE)
+Jupyter [BSD 3](https://github.com/jupyter/jupyter/blob/master/LICENSE)
