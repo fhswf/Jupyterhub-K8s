@@ -1,0 +1,6 @@
+## override default values from  https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/main/jupyterhub/values.yaml
+## config reference: https://z2jh.jupyter.org/en/latest/resources/reference.html#
+
+hub:
+    image:
+      name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub

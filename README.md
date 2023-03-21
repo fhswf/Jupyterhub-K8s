@@ -11,6 +11,7 @@
 [![GitHub Tags](https://img.shields.io/github/v/tag/fhswf/jupyterhub?style=plastic)](https://github.com/fhswf/jupyterhub/tags)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 -->
+A customized version of the standard [zero-to-jupyterhub-k8s Project](https://github.com/jupyterhub/zero-to-jupyterhub-k8s).
 
 ## Technical Overview
 ### Authenticators
@@ -21,9 +22,18 @@ We are using a custom multi authenticator to allow for multiple authentication m
 | [Keycloak (Generic OAuth)](https://github.com/jupyterhub/oauthenticator/blob/main/oauthenticator/generic.py) | Login with SSO and standard account login |
 | [LTI Authenticator](https://github.com/jupyterhub/ltiauthenticator) | Login with Moodle |
 
+### Custom Images
+Custom Images are already supported by the official [helm chart from Jupyter](https://hub.jupyter.org/helm-chart/).
+Default configuration values can be found in the repository [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/main/jupyterhub).
+(Nivida-based) GPU Images need to be build with CUDA and are not available from the offcial Jupyter, hence be build them ourself.
+Current Base Images can be found here (TODO).
+
 ## Deployment
+Deploy via the official helm chart using our config:
+```
 TODO
- 
+```
+
 ## License
 This Repository [MIT](https://github.com/fhswf/Jupyterhub-K8s/blob/main/LICENSE)
 Jupyter [BSD 3](https://github.com/jupyter/jupyter/blob/master/LICENSE)

@@ -1,0 +1,13 @@
+github workflow to build and publish hub image.
+
+recreate base gpu images and other custom base images.
+
+launch projekt for "on the fly" image customization.
+
+configure spawner to auto select image when loggin in via lti and moodle id.
+
+sort out what values are required in values.yaml
+
+recreate, organize and test! MultiAuthenticator package (and publish wheel via github)
+
+github workflow for test deployments, maybe?
