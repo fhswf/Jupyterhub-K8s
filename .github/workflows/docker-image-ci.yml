@@ -1,8 +1,8 @@
 name: Docker Image CI
 
 on:
-  schedule:
-    - cron: '18 15 * * *'
+  #schedule:
+  #  - cron: '18 15 * * *'
   push:
     branches: [ "main" ]
     tags: [ 'v*.*.*' ]
@@ -31,7 +31,7 @@ jobs:
 
   build-and-push-hub:
     needs: changes
-    if: ${{ needs.changes.outputs.jupyterhub == 'true' || github.event_name == 'schedule' }}
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' || github.event_name == 'release' || github.event_name == 'schedule'}}
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: jupyterhub
