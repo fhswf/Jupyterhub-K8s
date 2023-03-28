@@ -15,5 +15,4 @@ USER ${NB_USER}
 RUN pip install .
 
 RUN pip install \
-    nbgitpuller \
-    nb_conda_kernels
+    nbgitpuller 
