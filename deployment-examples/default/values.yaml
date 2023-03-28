@@ -4,11 +4,10 @@
 hub:
   image:
     name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub
-auth:
-  state:
-    enabled: true
-# just as an example if yout want to encrypt auth state of singleuser enviroments    
-    cryptoKey: 2c9b8b93a58f21883be46e3ff603e30427b0a33fb6c6eca235c2387439a88592
+  config:
+    Authenticator:
+      enable_auth_state: true
+      cryptoKey: 2c9b8b93a58f21883be46e3ff603e30427b0a33fb6c6eca235c2387439a88592
 
 
 # this is were the majority of the kubernetes spawner config resides.
