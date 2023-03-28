@@ -37,13 +37,13 @@ singleuser:
       kubespawner_override:
         http_timeout: 120
         start_timeout: 300
-        image: jupyter/datascience-notebook:2343e33dec46
+        image: jupyter/datascience-notebook:latest
 #        extra_resource_limits:
 #          nvidia.com/gpu: "1
     - display_name: "Learning Data Science"
       description: "Datascience Environment with Sample Notebooks"
       kubespawner_override:
-        image: jupyter/datascience-notebook:2343e33dec46
+        image: jupyter/datascience-notebook:latest
         lifecycle_hooks:
         http_timeout: 120
         start_timeout: 300
