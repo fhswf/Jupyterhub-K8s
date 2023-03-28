@@ -4,3 +4,54 @@
 hub:
     image:
       name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub
+auth:
+  state:
+    enabled: true
+# just as an example if yout want to encrypt auth state of singleuser enviroments    
+    cryptoKey: 2c9b8b93a58f21883be46e3ff603e30427b0a33fb6c6eca235c2387439a88592
+
+
+# this is were the majority of the kubernetes spawner config resides.
+# config structure for singleuser is simliar to the hub.
+# every profile under profile list overrides default values set for the kubernetes spawner.
+# Note that c.KubeSpawner.profile_list does not make the image puller service aware of the images specified here.
+# configuration under profileList is passed though to https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner
+# can possibly be used to also insert custom python code uner extra config
+#   singleuser: 
+#     extraConfig:
+#         myConfig.py: |       # non grammar check python code here
+#           c.JupyterHub.something = 'something'
+#           c.Spawner.something_else = 'something else'
+
+
+singleuser:
+  # Defines values
+  image:
+    name: jupyter/minimal-notebook
+    tag: 2343e33dec46
+  profileList:
+    - display_name: "Minimal environment"
+      description: "Basic Python unsing the minimal-notebook from jupyter."
+      default: true
+    - display_name: "Datascience environment"
+      description: "Comes with Sciopy, R and Julia"
+      kubespawner_override:
+        http_timeout: 120
+        start_timeout: 300
+        image: jupyter/datascience-notebook:2343e33dec46
+#        extra_resource_limits:
+#          nvidia.com/gpu: "1
+    - display_name: "Learning Data Science"
+      description: "Datascience Environment with Sample Notebooks"
+      kubespawner_override:
+        image: jupyter/datascience-notebook:2343e33dec46
+        lifecycle_hooks:
+        http_timeout: 120
+        start_timeout: 300
+          postStart:
+            exec:
+              command:
+                - "sh"
+                - "-c"
+                - >
+                  gitpuller https://github.com/data-8/materials-fa17 master materials-fa;
