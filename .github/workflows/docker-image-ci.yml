@@ -31,7 +31,7 @@ jobs:
 
   build-and-push-hub:
     needs: changes
-    if: ${{ needs.changes.outputs.jupyterhub == 'true' || github.event_name == 'release' || github.event_name == 'schedule'}}
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' || github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'schedule'}}
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: jupyterhub
