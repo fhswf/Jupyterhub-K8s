@@ -2,8 +2,8 @@
 ## config reference: https://z2jh.jupyter.org/en/latest/resources/reference.html#
 
 hub:
-    image:
-      name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub
+  image:
+    name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub
 auth:
   state:
     enabled: true
