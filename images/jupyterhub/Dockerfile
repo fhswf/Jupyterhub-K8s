@@ -4,9 +4,13 @@ ENV PYTHONUNBUFFERED=1
 
 COPY . ./
 
+USER root
+
 RUN mkdir -p /usr/local/etc/jupyterhub/jupyterhub_config.d
 
-COPY jupyterhub_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/jupyterhub_extra_config.py
+COPY _static_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/_static_extra_config.py
+
+USER ${NB_USER}
 
 RUN pip install .
 
