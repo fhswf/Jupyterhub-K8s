@@ -3,7 +3,7 @@
 
 hub:
   image:
-    name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub
+    name: ghcr.io/fhswf/jupyterhub-k8s/jupyterhub
   config:
     Authenticator:
       enable_auth_state: true
