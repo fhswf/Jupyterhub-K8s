@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  schedule:
+    - cron: '18 15 * * *'
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      hub: ${{ steps.filter.outputs.jupyterhub }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: develop
+
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        base: develop
+        filters: |
+          jupyterhub:
+            - 'images/jupyterhub/**'
+
+  build-and-push-hub:
+    needs: changes
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' }}
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image: jupyterhub
