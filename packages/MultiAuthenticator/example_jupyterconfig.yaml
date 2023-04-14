@@ -1,0 +1,46 @@
+#############################################
+# Custom config for JupyterHub's helm chart #
+#############################################
+
+# even tough yaml config stuff under hub>config will get parsed at deployment and converted to a python dict
+# some things can not be done there so it is better to just insert the custom config under extraConfig, 
+# which is litterly python code that gets executed at runtime 
+# note that any Authenticator has to be present at runtime (aka installed in the container image)
+
+custom:
+  api: "https://api.example.com"
+hub:
+  config:
+    Authenticator:
+      enable_auth_state: true
+  extraConfig:
+    myConfig.py: |
+      import MultiAuthenticator
+      from ltiauthenticator import LTIAuthenticator
+      from oauthenticator.generic import GenericOAuthenticator
+
+      # using traitletsm to do pass any config to a class:
+      c.SomeObject.api = get_config("custom.api")
+
+      # specific for multiauth:
+      # select login options
+      c.MultiAuthenticator.authenticators = [
+          (LTIAuthenticator), "", False, {
+              'client_secret': 'xxxx',
+              'LTI_CLIENT_KEY': "asd"
+              'LTI_SHARED_SECRET': "asd"
+              'LTI13_PRIVATE_KEY': "/home/user/.ssh/private.pem"
+          }
+          (GenericOAuthenticator), "keycloak", True, {
+              'client_secret': '1234901234567890AS',
+              'authorize_url': 'https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/auth',
+              'token_url': 'https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/token',
+              'userdata_url': 'https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/userinfo',
+              'login_service': 'keycloak',
+              'username_key': 'preferred_username',
+              'scope': ['openid'],
+              'userdata_params': {state: state},           
+          }
+      ]
+      c.JupyterHub.authenticator_class = MultiAuthenticator
+
