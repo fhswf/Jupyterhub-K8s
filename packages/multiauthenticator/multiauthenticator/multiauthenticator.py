@@ -1,5 +1,5 @@
 import traitlets
-
+import logging
 from jupyterhub.auth import Authenticator
 #from jupyterhub.handlers.login import LoginHandler, LogoutHandler
 from jupyterhub.utils import url_path_join
@@ -7,7 +7,6 @@ from jupyterhub.utils import url_path_join
 
 #class MultiLogoutHandler(LogoutHandler):
     
-
 class MultiAuthenticator(Authenticator):
     authenticators = traitlets.List(help="The subauthenticators to use", config=True)
 
@@ -20,6 +19,10 @@ class MultiAuthenticator(Authenticator):
             self._authenticators.append({"instance": authenticator_class(**c), "url_scope": url_scope, "display": display})
     
     def get_handlers(self, app):
+        """
+        Gather all url routes from defined handlers in the authenticators.
+        Note that some authenticators have multiple, such as the LTI.
+        """
         routes = []
         for _authenticator in self._authenticators:
             for path, handler in _authenticator["instance"].get_handlers(app):
@@ -31,6 +34,7 @@ class MultiAuthenticator(Authenticator):
         return routes
     
     def get_custom_html(self, base_url):
+        """Render HTML login button"""
         html = []
         for authenticator in self._authenticators:
             if authenticator.display == True and "login_service" in authenticator["instance"].__dict__:
@@ -57,11 +61,12 @@ class MultiAuthenticator(Authenticator):
     def get_callback_url(self, handler):
         return self._get_responsible_authenticator(handler).get_callback_url()
 
+    # not sure if this is elegant
     def _get_responsible_authenticator(self, handler):
         responsible_authenticator = None
         for authenticator in self._authenticators:
             if handler.request.path.find(authenticator['url_scope']) != -1:
-                print("redirect to ", authenticator["instance"].__name__) 
+                self.log.info("redirect to ", authenticator["instance"].__name__) 
                 responsible_authenticator = authenticator
                 break
         return responsible_authenticator['instance']

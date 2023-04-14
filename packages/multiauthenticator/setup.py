@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
 
 setup_args = dict(
-    name='MultiAuthenticator',
+    name='multiauthenticator',
     packages=find_packages(),
     version='0.1.0',
-    description="JupyterHub MultiAuthenticator",
+    description="JupyterHub multiauthenticator",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Max Kuhmichel, FH SWF",
@@ -15,7 +15,7 @@ setup_args = dict(
     include_package_data=True,
     entry_points={
     'jupyterhub.authenticators': [
-        'MultiAuthenticator = MultiAuthenticator.MultiAuthenticator:MultiAuthenticator',
+        'MultiAuthenticator = multiauthenticator.multiauthenticator:MultiAuthenticator',
     ],
   },
 )

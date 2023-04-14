@@ -15,4 +15,5 @@ USER ${NB_USER}
 RUN pip install .
 
 RUN pip install \
+    pip install git+https://github.com/fhswf/Jupyterhub-K8s.git@1-multiauth-package#subdirectory=packages/MultiAuthenticator \
     nbgitpuller 
