@@ -4,7 +4,8 @@
 **[Deployment](#deployment)** |
 **[License](#license-mit)**
 
-# [Jupyterhub on K8s with GPU support](https://github.com/fhswf/jupyterhub)
+# Jupyterhub on Kubernetes with GPU support and Multiauthentication
+
 <!---
 [![Docker Image CI](https://github.com/fhswf/jupyterhub/actions/workflows/docker-image-ci.yml/badge.svg?branch=main)](https://github.com/fhswf/jupyterhub/actions/workflows/docker-image-ci.yml)
 [![GitHub](https://img.shields.io/badge/issue_tracking-github-blue?logo=github)](https://github.com/fhswf/jupyterhub/issues)
