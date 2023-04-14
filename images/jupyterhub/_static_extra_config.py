@@ -14,7 +14,7 @@ print("loading extra conf: " + __file__)
 c.Authenticator.enable_auth_state = True
 
 
-import MultiAuthenticator
+from multiauthenticator.multiauthenticator import MultiAuthenticator
 from ltiauthenticator import LTIAuthenticator
 from oauthenticator.generic import GenericOAuthenticator
 
