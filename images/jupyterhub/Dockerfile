@@ -13,5 +13,5 @@ USER ${NB_USER}
 RUN pip install \
     oauthenticator \
     jupyterhub-ltiauthenticator \
-    git+https://github.com/fhswf/Jupyterhub-K8s.git@1-multiauth-package#subdirectory=packages/MultiAuthenticator \
+    git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
     nbgitpuller 
