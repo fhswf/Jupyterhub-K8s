@@ -25,22 +25,21 @@ hub:
       # specific for multiauth:
       # select login options
       c.MultiAuthenticator.authenticators = [
-          (LTIAuthenticator), "", False, {
-              'client_secret': 'xxxx',
-              'LTI_CLIENT_KEY': "asd"
-              'LTI_SHARED_SECRET': "asd"
+          (LTIAuthenticator, "", False, {
+              'LTI_CLIENT_KEY': "secretclientidforauth"
+              'LTI_SHARED_SECRET': "somesharedsecret"
               'LTI13_PRIVATE_KEY': "/home/user/.ssh/private.pem"
-          }
+          }),
           (GenericOAuthenticator), "keycloak", True, {
-              'client_secret': '1234901234567890AS',
-              'authorize_url': 'https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/auth',
-              'token_url': 'https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/token',
-              'userdata_url': 'https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/userinfo',
+              'client_secret': 'supersecretclientkeyforencryption',
+              'authorize_url': 'https://www.ki.fh-swf.de/keycloak/realms/kicluster/protocol/openid-connect/auth',
+              'token_url': 'https://www.ki.fh-swf.de/keycloak/realms/kicluster/protocol/openid-connect/token',
+              'userdata_url': 'https://www.ki.fh-swf.de/keycloak/realms/kicluster/protocol/openid-connect/userinfo',
               'login_service': 'keycloak',
               'username_key': 'preferred_username',
               'scope': ['openid'],
               'userdata_params': {state: state},           
-          }
+          })
       ]
       c.JupyterHub.authenticator_class = MultiAuthenticator
 
