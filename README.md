@@ -13,7 +13,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 -->
 A customized version of the standard [zero-to-jupyterhub-k8s Project](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) used for educational student workspaces, where they can experiment with Deep Learning frameworks and develop python notebooks.
-This is an update to our older Jupyterhub with GPU support using docker swarm. The old project can be found here: [here](https://github.com/fhswf/jupyterhub). Note that K8s takes more effort to deploy and manage, so if you are looking for a simpler way to use GPUs with Jupyterhub take a look.
+This is an update to our older Jupyterhub with GPU support using Docker Swarm. The old project can be found [here](https://github.com/fhswf/jupyterhub). Note that K8s takes more effort to deploy and manage, so if you are looking for a simpler way to use GPUs with Jupyterhub take a look.
 
 
 ## Technical Overview
