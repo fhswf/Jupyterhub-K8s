@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     # Set job outputs to values from filter step
     outputs:
-      hub: ${{ steps.filter.outputs.jupyterhub }}
+      jupyterhub: ${{ steps.filter.outputs.jupyterhub }}
 
     steps:
     - name: Checkout repository
