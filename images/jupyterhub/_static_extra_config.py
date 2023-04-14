@@ -13,7 +13,7 @@ print("loading extra conf: " + __file__)
 # auth_state to the spawner
 c.Authenticator.enable_auth_state = True
 
-
+# auth
 import MultiAuthenticator
 from ltiauthenticator import LTIAuthenticator
 from oauthenticator.generic import GenericOAuthenticator
