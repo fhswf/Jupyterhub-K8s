@@ -15,3 +15,5 @@ RUN pip install \
     jupyterhub-ltiauthenticator \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
     nbgitpuller 
+
+LABEL fhswf.kicluster="test-label-content"
