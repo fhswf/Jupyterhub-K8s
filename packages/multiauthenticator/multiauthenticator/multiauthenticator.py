@@ -70,7 +70,7 @@ class MultiAuthenticator(Authenticator):
         responsible_authenticator = None
         for authenticator in self._authenticators:
             if handler.request.path.find(authenticator['url_scope']) != -1:
-                self.log.info("redirect to ", authenticator["instance"].__name__) 
+                self.log.info("redirect to ", authenticator["instance"]) 
                 responsible_authenticator = authenticator
                 break
         return responsible_authenticator['instance']
