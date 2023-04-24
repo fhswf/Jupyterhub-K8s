@@ -25,7 +25,7 @@ hub:
       # specific for multiauth:
       # select login options
       c.MultiAuthenticator.authenticators = [
-          (LTIAuthenticator, "", False, {
+          (LTIAuthenticator, "lti", False, {
               'LTI_CLIENT_KEY': "secretclientidforauth"
               'LTI_SHARED_SECRET': "somesharedsecret"
               'LTI13_PRIVATE_KEY': "/home/user/.ssh/private.pem"
