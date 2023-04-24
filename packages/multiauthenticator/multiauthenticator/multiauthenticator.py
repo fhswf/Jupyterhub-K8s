@@ -39,8 +39,7 @@ class MultiAuthenticator(Authenticator):
         html = []
         for authenticator in self._authenticators:
             print("authenticator")
-            if hasattr(authenticator, "__dict__"):
-                print(authenticator.__dict__) 
+            print(authenticator.repr()) 
             if authenticator["display"] == True and "login_service" in authenticator["instance"].__dict__:
                 login_service = authenticator["instance"].login_service
                 url = url_path_join(base_url, authenticator["url_scope"], "oauth_login")
@@ -67,10 +66,10 @@ class MultiAuthenticator(Authenticator):
 
     # not sure if this is elegant
     def _get_responsible_authenticator(self, handler):
-        responsible_authenticator = None
+        responsible_authenticator = self._authenticators[0]
         for authenticator in self._authenticators:
             if handler.request.path.find(authenticator['url_scope']) != -1:
-                self.log.info("redirect to ", authenticator["instance"]) 
+                self.log.info("redirect to ", authenticator["instance"].repr()) 
                 responsible_authenticator = authenticator
                 break
         return responsible_authenticator['instance']
