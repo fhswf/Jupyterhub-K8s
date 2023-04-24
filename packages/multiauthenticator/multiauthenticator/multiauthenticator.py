@@ -39,7 +39,8 @@ class MultiAuthenticator(Authenticator):
         html = []
         for authenticator in self._authenticators:
             print("authenticator")
-            print(authenticator.__dict__) 
+            if __dict__ in authenticator:
+                print(authenticator.__dict__) 
             if authenticator["display"] == True and "login_service" in authenticator["instance"].__dict__:
                 login_service = authenticator["instance"].login_service
                 url = url_path_join(base_url, authenticator["url_scope"], "oauth_login")
