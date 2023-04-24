@@ -27,6 +27,7 @@ jobs:
           jupyterhub:
             - 'images/jupyterhub/**'
             - 'packages/**'
+            - '.github/workflows/docker-image-ci-dev.yml'
 
   build-and-push-hub:
     needs: changes
