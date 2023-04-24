@@ -26,6 +26,7 @@ jobs:
         filters: |
           jupyterhub:
             - 'images/jupyterhub/**'
+            - 'packages/**'
 
   build-and-push-hub:
     needs: changes
