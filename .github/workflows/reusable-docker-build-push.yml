@@ -15,9 +15,9 @@ on:
       tags:
         description: "tags"
         value: ${{ jobs.build-push.outputs.tags }}
-      lables:
-        description: "lables"
-        value: ${{ jobs.build-push.outputs.lables }}
+      labels:
+        description: "labels"
+        value: ${{ jobs.build-push.outputs.labels }}
       image:
         description: "image"
         value: ${{ jobs.build-push.outputs.image }}
