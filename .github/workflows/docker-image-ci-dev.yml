@@ -41,16 +41,13 @@ jobs:
   dispatch-deploy:
     needs: build-and-push-hub
     name: Dispatch a deployment request
-    env:
-      tags: ${{needs.build-and-push-hub.outputs.tags}}
-      labels: ${{needs.build-and-push-hub.outputs.labels}}
-      image: ${{needs.build-and-push-hub.outputs.image}}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Dispatch to workflows
         run: |
+            echo ${{needs.build-and-push-hub.outputs}}
             curl -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
             --request POST \
-            --data '{"event_type": "deploy_dev", "client_payload": { "tags": "${{ env.tags }}", "labels": "${{ env.labels }}", "image": "${{ env.image }}" }}' https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
+            --data '{"event_type": "deploy_dev", "client_payload": { "tags": "${{ needs.build-and-push-hub.outputs.tags }}", "labels": "${{ needs.build-and-push-hub.outputs.labels }}", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
