@@ -46,8 +46,10 @@ jobs:
     steps:
       - name: Dispatch to workflows
         run: |
-            echo ${{needs.build-and-push-hub.outputs}}
+            tags=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< ${{ needs.build-and-push-hub.outputs.tags }})
+            labels=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< ${{ needs.build-and-push-hub.outputs.labels }})
+            tags=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< ${{ needs.build-and-push-hub.outputs.tags }})
             curl -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
             --request POST \
-            --data '{"event_type": "deploy_dev", "client_payload": { "tags": "${{ needs.build-and-push-hub.outputs.tags }}", "labels": "${{ needs.build-and-push-hub.outputs.labels }}", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
+            --data '{"event_type": "deploy_dev", "client_payload": { "tags": $tags, "labels": $labels, "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
