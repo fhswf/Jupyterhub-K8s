@@ -58,14 +58,4 @@ jobs:
             curl -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
             --request POST \        
-            --data "$(cat <<EOF
-              { 
-              "event_type": "deploy_dev", 
-              "client_payload": { 
-                "tags": "[ $tags ]", 
-                "labels": "[ $labels ]", 
-                "image": "${{ needs.build-and-push-hub.outputs.image }}" 
-                }
-              }
-              EOF
-              )" https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
+            --data "$(cat <<EOF { "event_type": "deploy_dev",  "client_payload": {  "tags": "[ $tags ]",  "labels": "[ $labels ]", "image": "${{ needs.build-and-push-hub.outputs.image }}"  }} EOF)" https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
