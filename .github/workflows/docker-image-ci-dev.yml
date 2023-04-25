@@ -43,12 +43,15 @@ jobs:
     name: Dispatch a deployment request
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      OUT_TAGS: ${{ needs.build-and-push-hub.outputs.tags }}
+      OUT_LABELS: ${{ needs.build-and-push-hub.outputs.labels }}
+      OUT_IMAGE: ${{ needs.build-and-push-hub.outputs.image }}
     steps:
       - name: Dispatch to workflows
         run: |
-            tags=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< ${{ needs.build-and-push-hub.outputs.tags }})
-            labels=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< ${{ needs.build-and-push-hub.outputs.labels }})
-            tags=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< ${{ needs.build-and-push-hub.outputs.tags }})
+            tags=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< $OUT_TAGS)
+            labels=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< $OUT_LABELS)
             curl -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
             --request POST \
