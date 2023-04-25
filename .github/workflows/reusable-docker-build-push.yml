@@ -16,9 +16,9 @@ jobs:
   build-push:
     runs-on: ubuntu-latest
     outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-      labels: ${{ steps.meta.outputs.labels }}
-      image: ${{ inputs.image }}
+      tags: ${{ steps.setoutput.outputs.tags }}
+      labels: ${{ steps.setoutput.outputs.labels }}
+      image: ${{ steps.setoutput.outputs.image }}
     permissions:
       contents: read
       packages: write
@@ -40,7 +40,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}
           tags: |
@@ -51,7 +51,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-
+    
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
@@ -60,5 +60,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - name: setoutput
+        id: setoutput
+        run: |
+          echo "tags=${{ steps.meta.outputs.tags }}" >> "$GITHUB_OUTPUT"
+          echo "lables=${{ steps.meta.outputs.lables }}" >> "$GITHUB_OUTPUT"
+          echo "tags=${{ inputs.image }}" >> "$GITHUB_OUTPUT"
 
 
