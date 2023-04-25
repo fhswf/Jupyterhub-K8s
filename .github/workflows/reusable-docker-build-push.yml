@@ -11,7 +11,17 @@ on:
         description: Image name
         required: true
         type: string
-        
+    outputs:
+      tags:
+        description: "tags"
+        value: ${{ jobs.build-push.outputs.tags }}
+      lables:
+        description: "lables"
+        value: ${{ jobs.build-push.outputs.lables }}
+      image:
+        description: "image"
+        value: ${{ jobs.build-push.outputs.image }}
+
 jobs:
   build-push:
     runs-on: ubuntu-latest
