@@ -53,9 +53,20 @@ jobs:
             echo $OUT_TAGS
             tags=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< $OUT_TAGS)
             labels=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< $OUT_LABELS)
+            json_data='{"event_type": "deploy_dev", "client_payload": { "tags": ' '${tags}' ', "labels": ' '${labels}' ', "image": "${{ needs.build-and-push-hub.outputs.image }}" }}'
             echo $tags
             echo $labels
             curl -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
-            --request POST \
-            --data '{"event_type": "deploy_dev", "client_payload": { "tags": "['$tags']", "labels": "['$labels']", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
+            --request POST \        
+            --data "$(cat <<EOF
+              { 
+              "event_type": "deploy_dev", 
+              "client_payload": { 
+                "tags": "[ $tags ]", 
+                "labels": "[ $labels ]", 
+                "image": "${{ needs.build-and-push-hub.outputs.image }}" 
+                }
+              }
+              EOF
+              )" https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
