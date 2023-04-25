@@ -6,8 +6,6 @@ USER root
 
 RUN mkdir -p /usr/local/etc/jupyterhub/jupyterhub_config.d
 
-COPY _static_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/_static_extra_config.py
-
 USER ${NB_USER}
 
 RUN pip install \
