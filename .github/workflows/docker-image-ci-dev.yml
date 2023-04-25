@@ -19,7 +19,7 @@ jobs:
       with:
         ref: develop
 
-    - uses: dorny/paths-filter@v2
+    - uses: dorny/paths-filter@v2.11.1
       id: filter
       with:
         base: develop
