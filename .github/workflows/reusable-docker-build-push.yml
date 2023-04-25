@@ -15,6 +15,10 @@ on:
 jobs:
   build-push:
     runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
+      image: ${{ inputs.image }}
     permissions:
       contents: read
       packages: write
