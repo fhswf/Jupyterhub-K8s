@@ -33,7 +33,7 @@ jobs:
 
   build-and-push-hub:
     needs: changes
-    if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  github.event_name == "workflow_dispatch" }}
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: jupyterhub
