@@ -52,8 +52,7 @@ jobs:
         run: |
             tags=$(sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}' <<<  `awk -F':' '{ print $2 }' <<< $OUT_TAGS`)
             echo $tags
-            tag=$(awk -F',' '{ for (i = 0; ++i <= NF;) print $i }' <<< $comp | grep sha | head -n 1)
+            tag=$(awk -F',' '{ for (i = 0; ++i <= NF;) print $i }' <<< $tags | grep sha | head -n 1)
             echo "$tag"
-            awk -F',' '{ for (i = 0; ++i <= NF;) print $i }' <<< $comp | grep sha
             printf -v data '{"event_type": "deploy_dev", "client_payload": { "tag": "%s", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' "$tag"
             curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" -d "$data" -X POST https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
