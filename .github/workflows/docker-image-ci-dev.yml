@@ -51,10 +51,9 @@ jobs:
       - name: Dispatch to workflows
         run: |
             echo $OUT_TAGS
-            tags=$(sed -n -e 'H;${x;s/\n/,/g;s/^,/"/;s/$/"/;p;}' <<< $OUT_TAGS)
-            labels=$(sed -n -e 'H;${x;s/\n/","/g;s/^","/"/;s/$/"/p;}' <<< $OUT_LABELS)
+            tags=$(sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}' <<<  `awk -F':' '{ print $2 }' <<< $OUT_TAGS`)
             echo $tags
+            printf -v data '{"event_type": "deploy_dev", "client_payload": { "tags": "%s", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' "$tags"
             curl -v -H "Accept: application/vnd.github.everest-preview+json" \
-            -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
-            --request POST \        
-            --data '{"event_type": "deploy_dev", "client_payload": { "tags": "'"$tags"'", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
+            -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \       
+            -d "$data" -X POST https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
