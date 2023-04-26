@@ -54,5 +54,6 @@ jobs:
             echo $tags
             tag=$(awk -F',' '{ for (i = 0; ++i <= NF;) print $i }' <<< $tags | grep sha | head -n 1)
             echo "$tag"
-            printf -v data '{"event_type": "deploy_dev", "client_payload": { "tag": "%s", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' "$tag"
+            printf -v data '{"event_type": "deploy_dev", "client_payload": { "tag": "%s", "image": "ghcr.io/fhswf/jupyterhub-k8s/${{ needs.build-and-push-hub.outputs.image }}" }}' "$tag"
+            echo "$data"
             curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" -d "$data" -X POST https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
