@@ -54,6 +54,5 @@ jobs:
             tags=$(sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}' <<<  `awk -F':' '{ print $2 }' <<< $OUT_TAGS`)
             echo $tags
             printf -v data '{"event_type": "deploy_dev", "client_payload": { "tags": "%s", "image": "${{ needs.build-and-push-hub.outputs.image }}" }}' "$tags"
-            curl -v -H "Accept: application/vnd.github.everest-preview+json" \
-            -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \       
-            -d "$data" -X POST https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
+            echo "$data"
+            curl -v -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token $token" -d "$data" -X POST https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
