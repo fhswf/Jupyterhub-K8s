@@ -1,4 +1,4 @@
-FROM jupyterhub/k8s-hub:2.0.1-0.dev.git.5939.h617bec32
+FROM jupyterhub/k8s-hub:2.0.0
 # latest version for jupyterhub 3.1.1  2.0.1-0.dev.git.6026.h0e7347d7
 # latest version for jupyterhub 3.0.0  2.0.1-0.dev.git.5939.h617bec32
 ENV PYTHONUNBUFFERED=1
