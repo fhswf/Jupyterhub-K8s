@@ -1,4 +1,4 @@
-FROM jupyterhub/k8s-hub:2.0.0
+FROM jupyterhub/k8s-hub:2.0.1-0.dev.git.6105.hb969fa50
 
 ENV PYTHONUNBUFFERED=1
 
