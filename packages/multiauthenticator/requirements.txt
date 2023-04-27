@@ -1,5 +1,4 @@
-jupyterhub==3.1.1 # same a chart version 2.1.0
-tornado
+jupyterhub>=3.0.0
 requests
 traitlets
 #jupyterhub-ltiauthenticator
