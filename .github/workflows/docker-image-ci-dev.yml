@@ -47,12 +47,13 @@ jobs:
       OUT_TAGS: ${{ needs.build-and-push-hub.outputs.tags }}
       OUT_LABELS: ${{ needs.build-and-push-hub.outputs.labels }}
       OUT_IMAGE: ${{ needs.build-and-push-hub.outputs.image }}
+      chart_ref: ${{ fromJson(needs.build-and-push-hub.outputs.metadata).sources[0].ref }}
       chartversion: 2.0.0
     steps:
       - name: Dispatch to workflows
         run: |
             tags=$(sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}' <<<  `awk -F':' '{ print $2 }' <<< $OUT_TAGS`)
-            echo $tags
+            echo $chart_ref
             tag=$(awk -F',' '{ for (i = 0; ++i <= NF;) print $i }' <<< $tags | grep sha | head -n 1)
             echo "$tag"
             printf -v data '{"event_type": "deploy_dev", "client_payload": { "tag": "%s", "chartversion": "%s", "image": "ghcr.io/fhswf/jupyterhub-k8s/${{ needs.build-and-push-hub.outputs.image }}" }}' "$tag" "$chartversion"

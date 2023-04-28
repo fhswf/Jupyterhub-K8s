@@ -21,13 +21,17 @@ on:
       image:
         description: "image"
         value: ${{ jobs.build-push.outputs.image }}
-
+      metadata:
+        description: metadata of image
+        value: ${{ jobs.build-push.outputs.metadata }}
+# ${{fromJson(steps.set_var.outputs.packageJson).version}}
 jobs:
   build-push:
     runs-on: ubuntu-latest
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
+      metadata: ${{ steps.build.outputs.metadata }}
       image: ${{ inputs.image }}
     permissions:
       contents: read
@@ -63,6 +67,7 @@ jobs:
             type=sha
     
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v4
         with:
           context: ./images/${{ inputs.image }}/.
