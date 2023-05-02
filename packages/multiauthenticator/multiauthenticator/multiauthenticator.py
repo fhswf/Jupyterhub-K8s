@@ -6,7 +6,8 @@ from jupyterhub.utils import url_path_join
 #class MultiLoginHandler(LoginHandler):
 
 #class MultiLogoutHandler(LogoutHandler):
-    
+import json
+
 class MultiAuthenticator(Authenticator):
     authenticators = traitlets.List(help="The subauthenticators to use", config=True)
 
@@ -42,6 +43,9 @@ class MultiAuthenticator(Authenticator):
             print("authenticator")
             print(str(type(authenticator)))
             print(str(authenticator))
+            authenticator["instance"].__dict__
+            print(str(json.dumps(authenticator["instance"].__dict__)))
+            print(str(json.dumps(authenticator.__dict__)))
             if authenticator["display"] == True and "login_service" in authenticator["instance"].__dict__:
                 login_service = authenticator["instance"].login_service
                 url = url_path_join(base_url, authenticator["url_scope"], "oauth_login")
