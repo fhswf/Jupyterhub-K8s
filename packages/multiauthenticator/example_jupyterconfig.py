@@ -16,16 +16,19 @@ c.Authenticator.enable_auth_state = True
 # specific for multiauth:
 # select login options
 c.MultiAuthenticator.authenticators = [
-    (LTIAuthenticator), None, {
-        'client_id': 'xxxx',
-        'client_secret': 'xxxx',
-        'oauth_callback_url': 'http://example.com/hub/github/oauth_callback'
-    }
-    (GenericOAuthenticator), None, {
-        'client_id': 'xxxx',
-        'client_secret': 'xxxx',
-        'oauth_callback_url': 'http://example.com/hub/github/oauth_callback'
-    }
+    (LTIAuthenticator, "lti", False, {
+        "consumers": {"<lti_client_key>": "<lti_shared_secret>"}
+    }),
+    (GenericOAuthenticator, "oauth", True, {
+        "client_secret": "supersecretclientkeyforencryption",
+        "authorize_url": "<host>/oidc/cluster/protocol/openid-connect/auth",
+        "token_url": "<host>/oidc/cluster/protocol/openid-connect/token",
+        "userdata_url": "<host>/oidc/cluster/protocol/openid-connect/userinfo",
+        "login_service": "oauth",
+        "username_key": "preferred_username",
+        "scope": ["openid"],
+        "userdata_params": {"state": "state"},           
+    })
 ]
 
 c.JupyterHub.authenticator_class = MultiAuthenticator

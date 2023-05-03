@@ -25,21 +25,19 @@ hub:
       # specific for multiauth:
       # select login options
       c.MultiAuthenticator.authenticators = [
-          (LTIAuthenticator, "lti", False, {
-              'LTI_CLIENT_KEY': "secretclientidforauth"
-              'LTI_SHARED_SECRET': "somesharedsecret"
-              'LTI13_PRIVATE_KEY': "/home/user/.ssh/private.pem"
-          }),
-          (GenericOAuthenticator), "keycloak", True, {
-              'client_secret': 'supersecretclientkeyforencryption',
-              'authorize_url': 'https://www.ki.fh-swf.de/keycloak/realms/kicluster/protocol/openid-connect/auth',
-              'token_url': 'https://www.ki.fh-swf.de/keycloak/realms/kicluster/protocol/openid-connect/token',
-              'userdata_url': 'https://www.ki.fh-swf.de/keycloak/realms/kicluster/protocol/openid-connect/userinfo',
-              'login_service': 'keycloak',
-              'username_key': 'preferred_username',
-              'scope': ['openid'],
-              'userdata_params': {state: state},           
-          })
+         (LTIAuthenticator, "lti", False, {
+        "consumers": {"<lti_client_key>": "<lti_shared_secret>"}
+        }),
+        (GenericOAuthenticator, "oauth", True, {
+            "client_secret": "supersecretclientkeyforencryption",
+            "authorize_url": "<host>/oidc/cluster/protocol/openid-connect/auth",
+            "token_url": "<host>/oidc/cluster/protocol/openid-connect/token",
+            "userdata_url": "<host>/oidc/cluster/protocol/openid-connect/userinfo",
+            "login_service": "oauth",
+            "username_key": "preferred_username",
+            "scope": ["openid"],
+            "userdata_params": {"state": "state"},           
+        })
       ]
       c.JupyterHub.authenticator_class = MultiAuthenticator
 
