@@ -16,7 +16,6 @@ class MultiAuthenticator(Authenticator):
         self._authenticators = []
         for authenticator_class, url_scope, display, configs in self.authenticators:
             c = self.trait_values()
-            print(c)
             c.update(configs)
             self._authenticators.append({"instance": authenticator_class(**c), "url_scope": url_scope, "display": display})
     
@@ -37,15 +36,8 @@ class MultiAuthenticator(Authenticator):
     
     def get_custom_html(self, base_url):
         """Render HTML login button"""
-        print(str(base_url))
         html = []
         for authenticator in self._authenticators:
-            print("authenticator")
-            print(str(type(authenticator)))
-            print(str(authenticator))
-            authenticator["instance"].__dict__
-            print(str(authenticator["instance"].__dict__))
-            print(str(authenticator["instance"].__repr__()))
             if authenticator["display"] == True and "login_service" in authenticator["instance"].__dict__["_trait_values"]:
                 login_service = authenticator["instance"].login_service
                 url = url_path_join(base_url, authenticator["url_scope"], "oauth_login")
