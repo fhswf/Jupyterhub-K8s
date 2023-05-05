@@ -31,15 +31,31 @@ jobs:
             - '.github/workflows/docker-image-ci-dev.yml'
             - '.github/workflows/reusable-docker-build-push.yml'
 
+    - uses: dorny/paths-filter@v2.11.1
+      id: filter
+      with:
+        base: develop
+        filters: |
+          codeserver:
+            - 'images/codeserver/**'
+
   build-and-push-hub:
     needs: changes
     if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: jupyterhub
+
+  build-and-push-codeserver:
+    needs: changes
+    if: ${{ needs.changes.outputs.codeserver == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image: codeserver
       
   dispatch-deploy:
     needs: build-and-push-hub
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
     name: Dispatch a deployment request
     runs-on: ubuntu-latest
     timeout-minutes: 5
