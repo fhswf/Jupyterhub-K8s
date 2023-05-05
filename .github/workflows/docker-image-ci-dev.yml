@@ -32,6 +32,8 @@ jobs:
             - '.github/workflows/reusable-docker-build-push.yml'
           codeserver:
             - 'images/codeserver/**'
+            - '.github/workflows/docker-image-ci-dev.yml'
+            - '.github/workflows/reusable-docker-build-push.yml'
 
   build-and-push-hub:
     needs: changes
