@@ -40,7 +40,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}
           tags: |
@@ -54,7 +54,6 @@ jobs:
             type=sha
           labels: |
             org.opencontainers.image.title=${{ inputs.image }}
-            org.opencontainers.image.description=Build of ${{ inputs.image }}
             org.opencontainers.image.src=${{ github.event.repository.html_url }}
 
       - name: Show metadata
