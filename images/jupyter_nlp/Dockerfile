@@ -47,3 +47,4 @@ ENV CPATH=$CONDA_DIR/include:$CPATH
 # the label fhswf.jupyterhub.runtime has to be present for runtime detection of available images 
 LABEL fhswf.jupyterhub.runtime="NVIDIA-GPU"
 LABEL fhswf.jupyterhub.namelabel="Jupyter NLP"
+LABEL fhswf.jupyterhub.description="Image for natural language processing"
