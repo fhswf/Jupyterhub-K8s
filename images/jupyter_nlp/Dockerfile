@@ -29,6 +29,7 @@ RUN pip install jupyterhub nbgitpuller ipywidgets \
     pip install spacy \
     pip install nltk \
     pip install gensim \
+    pip install rasa \
     pip install scikit-learn 
 
 USER root
