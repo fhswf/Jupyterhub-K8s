@@ -26,7 +26,7 @@ jobs:
         base: develop
         filters: |
           jupyterhub:
-            - 'images/jupyterhub/**'
+            - 'jupyterhub/**'
             - 'packages/**'
             - '.github/workflows/docker-image-ci-dev.yml'
             - '.github/workflows/reusable-docker-build-push.yml'
@@ -41,6 +41,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: jupyterhub
+      folder: jupyterhub
 
   build-and-push-codeserver:
     needs: changes
@@ -48,6 +49,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: codeserver
+      folder: images/codeserver
       
   dispatch-deploy:
     needs: build-and-push-hub
