@@ -41,6 +41,7 @@ RUN echo CPATH="${CPATH}" >> /etc/environment
 
 USER $NB_UID
 
+ENV LD_LIBRARY_PATH=${CONDA_DIR}/lib/:${LD_LIBRARY_PATH}
 ENV CPATH=$CONDA_DIR/include:$CPATH
 
 # the label fhswf.jupyterhub.runtime has to be present for runtime detection of available images 
