@@ -28,7 +28,7 @@ jobs:
     if: ${{ needs.detect-changes.outputs.images }}
     strategy:
       matrix:
-        image: ${{ needs.detect-changes.outputs.images }}
+        image: [ ${{ needs.detect-changes.outputs.images }} ]
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
-      image: ${{ matrix.image }}
+      image: ${{ matrix.image }} 
