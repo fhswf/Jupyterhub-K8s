@@ -23,6 +23,7 @@ from modules.LTI11Authenticator import LTI11Authenticator as LTIAuthenticator
 from modules.LTI11AuthenticateHandler import LTI11AuthenticateHandler as LTIAuthenticateHandler
 #from ltiauthenticator.lti11.auth import LTI11Authenticator as LTIAuthenticator
 from ltiauthenticator.lti11.handlers import LTI11AuthenticateHandler as LTIAuthenticateHandler
+from jinja2 import Template, Environment, FileSystemLoader
 
 class MultiLoginHandler(LoginHandler):
 
@@ -178,7 +179,7 @@ class MultiAuthenticator(Authenticator):
         if isinstance(handler, LTIAuthenticateHandler):
             #self.authenticated_via = "lti"
             ret = await maybe_future(self.lti_authenticator.authenticate(handler, data))
-        else:
+        elif isinstance(handler, OAuthLoginHandler):
             #self.authenticated_via = "keycloak"
             ret =  await maybe_future(self.keycloak_authenticator.authenticate(handler, data))
         return ret
@@ -196,7 +197,7 @@ class MultiAuthenticator(Authenticator):
             print("pre_spawn_start: auth_state not enabled")
             return 
         else:
-            print("auth state enabled")
+            print("auth steat")
 
         spawner.environment = {
             'NB_USER': spawner.user.name

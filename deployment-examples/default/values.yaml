@@ -3,25 +3,40 @@
 
 hub:
   image:
-    name: ghcr.io/fh-swf/jupyterhub-k8s/jupyterhub
+    name: ghcr.io/fhswf/jupyterhub-k8s/jupyterhub ghcr.io/fhswf/jupyterhub-k8s/jupyterhub
   config:
     Authenticator:
       enable_auth_state: true
       cryptoKey: 2c9b8b93a58f21883be46e3ff603e30427b0a33fb6c6eca235c2387439a88592
+#    MultiAuthenticator:
+#      client_id: your-client-id
+#      client_secret: your-client-secret
+#      oauth_callback_url: https://www.ki.fh-swf.de/jupyterhub/callback
+    GenericOAuthenticator:
+      client_id: your-client-id
+      client_secret: your-client-secret
+      oauth_callback_url: https://www.ki.fh-swf.de/jupyterhub/oauth_callback
+      authorize_url: https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/auth
+      token_url: https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/token
+      userdata_url: https://www.ki.fh-swf.de/keycloak/realms/cluster/protocol/openid-connect/userinfo
+      login_service: keycloak
+      username_key: preferred_username
+      userdata_params:
+        state: state
+    JupyterHub:
+      authenticator_class: generic-oauth
+  
+  
+  extraEnv:
+#    OAUTH2_AUTHORIZE_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
+#    OAUTH2_TOKEN_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
+#    OAUTH_CALLBACK_URL: https://<your_jupyterhub_host>/hub/oauth_callback
 
+    LTI_CLIENT_KEY: asdf
+    LTI_SHARED_SECRET: asdf
+    LTI13_PRIVATE_KEY: /home/user/.ssh/private.pem
 
-# this is were the majority of the kubernetes spawner config resides.
-# config structure for singleuser is simliar to the hub.
-# every profile under profile list overrides default values set for the kubernetes spawner.
-# Note that c.KubeSpawner.profile_list does not make the image puller service aware of the images specified here.
-# configuration under profileList is passed though to https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner
-# can possibly be used to also insert custom python code uner extra config
-#   singleuser: 
-#     extraConfig:
-#         myConfig.py: |       # non grammar check python code here
-#           c.JupyterHub.something = 'something'
-#           c.Spawner.something_else = 'something else'
-
+    OAUTH2_TLS_VERIFY: false
 
 singleuser:
   # Defines values
@@ -29,28 +44,12 @@ singleuser:
     name: jupyter/minimal-notebook
     tag: 2343e33dec46
   profileList:
-    - display_name: "Minimal environment"
-      description: "Basic Python unsing the minimal-notebook from jupyter."
-      default: true
     - display_name: "Datascience environment"
       description: "Comes with Sciopy, R and Julia"
+      default: true
       kubespawner_override:
         http_timeout: 120
         start_timeout: 300
         image: jupyter/datascience-notebook:latest
 #        extra_resource_limits:
 #          nvidia.com/gpu: "1
-    - display_name: "Learning Data Science"
-      description: "Datascience Environment with Sample Notebooks"
-      kubespawner_override:
-        image: jupyter/datascience-notebook:latest
-        lifecycle_hooks:
-        http_timeout: 120
-        start_timeout: 300
-          postStart:
-            exec:
-              command:
-                - "sh"
-                - "-c"
-                - >
-                  gitpuller https://github.com/data-8/materials-fa17 master materials-fa;

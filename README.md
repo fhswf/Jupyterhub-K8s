@@ -4,14 +4,17 @@
 **[Deployment](#deployment)** |
 **[License](#license-mit)**
 
-# [Jupyterhub on K8s with GPU support](https://github.com/fhswf/jupyterhub)
+# Jupyterhub on Kubernetes with GPU support and Multiauthentication
+
 <!---
 [![Docker Image CI](https://github.com/fhswf/jupyterhub/actions/workflows/docker-image-ci.yml/badge.svg?branch=main)](https://github.com/fhswf/jupyterhub/actions/workflows/docker-image-ci.yml)
 [![GitHub](https://img.shields.io/badge/issue_tracking-github-blue?logo=github)](https://github.com/fhswf/jupyterhub/issues)
 [![GitHub Tags](https://img.shields.io/github/v/tag/fhswf/jupyterhub?style=plastic)](https://github.com/fhswf/jupyterhub/tags)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 -->
-A customized version of the standard [zero-to-jupyterhub-k8s Project](https://github.com/jupyterhub/zero-to-jupyterhub-k8s).
+A customized version of the standard [zero-to-jupyterhub-k8s Project](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) used for educational student workspaces, where they can experiment with Deep Learning frameworks and develop python notebooks.
+This is an update to our older Jupyterhub with GPU support using Docker Swarm. The old project can be found [here](https://github.com/fhswf/jupyterhub). Note that K8s takes more effort to deploy and manage, so if you are looking for a simpler way to use GPUs with Jupyterhub take a look.
+
 
 ## Technical Overview
 ### Authenticators
@@ -25,7 +28,7 @@ We are using a custom multi authenticator to allow for multiple authentication m
 ### Custom Images
 Custom Images are already supported by the official [helm chart from Jupyter](https://hub.jupyter.org/helm-chart/).
 Default configuration values can be found in the repository [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/main/jupyterhub).
-(Nivida-based) GPU Images need to be build with CUDA and are not available from the offcial Jupyter, hence we build them ourself.
+(NVIDIA-based) GPU Images need to be build with CUDA and are not available from the official Jupyter, hence be build them ourself.
 Current Base Images can be found here (TODO).
 
 ## Deployment
