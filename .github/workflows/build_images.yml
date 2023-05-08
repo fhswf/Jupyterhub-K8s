@@ -1,0 +1,34 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    paths:
+      - "images/**/Dockerfile"
+      - "images/**/*"
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.changed_dirs.outputs.dirs }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Get changed directories
+        id: changed_dirs
+        run: |
+          changed_dirs=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} | grep '^images/' | awk -F/ '{print $2}' | uniq | sed 's/^/"/;s/$/"/')
+          changed_dirs=$(echo $changed_dirs | tr '\n' ', ')
+          echo "dirs=[ $changed_dirs ]" 
+          echo "dirs=[$changed_dirs]" >> $GITHUB_OUTPUT
+
+  build-and-push-hub:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.images }}
+    strategy:
+      matrix:
+        image: ${{fromJson(needs.detect-changes.outputs.images)}}
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image: ${{ matrix.image }}
