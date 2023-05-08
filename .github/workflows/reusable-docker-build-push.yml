@@ -2,7 +2,7 @@ name: Build and push images to registry
 
 env:
   OWNER: ${{ github.repository }}
-  REGISTRY: ghcr.io 
+  REGISTRY: ghcr.io
 
 on:
   workflow_call:
@@ -11,7 +11,7 @@ on:
         description: Image name
         required: true
         type: string
-        
+
 jobs:
   build-push:
     runs-on: ubuntu-latest
@@ -23,7 +23,6 @@ jobs:
       contents: read
       packages: write
     steps:
-    
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -51,6 +50,10 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
+          labels: |
+            org.opencontainers.image.title=${{ inputs.image }}
+            org.opencontainers.image.description=Build of ${{ inputs.image }}
+            org.opencontainers.image.src=${{ github.event.repository.html_url }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -59,6 +62,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-
-

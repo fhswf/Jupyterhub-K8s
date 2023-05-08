@@ -1,0 +1,41 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    paths:
+      - "images/**/Dockerfile"
+      - "images/**/*"
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get changed directories
+        id: changed_dirs
+        run: |
+          changed_dirs=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} | grep '^images/' | awk -F/ '{print $2}' | uniq)
+          changed_dirs=$(echo $changed_dirs | tr '\n' ' ')
+          echo "::set-output name=dirs::$changed_dirs"
+
+  build-and-push-hub:
+    needs: detect-changes
+    strategy:
+      matrix:
+        image: ${{ steps.changed_dirs.outputs.dirs }}
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' || github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'schedule'}}
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image: ${{ matrix.image }}
