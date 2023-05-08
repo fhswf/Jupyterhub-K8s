@@ -1,0 +1,38 @@
+name: Build and push lab image codeserver
+
+on:
+  schedule:
+    - cron: '18 15 * * *'
+  push:
+    branches: [ "develop", "main" ]
+  workflow_dispatch:
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      jupyterhub: ${{ steps.filter.outputs.changes }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: develop
+
+    - uses: dorny/paths-filter@v2.11.1
+      id: filter
+      with:
+        base: develop
+        filters: |
+          changes:
+            - 'images/codeserver/**'
+
+  build-and-push-codeserver:
+    needs: changes
+    if: ${{ needs.changes.outputs.changes == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image: codeserver
+      folder: images/codeserver
+    

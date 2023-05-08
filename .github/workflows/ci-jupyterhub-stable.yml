@@ -27,7 +27,10 @@ jobs:
         base: main
         filters: |
           jupyterhub:
-            - 'images/jupyterhub/**'
+            - 'jupyterhub/**'
+            - 'packages/**'
+            - '.github/workflows/ci-jupyterhub-stable.yml'
+            - '.github/workflows/reusable-docker-build-push.yml'
 
   build-and-push-hub:
     needs: changes
@@ -35,3 +38,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: jupyterhub
+      folder: jupyterhub
+      
+  ## Note: for now there is no automated deployment for the live version
+  ## trigger deployment manually after incrementing the version in the deployment repository

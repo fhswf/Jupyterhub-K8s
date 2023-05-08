@@ -1,4 +1,4 @@
-name: Docker Image CI DEV
+name: CICD jupyterhub-dev 
 
 on:
   schedule:
@@ -28,11 +28,7 @@ jobs:
           jupyterhub:
             - 'jupyterhub/**'
             - 'packages/**'
-            - '.github/workflows/docker-image-ci-dev.yml'
-            - '.github/workflows/reusable-docker-build-push.yml'
-          codeserver:
-            - 'images/codeserver/**'
-            - '.github/workflows/docker-image-ci-dev.yml'
+            - '.github/workflows/ci-jupyterhub-dev.yml'
             - '.github/workflows/reusable-docker-build-push.yml'
 
   build-and-push-hub:
@@ -43,14 +39,6 @@ jobs:
       image: jupyterhub
       folder: jupyterhub
 
-  build-and-push-codeserver:
-    needs: changes
-    if: ${{ needs.changes.outputs.codeserver == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
-    uses: ./.github/workflows/reusable-docker-build-push.yml
-    with:
-      image: codeserver
-      folder: images/codeserver
-      
   dispatch-deploy:
     needs: build-and-push-hub
     if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
