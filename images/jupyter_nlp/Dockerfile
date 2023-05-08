@@ -48,4 +48,4 @@ ENV CPATH=$CONDA_DIR/include:$CPATH
 LABEL fhswf.jupyterhub.runtime="NVIDIA-GPU"
 LABEL fhswf.jupyterhub.namelabel="Jupyter NLP"
 LABEL fhswf.jupyterhub.description="Image for natural language processing"
-LABEL fhswf.jupyterhub.version="1.0.1"
+LABEL fhswf.jupyterhub.version="1.0.0"
