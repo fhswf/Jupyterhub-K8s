@@ -21,7 +21,7 @@ jobs:
           changed_dirs=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} | grep '^images/' | awk -F/ '{print $2}' | uniq)
           changed_dirs=$(echo $changed_dirs | tr '\n' ' ')
           echo "dirs=[ $changed_dirs ]" 
-          echo "dirs=[ $changed_dirs ]" >> $GITHUB_OUTPUT
+          echo "dirs=[\"$changed_dirs\"]" >> $GITHUB_OUTPUT
 
   build-and-push-hub:
     needs: detect-changes
