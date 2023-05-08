@@ -13,7 +13,7 @@ jobs:
       images: ${{ steps.changed_dirs.outputs.dirs }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v1
 
       - name: Get changed directories
         id: changed_dirs
