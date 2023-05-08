@@ -56,11 +56,15 @@ jobs:
             org.opencontainers.image.description=Build of ${{ inputs.image }}
             org.opencontainers.image.src=${{ github.event.repository.html_url }}
 
+      - name: Show metadata
+        run: |
+          echo "tags: ${{ steps.meta.outputs.tags }}"
+          echo "labels: ${{ steps.meta.outputs.labels }}"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: ./images/${{ inputs.image }}/.
-          image: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
