@@ -1,0 +1,5 @@
+jupyterhub>=3.0.0
+requests
+traitlets
+#jupyterhub-ltiauthenticator
+#oauthenticator

@@ -1,0 +1,63 @@
+name: CICD jupyterhub-dev 
+
+on:
+  schedule:
+    - cron: '18 15 * * *'
+  push:
+    branches: [ "develop" ]
+  workflow_dispatch:
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      jupyterhub: ${{ steps.filter.outputs.jupyterhub }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: develop
+
+    - uses: dorny/paths-filter@v2.11.1
+      id: filter
+      with:
+        base: develop
+        filters: |
+          jupyterhub:
+            - 'jupyterhub/**'
+            - 'packages/**'
+            - '.github/workflows/ci-jupyterhub-dev.yml'
+            - '.github/workflows/reusable-docker-build-push.yml'
+
+  build-and-push-hub:
+    needs: changes
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      image: jupyterhub
+      folder: jupyterhub
+
+  dispatch-deploy:
+    needs: build-and-push-hub
+    if: ${{ needs.changes.outputs.jupyterhub == 'true' ||  contains(github.event_name, 'workflow_dispatch') }}
+    name: Dispatch a deployment request
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      OUT_TAGS: ${{ needs.build-and-push-hub.outputs.tags }}
+      OUT_LABELS: ${{ needs.build-and-push-hub.outputs.labels }}
+      OUT_IMAGE: ${{ needs.build-and-push-hub.outputs.image }}
+      chart_ref: ${{ fromJson(needs.build-and-push-hub.outputs.metadata).sources[0].ref }}
+      chartversion: 2.0.0
+    steps:
+      - name: Dispatch to workflows
+        run: |
+            tags=$(sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}' <<<  `awk -F':' '{ print $2 }' <<< $OUT_TAGS`)
+            echo $chart_ref
+            tag=$(awk -F',' '{ for (i = 0; ++i <= NF;) print $i }' <<< $tags | grep sha | head -n 1)
+            echo "$tag"
+            printf -v data '{"event_type": "deploy_dev", "client_payload": { "tag": "%s", "chartversion": "%s", "image": "ghcr.io/fhswf/jupyterhub-k8s/${{ needs.build-and-push-hub.outputs.image }}" }}' "$tag" "$chartversion"
+            echo "$data"
+            curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" -d "$data" -X POST https://api.github.com/repos/fhswf/kicluster-deployments/dispatches
