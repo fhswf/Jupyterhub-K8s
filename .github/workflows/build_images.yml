@@ -23,7 +23,7 @@ jobs:
           echo "dirs=[ $changed_dirs ]" 
           echo "dirs=[$changed_dirs]" >> $GITHUB_OUTPUT
 
-  build-and-push-hub:
+  build-and-push-images:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.images }}
     strategy:
@@ -32,3 +32,4 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: ${{ matrix.image }}
+      folder:  images/${{ matrix.image }}

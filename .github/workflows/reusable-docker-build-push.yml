@@ -11,10 +11,10 @@ on:
         description: Image name
         required: true
         type: string
-      #folder:
-      #  description: Location and build context of the Dockerfile folder
-      #  required: true
-      #  type: string
+      folder:
+        description: Location and build context of the Dockerfile folder
+        required: true
+        type: string
     outputs:
       tags:
         description: "tags"
@@ -28,7 +28,6 @@ on:
       metadata:
         description: metadata of image
         value: ${{ jobs.build-push.outputs.metadata }}
-# ${{fromJson(steps.set_var.outputs.packageJson).version}}
 
 jobs:
   build-push:
