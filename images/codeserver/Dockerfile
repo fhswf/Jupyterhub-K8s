@@ -30,14 +30,7 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
 RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy
 RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
 
-# X11 desktop env, warning this is unstable!
-#RUN apt-get update --yes --quiet && \
-#    apt-get install --yes --quiet \
-#    dbus-x11 xfce4 xfce4-panel xfce4-session xfce4-settings xorg xubuntu-icon-theme && \
-#    apt-get remove --yes --quiet light-locker && \
-#    apt-get clean --quiet && rm -rf /var/lib/apt/lists/*
-#RUN /opt/conda/bin/conda install -c manics websockify && \
-#    pip install git+https://github.com/yuvipanda/jupyter-desktop-server.git
+# pip install git+https://github.com/yuvipanda/jupyter-desktop-server.git
  
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}

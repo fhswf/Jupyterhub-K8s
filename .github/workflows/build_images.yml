@@ -19,7 +19,8 @@ jobs:
         id: changed_dirs
         run: |
           changed_dirs=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} | grep '^images/' | awk -F/ '{print $2}' | uniq | sed 's/^/"/;s/$/",/')
-          changed_dirs=$(echo $changed_dirs | tr '\n')
+          echo "$changed_dirs" 
+          changed_dirs=$(echo $changed_dirs | tr '\n' ' ')
           echo "dirs=[ $changed_dirs ]" 
           echo "dirs=[$changed_dirs]" >> $GITHUB_OUTPUT
 
