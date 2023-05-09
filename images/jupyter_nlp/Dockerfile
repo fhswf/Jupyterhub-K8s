@@ -23,9 +23,10 @@ RUN apt-get update && \
 
 USER $NB_UID
 
-RUN pip install jupyterhub nbgitpuller ipywidgets \
-    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116 \
-    pip install transformers datasets metrics \
+RUN pip install -U jupyterhub \
+    pip install nbgitpuller ipywidgets \
+    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117 \
+    pip install transformers datasets metrics tokenizers \
     pip install spacy \
     pip install nltk \
     pip install gensim \
@@ -48,5 +49,5 @@ LABEL fhswf.jupyterhub.runtime="NVIDIA-GPU"
 LABEL fhswf.jupyterhub.namelabel="Jupyter NLP"
 LABEL fhswf.jupyterhub.description="Custom JupyterLab image for natural language processing."
 LABEL org.opencontainers.image.description="Custom JupyterLab image for natural language processing."
-LABEL org.opencontainers.image.authors="FH SWF"
+LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
 LABEL org.opencontainers.image.licenses="MIT"
