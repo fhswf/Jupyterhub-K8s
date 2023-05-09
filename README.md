@@ -28,7 +28,7 @@ We are using a custom multi authenticator to allow for multiple authentication m
 ### Custom Images
 Custom Images are already supported by the official [helm chart from Jupyter](https://hub.jupyter.org/helm-chart/).
 Default configuration values can be found in the repository [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/main/jupyterhub).
-(Nivida-based) GPU Images need to be build with CUDA and are not available from the official Jupyter, hence be build them ourself.
+(NVIDIA-based) GPU Images need to be build with CUDA and are not available from the official Jupyter, hence be build them ourself.
 Current Base Images can be found here (TODO).
 
 ## Deployment
