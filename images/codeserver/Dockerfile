@@ -41,3 +41,10 @@ RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
  
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
+
+LABEL fhswf.jupyterhub.runtime="CPU"
+LABEL fhswf.jupyterhub.namelabel="Generic vscode-server example"
+LABEL fhswf.jupyterhub.description="Generic vscode-server example for jupyterhub"
+LABEL org.opencontainers.image.description="Generic vscode-server example for jupyterhub"
+LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
+LABEL org.opencontainers.image.licenses="MIT"
