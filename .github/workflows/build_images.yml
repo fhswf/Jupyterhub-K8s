@@ -34,3 +34,16 @@ jobs:
     with:
       image: ${{ matrix.image }}
       folder:  images/${{ matrix.image }}
+      
+  pull-to-harbor:
+    needs: build-and-push-images
+    if: ${{ needs.detect-changes.outputs.images }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: ${{fromJson(needs.detect-changes.outputs.images)}}
+    steps:
+      - name: pull
+        run: |
+          docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}
+      
