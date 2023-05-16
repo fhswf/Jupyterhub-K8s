@@ -5,6 +5,7 @@ on:
     paths:
       - "images/**/Dockerfile"
       - "images/**/*"
+  workflow_dispatch:
 
 jobs:
   detect-changes:
@@ -18,14 +19,15 @@ jobs:
       - name: Get changed directories
         id: changed_dirs
         run: |
-          changed_dirs=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} | grep '^images/' | awk -F/ '{print $2}' | uniq | sed 's/^/"/;s/$/"/')
-          changed_dirs=$(echo $changed_dirs | tr '\n' ', ')
+          changed_dirs=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} | grep '^images/' | awk -F/ '{print $2}' | uniq | sed 's/^/"/;s/$/",/')
+          echo "$changed_dirs" 
+          changed_dirs=$(echo $changed_dirs | tr '\n' ' ')
           echo "dirs=[ $changed_dirs ]" 
           echo "dirs=[$changed_dirs]" >> $GITHUB_OUTPUT
 
   build-and-push-images:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.images }}
+    if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
@@ -33,3 +35,16 @@ jobs:
     with:
       image: ${{ matrix.image }}
       folder:  images/${{ matrix.image }}
+      
+  pull-to-harbor:
+    needs: build-and-push-images
+    if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: ${{fromJson(needs.detect-changes.outputs.images)}}
+    steps:
+      - name: pull
+        run: |
+          docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}
+      
