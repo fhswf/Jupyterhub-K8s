@@ -27,7 +27,7 @@ jobs:
 
   build-and-push-base-images:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
+    if: ${{ needs.detect-changes.outputs.images != '[]' ||  contains(github.event_name, 'workflow_dispatch') }}
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
@@ -38,7 +38,7 @@ jobs:
       
   pull-to-harbor:
     needs: build-and-push-base-images
-    if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
+    if: ${{ needs.detect-changes.outputs.images != '[]'  ||  contains(github.event_name, 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
