@@ -38,7 +38,7 @@ jobs:
       
   pull-to-harbor:
     needs: build-and-push-images
-    if: ${{ needs.detect-changes.outputs.images }}
+    if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
