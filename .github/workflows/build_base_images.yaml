@@ -37,7 +37,7 @@ jobs:
       folder:  base-images/${{ matrix.image }}
       
   pull-to-harbor:
-    needs: build-and-push-images
+    needs: build-and-push-base-images
     if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     strategy:
