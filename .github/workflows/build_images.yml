@@ -5,6 +5,7 @@ on:
     paths:
       - "images/**/Dockerfile"
       - "images/**/*"
+  workflow_dispatch:
 
 jobs:
   detect-changes:
@@ -26,7 +27,7 @@ jobs:
 
   build-and-push-images:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.images }}
+    if: ${{ needs.detect-changes.outputs.images ||  contains(github.event_name, 'workflow_dispatch') }}
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
