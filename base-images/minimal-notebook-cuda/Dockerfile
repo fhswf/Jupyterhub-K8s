@@ -133,8 +133,7 @@ RUN mkdir -p /opt/code-server/lib/vscode/extensions \
        $HOME/.config \
        $HOME/.local
 
-RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy
-RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
+RUN pip install jupyter-server-proxy jupyter-vscode-proxy
 
 RUN pip install nbgitpuller scilab-kernel \
     && rm -rf /tmp/* $HOME/.cache
