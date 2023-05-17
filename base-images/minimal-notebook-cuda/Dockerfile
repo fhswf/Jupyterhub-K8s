@@ -94,6 +94,7 @@ RUN apt-get update && \
     fonts-dejavu \
     htop \
     wget \
+    curl \
     openssh-client \
     iputils-ping \
     && apt-get clean && \
