@@ -143,8 +143,6 @@ RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller scilab-ker
 
 USER $NB_UID
 
-ENV TERM=xterm-256color
-
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="scipy-notebook-cuda"
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab scipy-notebook with cuda and cudnn."
