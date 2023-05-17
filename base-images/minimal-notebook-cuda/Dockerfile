@@ -133,9 +133,7 @@ RUN mkdir -p /opt/code-server/lib/vscode/extensions \
        $HOME/.config \
        $HOME/.local
 
-RUN pip install jupyter-server-proxy jupyter-vscode-proxy
-
-RUN pip install nbgitpuller scilab-kernel \
+RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller scilab-kernel \
     && rm -rf /tmp/* $HOME/.cache
 
 USER $NB_UID
