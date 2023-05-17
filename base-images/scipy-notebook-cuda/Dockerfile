@@ -4,6 +4,8 @@ LABEL maintainer "Fachhochschule Südwestfalen"
 
 USER root
 
+ENV NVARCH x86_64
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg2 curl ca-certificates && \
     curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/${NVARCH}/3bf863cc.pub | apt-key add - && \
