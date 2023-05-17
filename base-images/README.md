@@ -5,4 +5,5 @@ Such extra packages could for example include nvida-cuda libraries.
 The Base images contain the follwing additions unless stated otherwise in the individual readme.
 ```
 VS Code
+nbgitpuller
 ```

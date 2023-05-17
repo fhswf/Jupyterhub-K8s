@@ -93,6 +93,7 @@ RUN apt-get update && \
     tzdata \
     gfortran \
     gcc \
+    openssh-client \
     scilab \
     pari-gp \
     libpari-dev \
@@ -103,9 +104,48 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+#  Code Server server-proxy/vscode-proxy from https://coder.com/docs/code-server/latest
+ENV CODE_VERSION=4.12.0
+ENV CODE_BUILTIN_EXTENSIONS_DIR=/opt/code-server/lib/vscode/extensions
+
+ENV PATH=/opt/code-server/bin:$PATH \
+    CS_DISABLE_GETTING_STARTED_OVERRIDE=1
+
+RUN mkdir -m 1777 /opt/code-server \
+    && cd /tmp \
+    && curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_VERSION}/code-server_${CODE_VERSION}_amd64.deb \
+    && curl -sL https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg -o vscode.svg \
+    && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
+    && rm -f code-server_${CODE_VERSION}_amd64.deb \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension GitHub.copilot \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.vscode-pylance \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension VisualStudioExptTeam.vscodeintellicode \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-vscode-remote.remote-ssh \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension redhat.vscode-yaml \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension donjayamanne.githistory \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension humao.rest-client \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension esbenp.prettier-vscode \ 
+    ## Create folders temp and tmp for Jupyter extension
+    && cd /opt/code-server/lib/vscode/extensions/ms-toolsai.jupyter-* \
+    && mkdir -m 1777 temp \
+    && mkdir -m 1777 tmp \
+    && rm -rf /tmp/* \
+       $HOME/.config \
+       $HOME/.local
+
+RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy
+RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
+
+RUN pip install nbgitpuller scilab-kernel \
+    && rm -rf /tmp/* $HOME/.cache
+
 USER $NB_UID
 
-RUN pip install jupyterhub nbgitpuller scilab-kernel
+ENV TERM=xterm-256color
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="scipy-notebook-cuda"
