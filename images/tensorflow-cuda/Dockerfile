@@ -28,3 +28,11 @@ USER $NB_UID
 
 ## test
 #python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+
+
+LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
+LABEL ki.fh-swf.de.jupyterhub.namelabel="tensorflow-notebook-cuda"
+LABEL ki.fh-swf.de.jupyterhub.description="Keras and TF for ML with python and cuda"
+LABEL org.opencontainers.image.description="Keras and TF for ML with python and cuda"
+LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
+LABEL org.opencontainers.image.licenses="MIT"
