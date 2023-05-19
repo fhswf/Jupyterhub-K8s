@@ -45,5 +45,8 @@ jobs:
     steps:
       - name: pull
         run: |
+          openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ca.crt
+          sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
+          sudo update-ca-certificates
           docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}
       
