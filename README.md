@@ -33,7 +33,7 @@ Local storage for cluster users, requires a storage class to be present in the c
 # Images
 Custom Images are already supported by the official [helm chart from Jupyter](https://hub.jupyter.org/helm-chart/).
 Default configuration values can be found in the repository [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/main/jupyterhub).
-(NVIDIA-based) GPU Images need to be build with CUDA and are not available from the official Jupyter, hence be build them ourselfs.
+(NVIDIA-based) GPU Images need to be build with CUDA and are not available from the official Jupyter, hence we be build them ourselfs.
 ### Lab images
 Primary folder for launchables by the hub: images
 Please create a subfolder for each lab/image/profile/course you want to use.
