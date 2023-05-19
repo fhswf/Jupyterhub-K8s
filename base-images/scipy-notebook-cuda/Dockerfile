@@ -112,19 +112,20 @@ ENV CODE_BUILTIN_EXTENSIONS_DIR=/opt/code-server/lib/vscode/extensions
 ENV PATH=/opt/code-server/bin:$PATH \
     CS_DISABLE_GETTING_STARTED_OVERRIDE=1
 
+# commented extension entries are not in the gallery for code-server
 RUN mkdir -p /opt/code-server/lib/vscode/extensions \
     && cd /tmp \
     && curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_VERSION}/code-server_${CODE_VERSION}_amd64.deb \
     && curl -sL https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg -o vscode.svg \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension GitHub.copilot \
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension GitHub.copilot \ 
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.vscode-pylance \
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.vscode-pylance \
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension VisualStudioExptTeam.vscodeintellicode \
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension VisualStudioExptTeam.vscodeintellicode \
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-vscode-remote.remote-ssh \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-vscode-remote.remote-ssh \ 
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension redhat.vscode-yaml \ 
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension donjayamanne.githistory \ 
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
