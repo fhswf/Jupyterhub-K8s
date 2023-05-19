@@ -1,4 +1,4 @@
-FROM ghcr.io/fhswf/Jupyterhub-K8s/scipy-cuda
+FROM ghcr.io/fhswf/Jupyterhub-K8s/scipy-notebook-cuda
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
