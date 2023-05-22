@@ -15,5 +15,5 @@ jobs:
       - name: Get changed directories
         id: changed_dirs
         run: |
-          echo "${{fromJson(env.input)}}"
-          echo << EOF ${{env.input}} EOF
+          echo "${{env.input}}"
+          awk '{print $1 $0}' <<<  ${{env.input}} | cat
