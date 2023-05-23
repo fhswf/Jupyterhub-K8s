@@ -1,5 +1,21 @@
 name: Build and Push Base Images
 
+env:
+  base: 
+    buildargs:
+    - |
+      JUPYTER_VARIANT=minimal
+      CUDA_VARIANT=nocuda
+    - |
+      JUPYTER_VARIANT=minimal
+      CUDA_VARIANT=cuda-cudnn
+    - |
+      JUPYTER_VARIANT=scipy
+      CUDA_VARIANT=nocuda
+    - |
+      JUPYTER_VARIANT=scipy
+      CUDA_VARIANT=cuda-cudnn
+
 on:
   push:
     paths:
@@ -31,24 +47,8 @@ jobs:
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
-        include:
-          - image: vscode
-            buildargs: |
-              JUPYTER_VARIANT=minimal
-              CUDA_VARIANT=cuda-cudnn
-          - image: vscode
-            buildargs: |
-              JUPYTER_VARIANT=scipy
-              CUDA_VARIANT=cuda-cudnn
-          - image: vscode
-            buildargs: |
-              JUPYTER_VARIANT=minimal
-              CUDA_VARIANT=nocuda
-          - image: vscode
-            buildargs: |
-              JUPYTER_VARIANT=scipy
-              CUDA_VARIANT=cuda-nocuda
-              
+        buildargs: ${{fromJson(env.base.buildargs)}}
+
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: ${{ matrix.image }}
