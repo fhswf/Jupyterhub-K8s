@@ -12,8 +12,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Get changed directories
-        id: changed_dirs
+      - name: test1
+        id: test1
         run: |
-          echo "${{env.input}}"
-          awk '{print $1 $0}' <<<  ${{env.input}} | cat
+          image_name=`echo "${{env.input}}" | awk -F'=' '{print $2}' | tr -d '[:blank:]' | tr  -s '\n' '-'`
+          echo "imagename=$image_name" >> $GITHUB_OUTPUT
+
+      - name: test2
+        id: test2
+        run: |
+          echo "ghcr.io/fhswf/image-${{ steps.test1.outputs.imagename }}"
