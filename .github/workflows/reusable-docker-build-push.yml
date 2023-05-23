@@ -69,6 +69,7 @@ jobs:
         run: |
           image_name=`echo "${{inputs.buildargs}}" | awk -F'=' '{print $2}' | tr -d '[:blank:]' | tr  -s '\n' '-' | sed 's/-$//'`
           if [ "$image_name" != "" ]; then image_name="-$image_name" ; fi
+          echo "$image_name"
           echo "imagename=$image_name" >> $GITHUB_OUTPUT
 
       - name: Extract metadata (tags, labels) for Docker
