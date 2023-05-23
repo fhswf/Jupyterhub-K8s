@@ -3,11 +3,10 @@ ARG CUDA_VARIANT
 
 FROM jupyter/${JUPYTER_VARIANT}-notebook as nocuda
 
-LABEL maintainer "Fachhochschule Südwestfalen"
-
 ENV BUILD_CUDA_VARIANT=$CUDA_VARIANT
 ENV BUILD_JUPYTER_VARIANT=$JUPYTER_VARIANT
 
+LABEL maintainer "Fachhochschule Südwestfalen"
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="jupyter/${BUILD_JUPYTER_VARIANT}-notebook"
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook"
