@@ -46,7 +46,7 @@ jobs:
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
-        buildargs: ${{fromJson(env.BUILDARGS)}}
+        buildargs: ${{env.BUILDARGS}}
 
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
