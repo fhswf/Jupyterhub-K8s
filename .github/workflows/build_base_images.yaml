@@ -1,8 +1,7 @@
 name: Build and Push Base Images
 
 env:
-  base: 
-    buildargs:
+  BUILDARGS:
     - |
       JUPYTER_VARIANT=minimal
       CUDA_VARIANT=nocuda
@@ -47,7 +46,7 @@ jobs:
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
-        buildargs: ${{fromJson(env.base.buildargs)}}
+        buildargs: ${{fromJson(env.BUILDARGS)}}
 
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
