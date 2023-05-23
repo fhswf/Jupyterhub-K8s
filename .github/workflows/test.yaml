@@ -15,7 +15,7 @@ jobs:
       - name: test1
         id: test1
         run: |
-          image_name=`echo "${{env.input}}" | awk -F'=' '{print $2}' | tr -d '[:blank:]' | tr  -s '\n' '-'`
+          image_name=`echo "${{env.input}}" | awk -F'=' '{print $2}' | tr -d '[:blank:]' | tr  -s '\n' '-' | sed 's/-$//' ` 
           echo "imagename=$image_name" >> $GITHUB_OUTPUT
 
       - name: test2
