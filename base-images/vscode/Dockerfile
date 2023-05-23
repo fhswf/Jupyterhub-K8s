@@ -3,6 +3,8 @@ ARG CUDA_VARIANT
 
 FROM jupyter/${JUPYTER_VARIANT}-notebook as nocuda
 
+LABEL maintainer "Fachhochschule Südwestfalen"
+
 ENV BUILD_CUDA_VARIANT=$CUDA_VARIANT
 ENV BUILD_JUPYTER_VARIANT=$JUPYTER_VARIANT
 
@@ -17,8 +19,6 @@ LABEL org.opencontainers.image.licenses="MIT"
 #  cuda 
 ###############
 FROM nocuda as cuda
-
-LABEL maintainer "Fachhochschule Südwestfalen"
 
 USER root
 
