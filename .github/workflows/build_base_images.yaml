@@ -1,20 +1,5 @@
 name: Build and Push Base Images
 
-env:
-  BUILDARGS:
-    - |
-      JUPYTER_VARIANT=minimal
-      CUDA_VARIANT=nocuda
-    - |
-      JUPYTER_VARIANT=minimal
-      CUDA_VARIANT=cuda-cudnn
-    - |
-      JUPYTER_VARIANT=scipy
-      CUDA_VARIANT=nocuda
-    - |
-      JUPYTER_VARIANT=scipy
-      CUDA_VARIANT=cuda-cudnn
-
 on:
   push:
     paths:
