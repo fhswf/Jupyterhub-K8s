@@ -7,7 +7,7 @@ ENV BUILD_CUDA_VARIANT=$CUDA_VARIANT
 ENV BUILD_JUPYTER_VARIANT=$JUPYTER_VARIANT
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
-LABEL ki.fh-swf.de.jupyterhub.namelabel="${BUILD_JUPYTER_VARIANT}-notebook"
+LABEL ki.fh-swf.de.jupyterhub.namelabel="jupyter/${BUILD_JUPYTER_VARIANT}-notebook"
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook"
 LABEL org.opencontainers.image.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
