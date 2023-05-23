@@ -46,7 +46,19 @@ jobs:
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
-        buildargs: ${{env.BUILDARGS}}
+        buildargs: 
+        - |
+          JUPYTER_VARIANT=minimal
+          CUDA_VARIANT=nocuda
+        - |
+          JUPYTER_VARIANT=minimal
+          CUDA_VARIANT=cuda-cudnn
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=nocuda
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=cuda-cudnn
 
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
