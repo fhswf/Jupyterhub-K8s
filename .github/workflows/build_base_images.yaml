@@ -53,6 +53,7 @@ jobs:
     with:
       image: ${{ matrix.image }}
       folder:  base-images/${{ matrix.image }}
+      buildargs:  ${{ matrix.buildargs }}
       
   pull-to-harbor:
     needs: [build-and-push-base-images, detect-changes]
