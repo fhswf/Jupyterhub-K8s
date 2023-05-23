@@ -31,6 +31,24 @@ jobs:
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
+        include:
+          - image: vscode
+            build-args: |
+              JUPYTER_VARIANT=minimal
+              CUDA_VARIANT=cuda-cudnn
+          - image: vscode
+            build-args: |
+              JUPYTER_VARIANT=scipy
+              CUDA_VARIANT=cuda-cudnn
+          - image: vscode
+            build-args: |
+              JUPYTER_VARIANT=minimal
+              CUDA_VARIANT=nocuda
+          - image: vscode
+            build-args: |
+              JUPYTER_VARIANT=scipy
+              CUDA_VARIANT=cuda-nocuda
+              
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: ${{ matrix.image }}
