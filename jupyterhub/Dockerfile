@@ -15,4 +15,6 @@ RUN pip install \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
     nbgitpuller 
 
-LABEL fhswf.kicluster="test-label-content"
+LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
+LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
+LABEL org.opencontainers.image.licenses="MIT"
