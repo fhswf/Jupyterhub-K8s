@@ -33,19 +33,19 @@ jobs:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
         include:
           - image: vscode
-            build-args: |
+            buildargs: |
               JUPYTER_VARIANT=minimal
               CUDA_VARIANT=cuda-cudnn
           - image: vscode
-            build-args: |
+            buildargs: |
               JUPYTER_VARIANT=scipy
               CUDA_VARIANT=cuda-cudnn
           - image: vscode
-            build-args: |
+            buildargs: |
               JUPYTER_VARIANT=minimal
               CUDA_VARIANT=nocuda
           - image: vscode
-            build-args: |
+            buildargs: |
               JUPYTER_VARIANT=scipy
               CUDA_VARIANT=cuda-nocuda
               
