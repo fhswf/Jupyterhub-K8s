@@ -26,6 +26,16 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
         less \
         && rm -rf /var/lib/apt/lists/*
 
+RUN conda install --quiet --yes \
+# ihaskell-widgets needs ipywidgets
+# https://github.com/IHaskell/IHaskell/issues/1380
+    'ipywidgets=7.7.1' && \
+# ihaskell-hvega doesn't need an extension. https://github.com/jupyterlab/jupyter-renderers
+#    'jupyterlab-vega3' && \
+    conda clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 #############################
 # To install ihaskell globally we follow the ihaskell-notebook installation
 # from https://github.com/IHaskell/ihaskell-notebook/blob/master/Dockerfile
@@ -93,11 +103,14 @@ ENV PATH ${PATH}:/opt/bin
 # IHaskell 2022-12-19
 ARG IHASKELL_COMMIT=1c22a874ac0c8ed019229f4a0cd5a0bfda017357
 
+
+## vega
 # Specify a git branch for hvega
 # https://github.com/DougBurke/hvega/commits/main
 # hvega 2022-06-16
 # hvega-0.12.0.3
 # ihaskell-hvega-0.5.0.3
+
 ARG HVEGA_COMMIT=2b453c230294b889564339853de02b0c1829a081
 
 # Clone IHaskell and install ghc from the IHaskell resolver
@@ -123,31 +136,32 @@ RUN    stack build $STACK_ARGS ihaskell \
 
 # Install IHaskell.Display libraries
 # https://github.com/gibiansky/IHaskell/tree/master/ihaskell-display
-RUN    stack build $STACK_ARGS ihaskell-aeson \
-    && stack build $STACK_ARGS ihaskell-blaze \
-    && stack build $STACK_ARGS ihaskell-charts \
-    && stack build $STACK_ARGS ihaskell-diagrams \
-    && stack build $STACK_ARGS ihaskell-gnuplot \
-    && stack build $STACK_ARGS ihaskell-graphviz \
-    && stack build $STACK_ARGS ihaskell-hatex \
-    && stack build $STACK_ARGS ihaskell-juicypixels \
-#   && stack build $STACK_ARGS ihaskell-magic \
-    && stack build $STACK_ARGS ihaskell-plot \
-#   && stack build $STACK_ARGS ihaskell-rlangqq \
-#   && stack build $STACK_ARGS ihaskell-static-canvas \
-    && stack build $STACK_ARGS ihaskell-widgets \
-    && stack build $STACK_ARGS hvega \
-    && stack build $STACK_ARGS ihaskell-hvega \
-    && fix-permissions $STACK_ROOT \
-# Fix for https://github.com/IHaskell/ihaskell-notebook/issues/14#issuecomment-636334824
-    && fix-permissions /opt/IHaskell \
-    && fix-permissions /opt/hvega
+#RUN    stack build $STACK_ARGS ihaskell-aeson \
+#    && stack build $STACK_ARGS ihaskell-blaze \
+#    && stack build $STACK_ARGS ihaskell-charts \
+#    && stack build $STACK_ARGS ihaskell-diagrams \
+#    && stack build $STACK_ARGS ihaskell-gnuplot \
+#    && stack build $STACK_ARGS ihaskell-graphviz \
+#    && stack build $STACK_ARGS ihaskell-hatex \
+#    && stack build $STACK_ARGS ihaskell-juicypixels \
+##   && stack build $STACK_ARGS ihaskell-magic \
+#    && stack build $STACK_ARGS ihaskell-plot \
+##   && stack build $STACK_ARGS ihaskell-rlangqq \
+##   && stack build $STACK_ARGS ihaskell-static-canvas \
+#    && stack build $STACK_ARGS ihaskell-widgets \
+#    && stack build $STACK_ARGS hvega \
+#    && stack build $STACK_ARGS ihaskell-hvega \
+#    && fix-permissions $STACK_ROOT \
+## Fix for https://github.com/IHaskell/ihaskell-notebook/issues/14#issuecomment-636334824
+#    && fix-permissions /opt/IHaskell \
+#    && fix-permissions /opt/hvega
 
 # Cleanup
-# Don't clean IHaskell/.stack-work, 7GB, this causes issue #5
-#   && rm -rf $(find /opt/IHaskell -type d -name .stack-work) \
-# Don't clean /opt/hvega
-# We can't actually figure out anything to cleanup.
+# Clean of IHaskell/.stack-work  causes https://github.com/IHaskell/ihaskell-notebook/issues/5
+# in this case user can not build packages based on ihaskell, which for just running hasell does not matter
+RUN  rm -rf $(find /opt/IHaskell -type d -name .stack-work)
+# clean /opt/hvega ?
+    # && rm -rf $(find /opt/hvega -type d -name .stack-work)
 
 # Bug workaround for https://github.com/IHaskell/ihaskell-notebook/issues/9
 RUN mkdir -p /home/jovyan/.local/share/jupyter/runtime \
@@ -162,56 +176,52 @@ RUN mkdir -p /opt/ghc && ln -s `stack path --compiler-bin` /opt/ghc/bin \
     && fix-permissions /opt/ghc
 ENV PATH ${PATH}:/opt/ghc/bin
 
+USER $NB_UID
+# Install the IHaskell kernel at /usr/local/share/jupyter/kernels, which is
+# in `jupyter --paths` data:
+RUN stack exec ihaskell -- install --stack --prefix=/usr/local
+USER root
+
+#######
+# vs code
+##########
 # vs code haskell needs ghcup, which manages its own install of ghc on the fly (per project)
 # this install script could confict with the custom install of ghc/stack and cabal
 # RUN BOOTSTRAP_HASKELL_NONINTERACTIVE=1 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh 
 # ghcup binary is all that vscode needs 
 
-ENV GHCUP_ROOT=/opt/ghcup
-RUN mkdir -p $GHCUP_ROOT
-RUN fix-permissions $GHCUP_ROOT
-RUN curl https://downloads.haskell.org/~ghcup/x86_64-linux-ghcup >> ${GHCUP_ROOT}/ghcup
-ENV PATH ${PATH}:/opt/ghcup
+#ENV GHCUP_ROOT=/opt/ghcup
+#ENV GHCUP_INSTALL_BASE_PREFIX=/opt/ghcup
+#ENV GHCUP_USE_XDG_DIRS=1
+#ENV GHCUP_SKIP_UPDATE_CHECK=1
+
+#RUN mkdir -p $GHCUP_ROOT
+#RUN fix-permissions $GHCUP_ROOT
+#RUN curl https://downloads.haskell.org/~ghcup/x86_64-linux-ghcup >> ${GHCUP_ROOT}/ghcup 
+#RUN chmod +x ${GHCUP_ROOT}/ghcup  && fix-permissions ${GHCUP_ROOT}/ghcup
+#ENV PATH ${PATH}:/opt/ghcup
+
+#USER $NB_UID
+#RUN ghcup install hls
+#USER root
+
+#### alternate manual install of hls
+RUN mkdir -p /tmp/hls && cd /tmp/hls \
+    && curl -sSL --output hls.tar.xz https://github.com/haskell/haskell-language-server/releases/download/2.0.0.0/haskell-language-server-2.0.0.0-x86_64-linux-deb11.tar.xz  \
+    && tar -xf hls.tar.xz \
+    && cp haskell-language-server-2.0.0.0/bin/haskell-language-server-9.4.5 /opt/bin/haskell-language-server-9.4.5 \
+    && cp haskell-language-server-2.0.0.0/bin/haskell-language-server-wrapper /opt/bin/haskell-language-server-wrapper \
+# copy libs over (yes this is dirty, but somehow libs in ghc lib dir dont work for some reason)
+    && mkdir /lib/hls  \
+    && cp -r haskell-language-server-2.0.0.0/lib/9.4.5/* /lib/x86_64-linux-gnu/  \
+    && cp -r /opt/stack/programs/x86_64-linux/ghc-tinfo6-9.4.5/lib/ghc-9.4.5/lib/x86_64-linux-ghc-9.4.5/* /lib/x86_64-linux-gnu/ \
+    && fix-permissions /opt/bin  \
+    && cd /tmp && rm -rf /tmp/hls
 
 # vscode haskell extension
-RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension haskell.haskell 
-
-# Install the IHaskell kernel at /usr/local/share/jupyter/kernels, which is
-# in `jupyter --paths` data:
-RUN stack exec ihaskell -- install --stack --prefix=/usr/local
-
-# # We don't need to install the ihaskell_labextension for JupyterLab syntax highlighting
-# # https://github.com/IHaskell/IHaskell/issues/1238#issuecomment-907658217
-#     && npm install -g typescript \
-#     && cd /opt/IHaskell/jupyterlab-ihaskell \
-#     && npm install \
-#     && npm run build \
-#     && jupyter labextension install . \
-# # Cleanup
-#     && npm cache clean --force \
-#     && rm -rf /home/$NB_USER/.cache/yarn \
-# # Clean jupyterlab-ihaskell/node_nodemodules, 86MB
-#     && rm -rf /opt/IHaskell/jupyterlab-ihaskell/node_modules
-
-RUN conda install --quiet --yes \
-# ihaskell-widgets needs ipywidgets
-# https://github.com/IHaskell/IHaskell/issues/1380
-    'ipywidgets=7.7.1' && \
-# ihaskell-hvega doesn't need an extension. https://github.com/jupyterlab/jupyter-renderers
-#    'jupyterlab-vega3' && \
-    conda clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension haskell.haskell && fix-permissions "/home/${NB_USER}"
 
 # Switch back to jovyan user
 USER $NB_UID
 
-# Example IHaskell notebooks are here: /opt/IHaskell/notebooks /opt/IHaskell/<package>/*
-# they should be readable, so simply copy into home to use them.
 
-# Enable this for debugging the kernel messages
-# RUN conda install --quiet --yes \
-#     'jupyterlab-kernelspy' && \
-#     conda clean --all -f -y && \
-#     fix-permissions "${CONDA_DIR}" && \
-#     fix-permissions "/home/${NB_USER}"

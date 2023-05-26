@@ -1,0 +1,48 @@
+resolver: nightly-2023-05-17
+# GHC 9.4.5
+
+# Stack global project /opt/stack/global-project/stack.yaml in the Docker image.
+# https://docs.haskellstack.org/en/stable/yaml_configuration/#yaml-configuration
+
+# All the IHaskell packages are listed as extra-deps rather than packages,
+# because we never want to build anything automatically, we always want to
+# select exactly what we build for the IHaskell notebook environment.
+# For example, `stack ghci` tries to load every package listed in `packages`,
+# and we don't want that behavior. Several of these packages are unbuildable
+# at the time of this writing. See the Dockerfile for the list of packages
+# which are pre-built into the Docker image.
+#
+# To make an notebook project with custom `stack.yaml`, copy this `stack.yaml`
+# file into the project directory that has the `.ipynb` notebook file and
+# then make changes to the copied `stack.yaml`.
+
+packages: []
+extra-deps:
+- /opt/IHaskell
+- /opt/IHaskell/ipython-kernel
+- /opt/IHaskell/ghc-parser
+#- /opt/IHaskell/ihaskell-display/ihaskell-aeson
+#- /opt/IHaskell/ihaskell-display/ihaskell-blaze
+#- /opt/IHaskell/ihaskell-display/ihaskell-charts
+#- /opt/IHaskell/ihaskell-display/ihaskell-diagrams
+#- /opt/IHaskell/ihaskell-display/ihaskell-gnuplot
+#- /opt/IHaskell/ihaskell-display/ihaskell-graphviz
+#- /opt/IHaskell/ihaskell-display/ihaskell-hatex
+#- /opt/IHaskell/ihaskell-display/ihaskell-juicypixels
+#- /opt/IHaskell/ihaskell-display/ihaskell-magic
+#- /opt/IHaskell/ihaskell-display/ihaskell-plot
+#- /opt/IHaskell/ihaskell-display/ihaskell-rlangqq
+#- /opt/IHaskell/ihaskell-display/ihaskell-static-canvas
+#- /opt/IHaskell/ihaskell-display/ihaskell-widgets
+#- /opt/hvega/hvega
+#- /opt/hvega/ihaskell-hvega
+
+
+# deps for the above ihaskell packages
+- Chart-cairo-1.9.3
+- cairo-0.13.10.0
+- diagrams-cairo-1.4.2
+- pango-0.13.10.0
+- glib-0.13.10.0
+- gtk2hs-buildtools-0.13.10.0
+- plot-0.2.3.11
