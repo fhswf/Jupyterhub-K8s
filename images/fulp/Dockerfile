@@ -219,7 +219,53 @@ RUN mkdir -p /tmp/hls && cd /tmp/hls \
     && cd /tmp && rm -rf /tmp/hls
 
 # vscode haskell extension
-RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension haskell.haskell && fix-permissions "/home/${NB_USER}"
+# RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension haskell.haskell && fix-permissions "/home/${NB_USER}"
+
+############
+# swi prolog & jupyterextension
+############
+
+# RUN apt-get install software-properties-common \
+#RUN apt-add-repository ppa:swi-prolog/stable \
+#    && apt-get update \
+#    && apt-get install swi-prolog \
+#    && rm -rf /var/lib/apt/lists/* 
+
+ENV LANG C.UTF-8
+RUN set -eux \
+    && SWIPL_VER=9.1.10 \
+    && SWIPL_CHECKSUM=16c0d014510f5e0c3b427d2842cac89fea0d4c136caabbeb698d578ee8126870 \
+    && BUILD_DEPS='make cmake ninja-build gcc g++ wget git autoconf libarchive-dev libgmp-dev libossp-uuid-dev libxext-dev libice-dev libjpeg-dev libxinerama-dev libxft-dev libxpm-dev libxt-dev libpcre2-dev ncurses-dev  libreadline-dev libedit-dev libssl-dev zlib1g-dev libdb-dev unixodbc-dev libgoogle-perftools-dev libyaml-dev' \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends $BUILD_DEPS \
+    # && apt-get install libgoogle-perftools-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir /tmp/src \
+    && cd /tmp/src \
+    && wget -q https://www.swi-prolog.org/download/devel/src/swipl-$SWIPL_VER.tar.gz \
+    && echo "$SWIPL_CHECKSUM  swipl-$SWIPL_VER.tar.gz" >> swipl-$SWIPL_VER.tar.gz-CHECKSUM \
+    && sha256sum -c swipl-$SWIPL_VER.tar.gz-CHECKSUM \
+    && tar -xzf swipl-$SWIPL_VER.tar.gz \
+    && mkdir swipl-$SWIPL_VER/build \
+    && cd swipl-$SWIPL_VER/build \
+    && cmake -DCMAKE_BUILD_TYPE=PGO \
+          -DSWIPL_PACKAGES_X=OFF \
+	  -DSWIPL_PACKAGES_JAVA=OFF \
+	  -DCMAKE_INSTALL_PREFIX=/usr \
+      -DSPM_ENABLE_TCMALLOC=OFF \
+          .. \
+    && make \
+    && make install \
+    && rm -rf /tmp/src \
+    # && apt-get purge -y --auto-remove $BUILD_DEPS \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install prolog_kernel jupyterlab_prolog_codemirror_extension \
+    && python -m prolog_kernel.install --prefix /usr/local \
+    && fix-permissions /usr/local/share/jupyter/kernels
+
+# check kernels
+RUN jupyter kernelspec list
 
 # Switch back to jovyan user
 USER $NB_UID
