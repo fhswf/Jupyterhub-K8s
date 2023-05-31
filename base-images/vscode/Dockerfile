@@ -125,7 +125,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-mark hold ${NV_CUDNN_PACKAGE_NAME} \
     && rm -rf /var/lib/apt/lists/*
 
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CONDA_DIR}/lib/
+# conda LD_LIBRARY_PATH contains conflicting packages 
+#ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CONDA_DIR}/lib/
 RUN echo LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" >> /etc/environment 
 ENV CPATH=$CONDA_DIR/include
 RUN echo CPATH="${CPATH}" >> /etc/environment
@@ -189,8 +190,13 @@ RUN mkdir -p /opt/code-server/lib/vscode/extensions \
        $HOME/.config \
        $HOME/.local
 
-RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller scilab-kernel \
+RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
+
+# only install scilab-kernel for scipy notebooks
+RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
+    then pip scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
+    fi 
 
 USER $NB_UID
 
