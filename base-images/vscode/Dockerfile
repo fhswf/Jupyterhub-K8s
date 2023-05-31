@@ -201,6 +201,9 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
     then pip install scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
     fi 
 
+RUN cp setup_env.sh /usr/local/bin/start-notebook.d \
+    && chmod +x /usr/local/bin/start-notebook.d/setup_env.sh
+
 USER $NB_UID
 
 LABEL ki.fh-swf.de.jupyterhub.namelabel="vscode-${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}"
