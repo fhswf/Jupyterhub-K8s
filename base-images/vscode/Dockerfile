@@ -198,7 +198,7 @@ RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller \
 
 # only install scilab-kernel for scipy notebooks
 RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
-    then pip scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
+    then pip install scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
     fi 
 
 USER $NB_UID
