@@ -35,19 +35,19 @@ jobs:
       image: ${{ matrix.image }}
       folder:  images/${{ matrix.image }}
       
-  pull-to-harbor:
-    needs: [build-and-push-images, detect-changes]
-    if: ${{ needs.detect-changes.outputs.images != '[]' ||  contains(github.event_name, 'workflow_dispatch') }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image: ${{fromJson(needs.detect-changes.outputs.images)}}
-    steps:
-      - name: pull
-        run: |
-          openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ca.crt
-          sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
-          sudo update-ca-certificates
-          tag=$(echo "${{ matrix.image }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
-          docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}:$tag
+  #pull-to-harbor:
+  #  needs: [build-and-push-images, detect-changes]
+  #  if: ${{ needs.detect-changes.outputs.images != '[]' ||  contains(github.event_name, 'workflow_dispatch') }}
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    matrix:
+  #      image: ${{fromJson(needs.detect-changes.outputs.images)}}
+  #  steps:
+  #    - name: pull
+  #      run: |
+  #        openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ca.crt
+  #        sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
+  #        sudo update-ca-certificates
+  #        tag=$(echo "${{ matrix.image }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
+  #        docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}:$tag
       
