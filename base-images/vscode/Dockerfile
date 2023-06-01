@@ -118,7 +118,6 @@ USER root
 
 ENV NV_CUDNN_VERSION 8.5.0.96
 ENV NV_CUDNN_PACKAGE_NAME "libcudnn8"
-
 ENV NV_CUDNN_PACKAGE "libcudnn8=$NV_CUDNN_VERSION-1+cuda11.7"
 
 LABEL com.nvidia.cudnn.version="${NV_CUDNN_VERSION}"
