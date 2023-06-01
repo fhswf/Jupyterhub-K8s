@@ -173,25 +173,23 @@ RUN mkdir -p /opt/code-server/lib/vscode/extensions \
     && curl -sL https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg -o vscode.svg \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb \
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension GitHub.copilot \ 
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.vscode-pylance \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension VisualStudioExptTeam.vscodeintellicode \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-vscode-remote.remote-ssh \ 
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension redhat.vscode-yaml \ 
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension donjayamanne.githistory \ 
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension humao.rest-client \ 
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension esbenp.prettier-vscode \ 
+    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension GitHub.copilot \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
+    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.vscode-pylance \
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
+    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension VisualStudioExptTeam.vscodeintellicode \
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
+    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-vscode-remote.remote-ssh \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension redhat.vscode-yaml \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension donjayamanne.githistory \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension humao.rest-client \ 
+    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension esbenp.prettier-vscode \ 
     ## Create folders temp and tmp for Jupyter extension, 202 shoueld default to the verison 2023-X.XYZ
-    && cd /opt/code-server/lib/vscode/extensions/ms-toolsai.jupyter-202* \
-    && mkdir -m 1777 temp \
-    && mkdir -m 1777 tmp \
-    && rm -rf /tmp/* \
-       $HOME/.config \
-       $HOME/.local
+    #&& cd /opt/code-server/lib/vscode/extensions/ms-toolsai.jupyter-202* \
+    #&& mkdir -m 1777 temp \
+    #&& mkdir -m 1777 tmp \
+    && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache
 
 RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
