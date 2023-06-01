@@ -108,9 +108,6 @@ jobs:
           
       - name: pull to harbor
         run: |
-          openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ca.crt
-          sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
-          sudo update-ca-certificates
           tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
           docker image pull harbor.ki.fh-swf.de/${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}${{ steps.imagename.outputs.imagename }}:$tag
           
