@@ -109,7 +109,8 @@ jobs:
       - name: pull to harbor
         run: |
           tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
-          docker image pull harbor.ki.fh-swf.de/${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}${{ steps.imagename.outputs.imagename }}:$tag
+          REPO=${GITHUB_REPOSITORY,,}
+          docker image pull harbor.ki.fh-swf.de/${{ env.REGISTRY }}/$REPO/${{ inputs.image }}${{ steps.imagename.outputs.imagename }}:$tag
           
       #- name: setoutput
       #  id: setoutput
