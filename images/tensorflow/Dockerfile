@@ -5,7 +5,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN conda install -c conda-forge cudatoolkit=11.7.0
 
 RUN python3 -m pip install nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
-    && && rm -rf /tmp/* $HOME/.cache
+    && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="tf-notebook-cuda"
