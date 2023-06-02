@@ -1,4 +1,4 @@
-FROM ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda
+FROM ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-d39be35
 
 RUN pip install bash_kernel \
     && python -m bash_kernel.install \
