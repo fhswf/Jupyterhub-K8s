@@ -1,11 +1,5 @@
 FROM ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda
 
-USER root
-######################
-
-######################
-USER $NB_UID
-
 RUN pip install bash_kernel \
     && python -m bash_kernel.install \
     && && rm -rf /tmp/* $HOME/.cache
