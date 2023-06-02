@@ -33,9 +33,29 @@ RUN pip install -U jupyterhub \
     pip install rasa \
     pip install scikit-learn 
 
+    # gradio
+    # evaluate adapter-transformers diffusers[torch] accelerate
+    # jiwer
+    # audiofile
+
+    # wandb
+    # spacy
+    # Cython
+    # flair
+    # nemo_toolkit['all'] or  "nemo_toolkit[all]"
+
+# libsndfile1 sox \
+#  libfreetype6 \
+#  swig \
+#  ffmpeg \
+#  libavdevice-dev && \
+# apt
+# librosa
+# libsndfile1 ffmpeg
+
 USER root
 
-ENV LD_LIBRARY_PATH=${CONDA_DIR}/lib/:${LD_LIBRARY_PATH}
+# ENV LD_LIBRARY_PATH=${CONDA_DIR}/lib/:${LD_LIBRARY_PATH}
 RUN echo LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" >> /etc/environment 
 ENV CPATH=$CONDA_DIR/include
 RUN echo CPATH="${CPATH}" >> /etc/environment

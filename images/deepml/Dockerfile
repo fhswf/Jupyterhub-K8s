@@ -2,6 +2,8 @@ FROM ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-cudnn:sha-d39be35
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+USER root
+
 # Install apt prerequisits
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -11,6 +13,8 @@ RUN apt-get update && \
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+USER $NB_UID
 
 # Install Tensorflow
 RUN conda install -c conda-forge cudatoolkit=11.7.0
@@ -37,7 +41,6 @@ RUN pip install \
 RUN pip install \
     spacy nltk gensim rasa jiwer audiofile  \
     && rm -rf /tmp/* $HOME/.cache
-
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-notebook-cuda"
