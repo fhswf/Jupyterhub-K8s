@@ -44,7 +44,7 @@ RUN pip install \
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-notebook-cuda"
-LABEL ki.fh-swf.de.jupyterhub.description="Multipurpose DeepLearning Image with cuda"
-LABEL org.opencontainers.image.description="Multipurpose DeepLearning Image with cuda"
+LABEL ki.fh-swf.de.jupyterhub.description="Multipurpose Deep Learning image with cuda"
+LABEL org.opencontainers.image.description="Multipurpose Deep Learning image with cuda"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
 LABEL org.opencontainers.image.licenses="MIT"
