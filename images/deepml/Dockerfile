@@ -8,7 +8,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # for torch vision and huggingface nlp
-    librosa libsndfile1 ffmpeg \
+    libsndfile1 ffmpeg \
     # deps for nvidia nemo_toolkit 
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
     && apt-get clean && \
@@ -29,7 +29,7 @@ RUN pip install \
 
 # Install other python packages 
 RUN pip install \
-    gradio wandb Cython flair nemo_toolkit[all] \
+    librosa gradio wandb Cython flair nemo_toolkit[all] \
     && rm -rf /tmp/* $HOME/.cache 
 
 # Install Huggingface libraries
