@@ -42,8 +42,8 @@ USER root
 
 RUN pip install multidict \
     && rm -rf /tmp/* $HOME/.cache \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+    && fix-permissions "${CONDA_DIR}" \
+    && fix-permissions "/home/${NB_USER}"
 
 USER $NB_UID
 
@@ -53,7 +53,7 @@ RUN pip install \
     && rm -rf /tmp/* $HOME/.cache 
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
-LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-notebook-cuda"
+LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-cuda"
 LABEL ki.fh-swf.de.jupyterhub.description="Multipurpose Deep Learning image with cuda"
 LABEL org.opencontainers.image.description="Multipurpose Deep Learning image with cuda"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
