@@ -37,10 +37,20 @@ RUN pip install \
     transformers datasets metrics tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
     && rm -rf /tmp/* $HOME/.cache
 
+# python wheels that get autocompiled when installed
+USER root
+
+RUN pip install multidict \
+    && rm -rf /tmp/* $HOME/.cache \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+USER $NB_UID
+
 # NLP related extras
 RUN pip install \
     spacy nltk gensim rasa jiwer audiofile  \
-    && rm -rf /tmp/* $HOME/.cache
+    && rm -rf /tmp/* $HOME/.cache 
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-notebook-cuda"
