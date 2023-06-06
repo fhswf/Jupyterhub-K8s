@@ -201,6 +201,8 @@ RUN  chmod +x /usr/local/bin/start-notebook.d/setup_env.sh
 
 USER $NB_UID
 
+RUN npm config set cache /opt/conda/npm-cache --global
+
 LABEL ki.fh-swf.de.jupyterhub.namelabel="vscode-${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}"
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook VS Code and ${BUILD_CUDA_VARIANT}."
 LABEL org.opencontainers.image.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook VS Code and ${BUILD_CUDA_VARIANT}."
