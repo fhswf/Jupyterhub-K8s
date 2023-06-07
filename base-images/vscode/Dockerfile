@@ -201,6 +201,10 @@ RUN  chmod +x /usr/local/bin/start-notebook.d/setup_env.sh
 
 USER $NB_UID
 
+RUN pip install bash_kernel \
+    && python -m bash_kernel.install --prefix /opt/conda \
+    && rm -rf /tmp/* $HOME/.cache
+
 RUN npm config set cache /opt/conda/npm-cache --global
 
 LABEL ki.fh-swf.de.jupyterhub.namelabel="vscode-${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}"
