@@ -145,6 +145,8 @@ USER $NB_UID
 
 FROM cuda-cudnn as cuda-devel
 
+USER root
+
 ENV NV_CUDA_LIB_VERSION "11.7.1-1"
 
 ENV NV_CUDA_CUDART_DEV_VERSION 11.7.99-1
@@ -182,6 +184,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Keep apt from auto upgrading the cublas and nccl packages. See https://gitlab.com/nvidia/container-images/cuda/-/issues/88
 RUN apt-mark hold ${NV_LIBCUBLAS_DEV_PACKAGE_NAME} ${NV_LIBNCCL_DEV_PACKAGE_NAME}
 ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+
+USER $NB_UID
 
 ###############
 #  vscode 
