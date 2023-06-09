@@ -22,17 +22,22 @@ RUN pip install multidict \
 
 USER $NB_UID
 
-# Install Tensorflow
+# Install Tensorflow deps
 RUN conda install -c conda-forge cudatoolkit=11.7.0
+
+# Install PyTorch
+RUN pip install \
+    torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
+    && rm -rf /tmp/* $HOME/.cache
 
 # Install Huggingface libraries
 RUN pip install \
     nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
-    torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
     librosa gradio wandb Cython flair nemo_toolkit[all] \
     transformers datasets metrics tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
-    spacy nltk gensim jiwer audiofile \
+    spacy nltk gensim rasa jiwer audiofile \
     && rm -rf /tmp/* $HOME/.cache
+
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-cuda"
