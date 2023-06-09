@@ -14,32 +14,7 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
-
-# Install Tensorflow
-RUN conda install -c conda-forge cudatoolkit=11.7.0
-
-RUN python3 -m pip install nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
-    && rm -rf /tmp/* $HOME/.cache
-
-# Install PyTorch
-RUN pip install \
-    torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
-    && rm -rf /tmp/* $HOME/.cache
-
-# Install other python packages 
-RUN pip install \
-    librosa gradio wandb Cython flair nemo_toolkit[all] \
-    && rm -rf /tmp/* $HOME/.cache 
-
-# Install Huggingface libraries
-RUN pip install \
-    transformers datasets metrics tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
-    && rm -rf /tmp/* $HOME/.cache
-
 # python wheels that get autocompiled when installed
-USER root
-
 RUN pip install multidict \
     && rm -rf /tmp/* $HOME/.cache \
     && fix-permissions "${CONDA_DIR}" \
@@ -47,10 +22,17 @@ RUN pip install multidict \
 
 USER $NB_UID
 
-# NLP related extras
+# Install Tensorflow
+RUN conda install -c conda-forge cudatoolkit=11.7.0
+
+# Install Huggingface libraries
 RUN pip install \
-    spacy nltk gensim rasa jiwer audiofile  \
-    && rm -rf /tmp/* $HOME/.cache 
+    nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
+    torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
+    librosa gradio wandb Cython flair nemo_toolkit[all] \
+    transformers datasets metrics tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
+    spacy nltk gensim rasa jiwer audiofile \
+    && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="deepml-cuda"
