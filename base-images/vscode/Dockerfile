@@ -140,6 +140,50 @@ LABEL ki.fh-swf.de.jupyterhub.runtime.cudnn="${NV_CUDNN_VERSION}"
 USER $NB_UID
 
 ###############
+# cuda-devel
+###############
+
+FROM cuda-cudnn as cuda-devel
+
+ENV NV_CUDA_LIB_VERSION "11.7.1-1"
+
+ENV NV_CUDA_CUDART_DEV_VERSION 11.7.99-1
+ENV NV_NVML_DEV_VERSION 11.7.91-1
+ENV NV_LIBCUSPARSE_DEV_VERSION 11.7.4.91-1
+ENV NV_LIBNPP_DEV_VERSION 11.7.4.75-1
+ENV NV_LIBNPP_DEV_PACKAGE libnpp-dev-11-7=${NV_LIBNPP_DEV_VERSION}
+
+ENV NV_LIBCUBLAS_DEV_VERSION 11.10.3.66-1
+ENV NV_LIBCUBLAS_DEV_PACKAGE_NAME libcublas-dev-11-7
+ENV NV_LIBCUBLAS_DEV_PACKAGE ${NV_LIBCUBLAS_DEV_PACKAGE_NAME}=${NV_LIBCUBLAS_DEV_VERSION}
+
+ENV NV_NVPROF_VERSION 11.7.101-1
+ENV NV_NVPROF_DEV_PACKAGE cuda-nvprof-11-7=${NV_NVPROF_VERSION}
+
+ENV NV_LIBNCCL_DEV_PACKAGE_NAME libnccl-dev
+ENV NV_LIBNCCL_DEV_PACKAGE_VERSION 2.13.4-1
+ENV NCCL_VERSION 2.13.4-1
+ENV NV_LIBNCCL_DEV_PACKAGE ${NV_LIBNCCL_DEV_PACKAGE_NAME}=${NV_LIBNCCL_DEV_PACKAGE_VERSION}+cuda11.7
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libtinfo5 libncursesw5 \
+    cuda-cudart-dev-11-7=${NV_CUDA_CUDART_DEV_VERSION} \
+    cuda-command-line-tools-11-7=${NV_CUDA_LIB_VERSION} \
+    cuda-minimal-build-11-7=${NV_CUDA_LIB_VERSION} \
+    cuda-libraries-dev-11-7=${NV_CUDA_LIB_VERSION} \
+    cuda-nvml-dev-11-7=${NV_NVML_DEV_VERSION} \
+    ${NV_NVPROF_DEV_PACKAGE} \
+    ${NV_LIBNPP_DEV_PACKAGE} \
+    libcusparse-dev-11-7=${NV_LIBCUSPARSE_DEV_VERSION} \
+    ${NV_LIBCUBLAS_DEV_PACKAGE} \
+    ${NV_LIBNCCL_DEV_PACKAGE} \
+    && rm -rf /var/lib/apt/lists/*
+
+# Keep apt from auto upgrading the cublas and nccl packages. See https://gitlab.com/nvidia/container-images/cuda/-/issues/88
+RUN apt-mark hold ${NV_LIBCUBLAS_DEV_PACKAGE_NAME} ${NV_LIBNCCL_DEV_PACKAGE_NAME}
+ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+
+###############
 #  vscode 
 ###############
 FROM ${CUDA_VARIANT}
