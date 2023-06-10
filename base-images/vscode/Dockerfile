@@ -1,7 +1,7 @@
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
 
-FROM jupyter/${JUPYTER_VARIANT}-notebook as nocuda
+FROM jupyter/${JUPYTER_VARIANT}-notebook:python-3.10 as nocuda
 
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
