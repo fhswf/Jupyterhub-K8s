@@ -15,6 +15,11 @@ on:
         description: Location and build context of the Dockerfile folder
         required: true
         type: string
+      buildargs:
+        description: build-args for docker build action (new line delimitated yaml like list)
+        required: false
+        type: string
+        default: ""
     outputs:
       tags:
         description: "tags"
@@ -59,11 +64,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: create image name based on build args
+        id: imagename
+        run: |
+          image_name=`echo "${{inputs.buildargs}}" | awk -F'=' '{print $2}' | tr -d '[:blank:]' | tr  -s '\n' '-' | sed 's/-$//'`
+          if [ "$image_name" != "" ]; then image_name="-$image_name" ; fi
+          echo "$image_name"
+          echo "imagename=$image_name" >> $GITHUB_OUTPUT
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}
+          images:  ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}${{ steps.imagename.outputs.imagename }}
+          #images: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ inputs.image }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=schedule
@@ -90,7 +104,17 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
+          build-args: ${{ inputs.buildargs }}
+          
+      - name: pull to harbor
+        run: |
+          tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
+          tags=$(echo "${{ steps.meta.outputs.tags }}")
+          for tag in $tags 
+          do 
+          docker image pull harbor.ki.fh-swf.de/$tag
+          done
+          
       #- name: setoutput
       #  id: setoutput
       #  run: |

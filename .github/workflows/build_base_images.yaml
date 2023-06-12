@@ -31,23 +31,51 @@ jobs:
     strategy:
       matrix:
         image: ${{fromJson(needs.detect-changes.outputs.images)}}
+        buildargs: 
+        - |
+          JUPYTER_VARIANT=minimal
+          CUDA_VARIANT=nocuda
+        - |
+          JUPYTER_VARIANT=minimal
+          CUDA_VARIANT=cuda-runtime
+        - |
+          JUPYTER_VARIANT=minimal
+          CUDA_VARIANT=cuda-cudnn
+        - |
+          JUPYTER_VARIANT=minimal
+          CUDA_VARIANT=cuda-devel
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=nocuda
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=cuda-runtime
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=cuda-cudnn
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=cuda-devel
+
     uses: ./.github/workflows/reusable-docker-build-push.yml
     with:
       image: ${{ matrix.image }}
       folder:  base-images/${{ matrix.image }}
+      buildargs:  ${{ matrix.buildargs }}
       
-  pull-to-harbor:
-    needs: [build-and-push-base-images, detect-changes]
-    if: ${{ needs.detect-changes.outputs.images != '[]'  ||  contains(github.event_name, 'workflow_dispatch') }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image: ${{fromJson(needs.detect-changes.outputs.images)}}
-    steps:
-      - name: pull
-        run: |
-          openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ca.crt
-          sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
-          sudo update-ca-certificates
-          docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}
+  #pull-to-harbor:
+  #  needs: [build-and-push-base-images, detect-changes]
+  #  if: ${{ needs.detect-changes.outputs.images != '[]'  ||  contains(github.event_name, 'workflow_dispatch') }}
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    matrix:
+  #      image: ${{fromJson(needs.detect-changes.outputs.images)}}
+  #  steps:
+  #    - name: pull
+  #      run: |
+  #        openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ca.crt
+  #        sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
+  #        sudo update-ca-certificates
+  #        tag=$(echo "${{ matrix.image }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
+  #        docker image pull harbor.ki.fh-swf.de/ghcr.io/fhswf/jupyterhub-k8s/${{ matrix.image }}:$tag
       
