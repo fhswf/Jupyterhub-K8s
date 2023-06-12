@@ -1,4 +1,4 @@
-FROM ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel
+FROM ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-d11cf9b
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
