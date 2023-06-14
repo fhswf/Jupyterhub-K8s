@@ -212,6 +212,7 @@ ENV CODE_BUILTIN_EXTENSIONS_DIR=/opt/code-server/lib/vscode/extensions
 ENV PATH=/opt/code-server/bin:$PATH \
     CS_DISABLE_GETTING_STARTED_OVERRIDE=1
 
+# maybe create a image specific folder for vs code extensions inside $HOME and install extension at runtime via script
 RUN mkdir -p /opt/code-server/lib/vscode/extensions \ 
     && cd /tmp \
     && curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_VERSION}/code-server_${CODE_VERSION}_amd64.deb \
