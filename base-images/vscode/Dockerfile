@@ -232,7 +232,7 @@ RUN cd /tmp \
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension esbenp.prettier-vscode \  
     ## Create folders temp and tmp for Jupyter extension, 202 shoueld default to the verison 2023-X.XYZ
-    && cd /opt/code-server/lib/vscode/extensions/ms-toolsai.jupyter-202* \
+    && cd ${CODE_BUILTIN_EXTENSIONS_DIR}/ms-toolsai.jupyter-202* \
     && mkdir -m 1777 temp \
     && mkdir -m 1777 tmp \
     && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
