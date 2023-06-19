@@ -7,6 +7,7 @@ ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
 ENV BUILD_CUDA_VARIANT=$CUDA_VARIANT
 ENV BUILD_JUPYTER_VARIANT=$JUPYTER_VARIANT
+ENV BUILD_IMAGE_NAME vscode-${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}
 
 LABEL maintainer "Fachhochschule Südwestfalen"
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
@@ -208,34 +209,34 @@ RUN apt-get update && \
 
 #  Code Server server-proxy/vscode-proxy from https://coder.com/docs/code-server/latest
 ENV CODE_VERSION=4.12.0
-ENV CODE_BUILTIN_EXTENSIONS_DIR=/opt/code-server/lib/vscode/extensions
+
+ENV CODE_BUILTIN_EXTENSIONS_DIR=/usr/lib/code-server/lib/vscode/extensions/
 ENV PATH=/opt/code-server/bin:$PATH \
     CS_DISABLE_GETTING_STARTED_OVERRIDE=1
 
+ENV SERVICE_URL=https://open-vsx.org/vscode/gallery 
+ENV ITEM_URL=https://open-vsx.org/vscode/item
+
 # maybe create a image specific folder for vs code extensions inside $HOME and install extension at runtime via script
-RUN mkdir -p /opt/code-server/lib/vscode/extensions \ 
-    && cd /tmp \
+RUN cd /tmp \
     && curl -fOL https://github.com/coder/code-server/releases/download/v${CODE_VERSION}/code-server_${CODE_VERSION}_amd64.deb \
     && curl -sL https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg -o vscode.svg \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb \
-    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension GitHub.copilot \ 
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
-    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.vscode-pylance \
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
-    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension VisualStudioExptTeam.vscodeintellicode \
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
-    ##&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-vscode-remote.remote-ssh \ 
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension redhat.vscode-yaml \ 
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension donjayamanne.githistory \ 
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension humao.rest-client \ 
-    #&& code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension esbenp.prettier-vscode \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension humao.rest-client \
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension redhat.vscode-yaml \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension donjayamanne.githistory \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension alefragnani.project-manager \ 
+    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension esbenp.prettier-vscode \  
     ## Create folders temp and tmp for Jupyter extension, 202 shoueld default to the verison 2023-X.XYZ
-    #&& cd /opt/code-server/lib/vscode/extensions/ms-toolsai.jupyter-202* \
-    #&& mkdir -m 1777 temp \
-    #&& mkdir -m 1777 tmp \
-    && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache
+    && cd ${CODE_BUILTIN_EXTENSIONS_DIR}/ms-toolsai.jupyter-202* \
+    && mkdir -m 1777 temp \
+    && mkdir -m 1777 tmp \
+    && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
+    && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
 RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
