@@ -4,7 +4,7 @@ with open("README.md", encoding="utf8") as f:
     readme = f.read()
 
 setup_args = dict(
-    name="jupyter-vscodeserver-proxy",
+    name="jupyter_vscodeserver_proxy",
     packages=find_packages(),
     version='0.1.0',
     description="JupyterHub jupyter server proxy for code-server",
