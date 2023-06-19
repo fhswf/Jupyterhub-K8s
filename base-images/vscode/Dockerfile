@@ -1,7 +1,8 @@
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
 
-FROM jupyter/${JUPYTER_VARIANT}-notebook:python-3.10 as nocuda
+FROM jupyter/${JUPYTER_VARIANT}-notebook:lab-3.6.3 as nocuda
+# FROM jupyter/${JUPYTER_VARIANT}-notebook:python-3.10 as nocuda
 
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
@@ -238,7 +239,12 @@ RUN cd /tmp \
     && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
     && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
-RUN pip install jupyter-server-proxy jupyter-vscode-proxy nbgitpuller \
+RUN pip install \
+    jupyterlab-lsp \
+    jupyter-server-proxy \
+    git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
+    jedi-language-server \
+    nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
 
 # only install scilab-kernel for scipy notebooks
@@ -246,14 +252,23 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
     then pip install scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
     fi 
 
+# conda tectlive latex lsp
+# conda install --channel conda-forge tectonic texlab chktex
+# conda install -c conda-forge texlab chktex
+
+# start scripts
 COPY setup_env.sh /usr/local/bin/start-notebook.d/  
 RUN  chmod +x /usr/local/bin/start-notebook.d/setup_env.sh
 
+# user 
 USER $NB_UID
 
 RUN pip install bash_kernel \
     && python -m bash_kernel.install --prefix /opt/conda \
     && rm -rf /tmp/* $HOME/.cache
+
+## npm language servers:
+RUN npm install -g --save-dev bash-language-server pyright sql-language-server typescript-language-server unified-language-server vscode-css-languageserver-bin vscode-html-languageserver-bin yaml-language-server vscode-json-languageserver-bin
 
 RUN npm config set cache /opt/conda/npm-cache --global
 
