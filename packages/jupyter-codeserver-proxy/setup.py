@@ -17,7 +17,7 @@ setup_args = dict(
     python_requires=">=3.8",
     include_package_data=True,
     package_data={"jupyter-codeserver-proxy": ["icons/*"]},
-    entry_points={"jupyter_serverproxy_servers": ["vscode = jupyter-codeserver-proxy:setup_vscode"] }
+    entry_points={"jupyter_serverproxy_servers": ["vscode = jupyter_codeserver_proxy:setup_vscode"] }
 )
 
 setup_args['install_requires'] = install_requires = []
