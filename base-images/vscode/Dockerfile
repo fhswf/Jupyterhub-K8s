@@ -266,6 +266,13 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/001_rebind_home.sh
 COPY setup_env.sh /usr/local/bin/before-notebook.d/010_setup_env.sh  
 RUN  chmod +x /usr/local/bin/before-notebook.d/010_setup_env.sh
 
+# git LFS
+RUN apt-get update \
+    &&  curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
+    &&  apt-get install -y --no-install-recommends git-lfs \
+     && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # user 
 USER $NB_UID
 
