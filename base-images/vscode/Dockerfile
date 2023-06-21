@@ -256,9 +256,15 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
 # conda install --channel conda-forge tectonic texlab chktex
 # conda install -c conda-forge texlab chktex
 
+# make /home group writable in case we want to move /home/$NB_USER
+# fix for https://github.com/jupyter/docker-stacks/issues/1923
+RUN chmod g+rwx /home
 # start scripts
-COPY setup_env.sh /usr/local/bin/start-notebook.d/  
-RUN  chmod +x /usr/local/bin/start-notebook.d/setup_env.sh
+COPY rebind_home.sh /usr/local/bin/before-notebook.d/001_rebind_home.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/001_rebind_home.sh
+
+COPY setup_env.sh /usr/local/bin/before-notebook.d/010_setup_env.sh  
+RUN  chmod +x /usr/local/bin/before-notebook.d/010_setup_env.sh
 
 # user 
 USER $NB_UID
