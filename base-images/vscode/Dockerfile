@@ -203,6 +203,7 @@ RUN apt-get update && \
     htop \
     wget \
     curl \
+    jq \
     openssh-client \
     iputils-ping \
     && apt-get clean && \
@@ -214,6 +215,9 @@ ENV CODE_VERSION=4.12.0
 ENV CODE_BUILTIN_EXTENSIONS_DIR=/usr/lib/code-server/lib/vscode/extensions/
 ENV PATH=/opt/code-server/bin:$PATH \
     CS_DISABLE_GETTING_STARTED_OVERRIDE=1
+
+ENV CODE_EXTENSIONSDIR='/home/$NB_USER/.local/share/code-server-$BUILD_IMAGE_NAME/extensions/'
+ENV CODE_USERDATADIR='/home/$NB_USER/.local/share/code-server-$BUILD_IMAGE_NAME/'
 
 ENV SERVICE_URL=https://open-vsx.org/vscode/gallery 
 ENV ITEM_URL=https://open-vsx.org/vscode/item
@@ -236,6 +240,11 @@ RUN cd /tmp \
     && cd ${CODE_BUILTIN_EXTENSIONS_DIR}/ms-toolsai.jupyter-202* \
     && mkdir -m 1777 temp \
     && mkdir -m 1777 tmp \
+    # update defualt values 
+    && QUERY='.contributes.configuration.properties."python.condaPath".default="/opt/conda/bin/conda"' \
+    && cat <<< $(jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json) > /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
+    && QUERY='.contributes.configuration.properties."python.defaultInterpreterPath".default="/opt/conda/bin/python"' \
+    && cat <<< $(jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json) > /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
     && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
     && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
 
@@ -268,9 +277,9 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/010_setup_env.sh
 
 # git LFS
 RUN apt-get update \
-    &&  curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
-    &&  apt-get install -y --no-install-recommends git-lfs \
-     && apt-get clean && \
+    && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
+    && apt-get install -y --no-install-recommends git-lfs \
+    && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # user 
