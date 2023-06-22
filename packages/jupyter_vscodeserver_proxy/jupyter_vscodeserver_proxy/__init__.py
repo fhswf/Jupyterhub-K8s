@@ -2,12 +2,12 @@ import os
 import shutil
 from typing import List
 
-def resolve_envs(s:str) -> str:
+def resolve_env(s:str) -> str:
     [s := s.replace("$"+k, v) for k, v in dict(os.environ).items()]
     return s
 
 def resolve_envs(ss:List[str]) -> List[str]:
-    return list(map(resolve_envs, ss))
+    return list(map(resolve_env, ss))
 
 def run_vscode():
     def _get_vscode_cmd(port):
@@ -31,11 +31,11 @@ def run_vscode():
         ]
 
         if extensions_dir:
-            dir = resolve_envs(extensions_dir) 
+            dir = resolve_env(extensions_dir) 
             os.makedirs(dir, exist_ok=True)
             cmd += ["--extensions-dir", dir]
         if user_data_dir:
-            dir = resolve_envs(user_data_dir) 
+            dir = resolve_env(user_data_dir) 
             os.makedirs(dir, exist_ok=True)
             cmd += ["--user-data-dir", dir]
         if extra_args:
