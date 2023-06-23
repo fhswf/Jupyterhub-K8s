@@ -7,7 +7,7 @@ if [[ -w /etc/passwd ]] && [[ -w /home ]]; then
          _log "creating enw home for user ${NB_USER}"
         mkdir -p /home/${NB_USER};
         head -n -1 /etc/passwd > /tmp/passwd;
-        echo "${NB_USER}:x:$(id -u):$(id -g):,,,:/home/${NB_USER}:/bin/bash";
+        echo "creating passwd entry ${NB_USER}:x:$(id -u):$(id -g):,,,:/home/${NB_USER}:/bin/bash";
         echo "${NB_USER}:x:$(id -u):$(id -g):,,,:/home/${NB_USER}:/bin/bash" >> /tmp/passwd;
         cat /tmp/passwd > /etc/passwd;
         rm /tmp/passwd;
