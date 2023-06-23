@@ -1,6 +1,9 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-d39be35 
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-634d8d0  
 
 FROM $BASE_CONTAINER
+
+ARG BASE_CONTAINER
+ENV BUILD_IMAGE_NAME java
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -26,11 +29,16 @@ RUN apt-get update \
     # openjdk-17-jdk \
     && rm -rf /var/lib/apt/lists/*
 
+RUN code-server --extensions-dir /usr/lib/code-server/lib/vscode/extensions/ --install-extension vscjava.vscode-java-pack \
+    && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
+    && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
 USER $NB_UID
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
-LABEL ki.fh-swf.de.jupyterhub.namelabel="java"
+LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
 LABEL ki.fh-swf.de.jupyterhub.description="Java"
 LABEL org.opencontainers.image.description="Java" 
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
 LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.base.name=$BASE_CONTAINER

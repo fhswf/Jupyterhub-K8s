@@ -1,7 +1,7 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-d11cf9b
-
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-634d8d0 
 FROM $BASE_CONTAINER
-
+ARG BASE_CONTAINER
+ENV BUILD_IMAGE_NAME fulp
 # Extra arguments to `stack build`. Used to build --fast, see Makefile.
 ARG STACK_ARGS=
 
@@ -218,9 +218,6 @@ RUN mkdir -p /tmp/hls && cd /tmp/hls \
     && fix-permissions /opt/bin  \
     && cd /tmp && rm -rf /tmp/hls
 
-# vscode haskell extension
-# RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension haskell.haskell && fix-permissions "/home/${NB_USER}"
-
 ############
 # swi prolog & jupyterextension
 ############
@@ -258,6 +255,7 @@ RUN set -eux \
     && make install \
     && rm -rf /tmp/src \
     # && apt-get purge -y --auto-remove $BUILD_DEPS \
+    && swipl -g "pack_install(prolog_lsp) "  -t halt \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install prolog_kernel jupyterlab_prolog_codemirror_extension \
@@ -267,7 +265,19 @@ RUN pip install prolog_kernel jupyterlab_prolog_codemirror_extension \
 # check kernels
 RUN jupyter kernelspec list
 
+# vscode extensions
+RUN code-server --extensions-dir /usr/lib/code-server/lib/vscode/extensions/ --install-extension haskell.haskell \
+    && code-server --extensions-dir /usr/lib/code-server/lib/vscode/extensions/ --install-extension hargettp.pure-prolog-language-support \
+    && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
+    && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
 # Switch back to jovyan user
 USER $NB_UID
 
-
+LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
+LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
+LABEL ki.fh-swf.de.jupyterhub.description="Functional and logical programming"
+LABEL org.opencontainers.image.description="Functional and logical programming"
+LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.base.name=$BASE_CONTAINER
