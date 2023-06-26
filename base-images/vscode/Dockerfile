@@ -204,13 +204,14 @@ RUN apt-get update && \
     wget \
     curl \
     jq \
+    moreutils \
     openssh-client \
     iputils-ping \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 #  Code Server server-proxy/vscode-proxy from https://coder.com/docs/code-server/latest
-ENV CODE_VERSION=4.12.0
+ENV CODE_VERSION=4.13.0
 
 ENV CODE_BUILTIN_EXTENSIONS_DIR=/usr/lib/code-server/lib/vscode/extensions/
 ENV PATH=/opt/code-server/bin:$PATH \
@@ -228,7 +229,10 @@ RUN cd /tmp \
     && curl -sL https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg -o vscode.svg \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb \
-    && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
+    && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
+    && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
+RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-python.python \
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.jupyter \
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension ms-toolsai.vscode-jupyter-cell-tags \
     && code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extension humao.rest-client \
@@ -242,11 +246,12 @@ RUN cd /tmp \
     && mkdir -m 1777 tmp \
     # update defualt values 
     && QUERY='.contributes.configuration.properties."python.condaPath".default="/opt/conda/bin/conda"' \
-    && cat <<< $(jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json) > /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
+    && jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json | sponge /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
     && QUERY='.contributes.configuration.properties."python.defaultInterpreterPath".default="/opt/conda/bin/python"' \
-    && cat <<< $(jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json) > /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
+    && jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json | sponge /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
     && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
-    && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+    && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER \
+    cd /tmp 
 
 RUN pip install \
     jupyterlab-lsp \
@@ -268,17 +273,17 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
 # make /home group writable in case we want to move /home/$NB_USER
 # fix for https://github.com/jupyter/docker-stacks/issues/1923
 RUN chmod g+rwx /home
-# start scripts
+# copy start scripts
 COPY rebind_home.sh /usr/local/bin/before-notebook.d/001_rebind_home.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/001_rebind_home.sh
-
 COPY setup_env.sh /usr/local/bin/before-notebook.d/010_setup_env.sh  
 RUN  chmod +x /usr/local/bin/before-notebook.d/010_setup_env.sh
 
 # git LFS
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
-    && apt-get install -y --no-install-recommends git-lfs \
+    && apt-get install -y --no-install-recommends \
+    git-lfs \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -290,7 +295,17 @@ RUN pip install bash_kernel \
     && rm -rf /tmp/* $HOME/.cache
 
 ## npm language servers:
-RUN npm install -g --save-dev bash-language-server pyright sql-language-server typescript-language-server unified-language-server vscode-css-languageserver-bin vscode-html-languageserver-bin yaml-language-server vscode-json-languageserver-bin
+RUN npm install -g --save-dev \
+    bash-language-server \
+    pyright \
+    sql-language-server \
+    typescript-language-server \
+    unified-language-server \
+    vscode-css-languageserver-bin \
+    vscode-html-languageserver-bin \
+    yaml-language-server \
+    vscode-json-languageserver-bin \
+    && rm -rf /tmp/* $HOME/.cache
 
 RUN npm config set cache /opt/conda/npm-cache --global
 
