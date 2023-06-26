@@ -251,7 +251,7 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json | sponge /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
     && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
     && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER \
-    cd /tmp 
+    && cd /tmp 
 
 RUN pip install \
     jupyterlab-lsp \
