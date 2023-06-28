@@ -257,10 +257,8 @@ RUN set -eux \
     # && apt-get purge -y --auto-remove $BUILD_DEPS 
 
 RUN set -eux \
-    && swipl -g "pack_install(prolog_lsp,[interactive(false)]) " -t halt \
+    && swipl -g "pack_install(log4p,[interactive(false)]) " -t halt \
     && swipl -g "pack_install(prolog_lsp,[interactive(false)]) "  -t halt \
-    && rm -rf /var/lib/apt/lists/*
-
 
 RUN pip install prolog_kernel jupyterlab_prolog_codemirror_extension \
     && python -m prolog_kernel.install --prefix /usr/local \
