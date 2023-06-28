@@ -50,11 +50,6 @@ RUN pip install multidict \
 
 USER $NB_UID
 
-## Install Tensorflow deps
-# this is not required for devel packages
-# RUN conda install -c conda-forge cudatoolkit=11.7.0
-# RUN conda install -c "nvidia/label/cuda-11.7.0" cuda-nvcc
-
 # Install PyTorch
 RUN pip install \
     torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \

@@ -38,7 +38,7 @@ USER $NB_UID
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
 LABEL ki.fh-swf.de.jupyterhub.description="Java"
-LABEL org.opencontainers.image.description="Java" 
+LABEL org.opencontainers.image.description="Java JDK20" 
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.base.name=$BASE_CONTAINER
