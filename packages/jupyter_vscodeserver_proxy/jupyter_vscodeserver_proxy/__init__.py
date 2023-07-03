@@ -1,12 +1,20 @@
 import os
 import shutil
+from typing import List
+
+def resolve_env(s:str) -> str:
+    [s := s.replace("$"+k, v) for k, v in dict(os.environ).items()]
+    return s
+
+def resolve_envs(ss:List[str]) -> List[str]:
+    return list(map(resolve_env, ss))
 
 def run_vscode():
     def _get_vscode_cmd(port):
         executable = "code-server"
         if not shutil.which(executable):
             raise FileNotFoundError("Can not find code-server in PATH")
-        
+            
         # Start vscode in CODE_WORKINGDIR env variable if set
         # If not, start in 'current directory', which is $REPO_DIR in mybinder
         # but /home/jovyan (or equivalent) in JupyterHubs
@@ -14,7 +22,6 @@ def run_vscode():
         extensions_dir = os.getenv("CODE_EXTENSIONSDIR", None)
         user_data_dir = os.getenv("CODE_USERDATADIR", None)
         extra_args = os.getenv("CODE_ARGS", None)
-        
         cmd = [
             executable,
             "--auth",
@@ -24,13 +31,18 @@ def run_vscode():
         ]
 
         if extensions_dir:
-            cmd += ["--extensions-dir", extensions_dir]
+            dir = resolve_env(extensions_dir) 
+            os.makedirs(dir, exist_ok=True)
+            cmd += ["--extensions-dir", dir]
         if user_data_dir:
-            cmd += ["--user-data-dir", user_data_dir]
+            dir = resolve_env(user_data_dir) 
+            os.makedirs(dir, exist_ok=True)
+            cmd += ["--user-data-dir", dir]
         if extra_args:
-            cmd.extend(extra_args.split(":"))
+            cmd.extend(resolve_envs(extra_args.split(":")))
 
         cmd.append(working_dir)
+        print("launching code server", cmd)
         return cmd
 
     return {
