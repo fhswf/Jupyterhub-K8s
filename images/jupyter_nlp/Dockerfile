@@ -17,6 +17,7 @@ RUN apt-get update && \
     libgmp-dev \
     htop \
     wget \
+    curl \
     iputils-ping \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
