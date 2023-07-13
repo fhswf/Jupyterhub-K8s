@@ -107,6 +107,7 @@ jobs:
           build-args: ${{ inputs.buildargs }}
           
       - name: pull to harbor
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
           tags=$(echo "${{ steps.meta.outputs.tags }}")
