@@ -277,6 +277,8 @@ COPY rebind_home.sh /usr/local/bin/before-notebook.d/001_rebind_home.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/001_rebind_home.sh
 COPY setup_env.sh /usr/local/bin/before-notebook.d/010_setup_env.sh  
 RUN  chmod +x /usr/local/bin/before-notebook.d/010_setup_env.sh
+COPY clean_runtime.sh /usr/local/bin/before-notebook.d/040_clean_runtime.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/040_clean_runtime.sh
 
 # git LFS
 RUN apt-get update \
