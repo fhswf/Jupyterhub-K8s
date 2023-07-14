@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-372d538
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-399fe69
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME deepml
@@ -60,7 +60,7 @@ RUN pip install \
     nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
     librosa gradio wandb Cython flair \ 
     transformers datasets metrics tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
-    spacy nltk gensim jiwer audiofile opencv-python\
+    spacy nltk gensim jiwer audiofile opencv-python tiktoken \
     && rm -rf /tmp/* $HOME/.cache
 
 # optional stuff not included currently
