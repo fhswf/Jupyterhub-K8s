@@ -10,3 +10,6 @@ else
         rm kernel-*.json nbserver-*.html nbserver-*.json;
     fi
 fi
+
+cd $HOME
+echo "done cleaning left over kernel connectors"
