@@ -219,8 +219,8 @@ ENV PATH=/opt/code-server/bin:$PATH \
 ENV CODE_EXTENSIONSDIR='/home/$NB_USER/.local/share/code-server-$BUILD_IMAGE_NAME/extensions/'
 ENV CODE_USERDATADIR='/home/$NB_USER/.local/share/code-server-$BUILD_IMAGE_NAME/'
 
-ENV SERVICE_URL=https://open-vsx.org/vscode/gallery 
-ENV ITEM_URL=https://open-vsx.org/vscode/item
+#ENV SERVICE_URL=https://open-vsx.org/vscode/gallery 
+#ENV ITEM_URL=https://open-vsx.org/vscode/item
 
 # maybe create a image specific folder for vs code extensions inside $HOME and install extension at runtime via script
 RUN cd /tmp \
@@ -250,6 +250,7 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && jq $QUERY /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json | sponge /usr/lib/code-server/lib/vscode/extensions/ms-python.python-*/package.json \
     && rm -rf /tmp/* $HOME/.config $HOME/.local $HOME/.cache \
     && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER \
+    && fix-permissions $CODE_BUILTIN_EXTENSIONS_DIR \
     && cd /tmp 
 
 RUN pip install \
