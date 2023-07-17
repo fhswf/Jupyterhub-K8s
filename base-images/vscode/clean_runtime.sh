@@ -3,11 +3,11 @@
 cd $HOME/.local/share/jupyter/runtime
 
 if [ $? -eq 0 ]; then
-    rm kernel-*.json nbserver-*.html nbserver-*.json;
+    rm -f kernel-*.json nbserver-*.html nbserver-*.json;
 else
     cd /home/jovyan/.local/share/jupyter/runtime;
     if [ $? -eq 0 ]; then
-        rm kernel-*.json nbserver-*.html nbserver-*.json;
+        rm -f kernel-*.json nbserver-*.html nbserver-*.json;
     fi
 fi
 
