@@ -1,15 +1,7 @@
 #!/bin/bash
-# cd cd /home/$NB_USER/.local/share/jupyter/runtime
-cd $HOME/.local/share/jupyter/runtime
-
-if [ $? -eq 0 ]; then
-    rm -f kernel-*.json nbserver-*.html nbserver-*.json;
+if [[ -d "$HOME/.local/share/jupyter/runtime" ]] ; then
+    rm -f $HOME/.local/share/jupyter/runtime/kernel-*.json $HOME/.local/share/jupyter/runtime/nbserver-*.html $HOME/.local/share/jupyter/runtime/nbserver-*.json;
 else
-    cd /home/jovyan/.local/share/jupyter/runtime;
-    if [ $? -eq 0 ]; then
-        rm -f kernel-*.json nbserver-*.html nbserver-*.json;
-    fi
+    rm -f /home/jovyan/.local/share/jupyter/runtime/kernel-*.json /home/jovyan/.local/share/jupyter/runtime/nbserver-*.html /home/jovyan/.local/share/jupyter/runtime/nbserver-*.json;
 fi
-
-cd $HOME
 echo "done cleaning left over kernel connectors"
