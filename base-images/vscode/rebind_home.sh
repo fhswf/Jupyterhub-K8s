@@ -11,13 +11,18 @@ if [[ -w /etc/passwd ]] && [[ -w /home ]]; then
         echo "${NB_USER}:x:$(id -u):$(id -g):,,,:/home/${NB_USER}:/bin/bash" >> /tmp/passwd;
         cat /tmp/passwd > /etc/passwd;
         rm /tmp/passwd;
-        export HOME=/home/${NB_USER};
-        if [[ "${PWD}/" == "/home/jovyan/"* ]]; then
+        if  [[ $HOME !=  "/home/${NB_USER}" ]]; then
+            export HOME=/home/${NB_USER}
+        fi
+        if [[ ${PWD}/ == "/home/jovyan/"* ]]; then
             new_wd="/home/${NB_USER}/${PWD:13}"
-            _log "Changing working directory to ${new_wd}"
+            echo "Changing working directory to ${new_wd}"
             cd "${new_wd}"
         fi
+        # snippets taken from the docker-stacks start.sh that do not get executed atm.
+        # note that file system permissions for /home/${NB_USER} have to be checked/corercted with a privilieged initContainer.
+        export XDG_CACHE_HOME="/home/${NB_USER}/.cache"
     fi
 else
-    _log "WARNING: unable to fix missing /etc/passwd entry because we don't have write permission. Try setting gid=0 with \"--user=$(id -u):0\"."
+    echo "WARNING: unable to fix missing /etc/passwd entry because we don't have write permission. Try setting gid=0 with \"--user=$(id -u):0\"."
 fi
