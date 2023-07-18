@@ -1,3 +1,4 @@
+#!/bin/bash
 # looks for .sh scripts to source and runs them
 run-user-hooks () {
     if [[ ! -d "${1}" ]] ; then
@@ -9,7 +10,7 @@ run-user-hooks () {
             *.sh)
                 echo "${0}: running script ${f}"
                 # shellcheck disable=SC1090
-                source "${f}"
+                source "${f}" > "$HOME/.startup-hooks/$BUILD_IMAGE_NAME/logs/${f}"
                 ;;
             *)
                 echo "${0}: ignoring non shell script ${f}"
