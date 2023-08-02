@@ -59,7 +59,7 @@ RUN pip install \
 RUN pip install \
     nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
     librosa gradio wandb Cython flair \ 
-    transformers datasets metrics tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
+    transformers datasets tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
     spacy nltk gensim jiwer audiofile opencv-python tiktoken \
     && rm -rf /tmp/* $HOME/.cache
 
