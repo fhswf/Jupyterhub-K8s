@@ -283,11 +283,11 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 
-# git LFS
+# git LFS and other extras
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && apt-get install -y --no-install-recommends \
-    git-lfs \
+    git-lfs zlib1g-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
