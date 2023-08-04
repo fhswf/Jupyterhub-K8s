@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/deepml:sha-8d803da
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/deepml:sha-399fe69
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME eki
