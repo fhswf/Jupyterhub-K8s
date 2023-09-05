@@ -14,8 +14,6 @@ RUN pip install \
     ipyturtle3 wikipedia-api beautifulsoup4 nose \
     && rm -rf /tmp/* $HOME/.cache
 
-RUN jupyter nbextension enable --py --sys-prefix ipyturtle
-
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
 LABEL ki.fh-swf.de.jupyterhub.description="Programmierung fuer KI"
