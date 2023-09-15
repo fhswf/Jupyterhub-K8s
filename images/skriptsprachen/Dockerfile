@@ -11,13 +11,13 @@ USER $NB_UID
 
 # Install PYthon Libs
 RUN pip install \
-    chess musicbrainzngs wikipedia-api PyPDF2 beautifulsoup4 matplotlib mock nose numpy openpyxl operator codecs requests shutil sqlite3 wikipedia-api yfinance \
+    chess musicbrainzngs wikipedia-api PyPDF2 beautifulsoup4 matplotlib mock nose numpy openpyxl requests shutil sqlite3 wikipedia-api yfinance \
     && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
-LABEL ki.fh-swf.de.jupyterhub.description="Programmierung fuer KI"
-LABEL org.opencontainers.image.description="Programmierung fuer KI"
+LABEL ki.fh-swf.de.jupyterhub.description="Skriptsprachen"
+LABEL org.opencontainers.image.description="Skriptsprachen"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.base.name=$BASE_CONTAINER
