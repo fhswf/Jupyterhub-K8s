@@ -11,7 +11,7 @@ USER $NB_UID
 
 # Install PYthon Libs
 RUN pip install \
-    chess musicbrainzngs wikipedia-api PyPDF2 beautifulsoup4 matplotlib mock nose numpy openpyxl requests shutil sqlite3 wikipedia-api yfinance \
+    chess musicbrainzngs wikipedia-api PyPDF2 beautifulsoup4 matplotlib mock nose numpy openpyxl requests sqlite3 yfinance \
     && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
