@@ -200,10 +200,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     fonts-dejavu \
     htop \
-    wget \
-    curl \
-    jq \
-    moreutils \
+    build-essential gcc g++ gnupg2 make less cmake \
+    wget curl jq moreutils \
     openssh-client \
     iputils-ping \
     && apt-get clean && \
