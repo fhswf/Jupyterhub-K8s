@@ -5,6 +5,7 @@ on:
     paths:
       - "images/**/Dockerfile"
       - "images/**/*"
+      - ".github/workflows/build_images.yaml"
   workflow_dispatch:
 
 jobs:
