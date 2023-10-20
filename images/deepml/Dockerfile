@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-bb4d64b
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-7961803
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME deepml
