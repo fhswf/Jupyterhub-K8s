@@ -60,6 +60,10 @@ ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
 USER $NB_UID
 
+# extra nvidia tools (nvidia-ml-py is wrapper for nvml c-library)
+RUN pip install nvidia-ml-py \
+    && rm -rf /tmp/* $HOME/.cache
+
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.cuda="${BUILD_CUDA_VARIANT}"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}"
@@ -280,6 +284,8 @@ COPY clean_runtime.sh /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
+COPY configure_cuda.sh /usr/local/bin/before-notebook.d/80_configure_cuda.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 
 # git LFS and other extras
 RUN apt-get update \
