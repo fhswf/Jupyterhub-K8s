@@ -5,7 +5,7 @@
 kicluster_configure_cmd=nvidia-smi
 if [[ $(type -P "$kicluster_configure_cmd") ]] ; then
     kicluster_configure_mode=(`nvidia-smi --format=csv --query-gpu=mig.mode.current | tail --lines=+2`)
-    if  [ ${#mode[@]} == 0 ] ; then
+    if  [ ${#kicluster_configure_mode[@]} == 0 ] ; then
        echo "WARNING: no cuda devices found";
     else
         ## mig modes for cuda devices can be: [Disabled|Enabled]
