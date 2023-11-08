@@ -292,6 +292,7 @@ RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && apt-get install -y --no-install-recommends \
     git-lfs zlib1g-dev \
+    libncurses-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
