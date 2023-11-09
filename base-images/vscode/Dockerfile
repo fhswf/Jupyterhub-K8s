@@ -273,7 +273,6 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
 # conda install -c conda-forge texlab chktex
 
 # make /home group writable in case we want to move /home/$NB_USER
-# fix for https://github.com/jupyter/docker-stacks/issues/1923
 RUN chmod g+rwx /home
 # copy start scripts
 COPY rebind_home.sh /usr/local/bin/before-notebook.d/01_rebind_home.sh
