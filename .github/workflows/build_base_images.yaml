@@ -47,9 +47,9 @@ jobs:
         #- |
         #  JUPYTER_VARIANT=minimal
         #  CUDA_VARIANT=cuda-devel
-        #- |
-        #  JUPYTER_VARIANT=scipy
-        #  CUDA_VARIANT=nocuda
+        - |
+          JUPYTER_VARIANT=scipy
+          CUDA_VARIANT=nocuda
         #- |
         #  JUPYTER_VARIANT=scipy
         #  CUDA_VARIANT=cuda-runtime
