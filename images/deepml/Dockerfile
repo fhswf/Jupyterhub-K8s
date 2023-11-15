@@ -28,25 +28,7 @@ RUN pip install multidict \
 # RUN cp -P /usr/include/cudnn.h /usr/local/cuda/include
 # RUN cp -P /usr/lib/x86_64-linux-gnu/libcudnn* /usr/local/cuda/lib64
 
-# Install TensorRT
-# our current configuration does not support any tensorrt version
-# we have to upgrade cuda
-#ENV TRT_VERSION 8.4.3.1-1+cuda11.6
-#ENV LIBINFER_VERSION 8.4.3-1+cuda11.6
-#RUN apt-get update \
-#    && apt-get install -y --no-install-recommends \
-#    libnvinfer-plugin8=${LIBINFER_VERSION} \
-#    libnvonnxparsers8=${LIBINFER_VERSION} \
-#    libnvparsers8=${LIBINFER_VERSION} \
-#    libnvinfer-plugin-dev=${LIBINFER_VERSION} \
-#    libnvparsers-dev=${LIBINFER_VERSION} \
-#    libnvonnxparsers-dev=${LIBINFER_VERSION} \
-#    libcudnn8-dev=8.5.0.96-1+cuda11.7 \
-#    libnvinfer8=${LIBINFER_VERSION} \ 
-#    tensorrt-dev=${TRT_VERSION} \
-#    libnvinfer-dev=${LIBINFER_VERSION} \
-#    && apt-get clean && \
-#    rm -rf /var/lib/apt/lists/*
+# Tensor RT is now in vscode base
 
 USER $NB_UID
 
