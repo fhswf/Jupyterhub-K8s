@@ -223,7 +223,7 @@ RUN apt-get install -y libnvinfer8=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers8=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers-dev=${NV_TENSOR_RT_TAG} \
     libnvparsers8=${NV_TENSOR_RT_TAG} \
-    libnvparsers-dev=${NV_TENSOR_RT_TAG}
+    libnvparsers-dev=${NV_TENSOR_RT_TAG} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
