@@ -7,13 +7,16 @@ USER root
 
 RUN mkdir -p /usr/local/etc/jupyterhub/jupyterhub_config.d
 
+COPY announcement_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/announcement_config.py
+
 USER ${NB_USER}
 
+# https://github.com/rcthomas/jupyterhub-announcement
 RUN pip install \
     oauthenticator \
     jupyterhub-ltiauthenticator \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
-    nbgitpuller 
+    nbgitpuller jupyterhub-announcement PyJWT
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
