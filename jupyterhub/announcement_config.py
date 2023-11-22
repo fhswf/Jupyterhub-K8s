@@ -7,16 +7,16 @@
 # ------------------------------------------------------------------------------
 ## This is an application.
 
-# TLDR
-if not isinstance(c.JupyterHub.services, list):
-    c.JupyterHub.services = []
-c.JupyterHub.services = c.JupyterHub.services.append(
-    {
-        'name': 'announcement',
-        'url': 'http://127.0.0.1:8888',
-        'command': ["python", "-m", "jupyterhub_announcement"]
-    }
-)
+## TLDR
+#if not isinstance(c.JupyterHub.services, list) or c.JupyterHub.services is None:
+#    c.JupyterHub.services = []
+#c.JupyterHub.services = c.JupyterHub.services.append(
+#    {
+#        'name': 'announcement',
+#        'url': 'http://127.0.0.1:8888',
+#        'command': ["python", "-m", "jupyterhub_announcement"]
+#    }
+#)
 
 ## Allow access from subdomains
 #  Default: False
