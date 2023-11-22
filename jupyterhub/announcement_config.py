@@ -8,8 +8,7 @@
 ## This is an application.
 
 # TLDR
-from typing import List
-if not instanceof(c.JupyterHub.services, List):
+if not isinstance(c.JupyterHub.services, list):
     c.JupyterHub.services = []
 c.JupyterHub.services = c.JupyterHub.services.append(
     {
