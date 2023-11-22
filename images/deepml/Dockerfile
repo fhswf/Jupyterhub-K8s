@@ -32,6 +32,9 @@ RUN pip install multidict \
 
 USER $NB_UID
 
+# prevent TF from allocating all VRAM
+ENV TF_FORCE_GPU_ALLOW_GROWTH True
+
 # Install PyTorch
 RUN pip install \
     torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
