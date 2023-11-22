@@ -8,13 +8,16 @@
 ## This is an application.
 
 # TLDR
-c.JupyterHub.services = [
+from typing import List
+if not instanceof(c.JupyterHub.services, List):
+    c.JupyterHub.services = []
+c.JupyterHub.services = c.JupyterHub.services.append(
     {
         'name': 'announcement',
         'url': 'http://127.0.0.1:8888',
         'command': ["python", "-m", "jupyterhub_announcement"]
     }
-]
+)
 
 ## Allow access from subdomains
 #  Default: False
