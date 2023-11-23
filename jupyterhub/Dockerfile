@@ -6,8 +6,7 @@ ENV PYTHONUNBUFFERED=1
 USER root
 
 RUN mkdir -p /usr/local/etc/jupyterhub/jupyterhub_config.d
-
-COPY announcement_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/announcement_config.py
+RUN mkdir -p /opt/jupyterhub/hub/templates
 
 USER ${NB_USER}
 
