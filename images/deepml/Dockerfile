@@ -33,7 +33,7 @@ RUN pip install multidict \
 USER $NB_UID
 
 # prevent TF from allocating all VRAM
-ENV TF_FORCE_GPU_ALLOW_GROWTH True
+ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
 # Install PyTorch
 RUN pip install \
