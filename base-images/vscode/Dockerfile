@@ -228,11 +228,10 @@ RUN apt-get install -y libnvinfer8=${NV_TENSOR_RT_TAG} \
     && rm -rf /var/lib/apt/lists/*
 
 # trick tf to use newer rt version
-RUN cd /usr/lib/x86_64-linux-gnu \
-    ln -s libnvinfer.so.8 libnvinfer.so.7 \
-    ln -s libnvinfer_plugin.so.8 libnvinfer_plugin.so.7 \
-    ln -s libnvonnxparser.so.8 libnvonnxparser.so.7 \
-    ln -s libnvparsers.so.8 libnvparsers.so.7
+RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so.8 /usr/lib/x86_64-linux-gnu/libnvinfer.so.7 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so.8 /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so.7 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.8 /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.7 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libnvparsers.so.8 /usr/lib/x86_64-linux-gnu/libnvparsers.so.7
 
 # Keep apt from auto upgrading the cublas and nccl packages. See https://gitlab.com/nvidia/container-images/cuda/-/issues/88
 RUN apt-mark hold ${NV_LIBCUBLAS_DEV_PACKAGE_NAME} ${NV_LIBNCCL_DEV_PACKAGE_NAME}
