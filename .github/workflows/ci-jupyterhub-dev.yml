@@ -1,8 +1,6 @@
 name: CICD jupyterhub-dev 
 
 on:
-  schedule:
-    - cron: '18 15 * * *'
   push:
     branches: [ "develop" ]
     paths:
