@@ -10,6 +10,10 @@ RUN mkdir -p /opt/jupyterhub/hub/templates
 
 USER ${NB_USER}
 
+ADD https://api.github.com/repos/fhswf/Jupyterhub-K8s/git/refs/heads/develop Jupyterhub-K8s.version.json
+ADD https://api.github.com/repos/fhswf/jupyterhub-announcement/git/refs/heads/main jupyterhub-announcement.version.json
+ADD https://api.github.com/repos/fhswf/ngshare/git/refs/heads/master ngshare.version.json
+
 # https://github.com/rcthomas/jupyterhub-announcement
 RUN pip install \
     oauthenticator \
