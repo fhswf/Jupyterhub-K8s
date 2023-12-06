@@ -16,7 +16,8 @@ RUN pip install \
     jupyterhub-ltiauthenticator \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
     nbgitpuller PyJWT \
-    git+https://github.com/fhswf/jupyterhub-announcement.git@main
+    git+https://github.com/fhswf/jupyterhub-announcement.git@main \
+    ngshare
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
