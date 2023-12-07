@@ -7,8 +7,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 
-RUN pip install \
-    ngshare_exchange\
+RUN pip install --no-deps\
+    ngshare_exchange nbgrader>=0.7.0 rapidfuzz hatchling>=1.10.0\
     && rm -rf /tmp/* $HOME/.cache
 
 COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
