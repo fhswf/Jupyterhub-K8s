@@ -11,6 +11,9 @@ RUN pip install \
     ngshare_exchange\
     && rm -rf /tmp/* $HOME/.cache
 
+COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
+RUN chmod -R 777 /etc/jupyter
+
 USER $NB_UID
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
