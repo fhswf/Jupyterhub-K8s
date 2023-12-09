@@ -17,7 +17,7 @@ RUN pip install \
     oauthenticator \
     jupyterhub-ltiauthenticator \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
-    nbgitpuller PyJWT 
+    nbgitpuller PyJWT \
     git+https://github.com/fhswf/jupyterhub-announcement.git@main 
 
 ADD https://api.github.com/repos/fhswf/ngshare/git/refs/heads/master ngshare.version.json
