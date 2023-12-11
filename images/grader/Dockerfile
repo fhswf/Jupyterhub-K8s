@@ -9,7 +9,7 @@ USER root
 
 # note that follwing packages after nbgrader are just dependencies of it
 RUN pip install --no-deps \          
-    ngshare_exchange nbgrader>=0.7.0 rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
+    ngshare_exchange nbgrader==0.8.5 rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
     && rm -rf /tmp/* $HOME/.cache
 
 COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
