@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-e108ac9
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-4dd0f7a
 
 FROM $BASE_CONTAINER
 
