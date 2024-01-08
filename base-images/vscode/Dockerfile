@@ -137,6 +137,13 @@ RUN echo LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" >> /etc/environment
 ENV CPATH=$CONDA_DIR/include
 RUN echo CPATH="${CPATH}" >> /etc/environment
 
+#RUN dpkg -i nv-tensorrt-local-repo-${OS_RELEASE}-${NV_TENSOR_RT_TAG}_1.0-1_amd64.deb
+#    && cp /var/nv-tensorrt-local-repo-${OS_RELEASE}-${NV_TENSOR_RT_TAG}/*-keyring.gpg /usr/share/keyrings/
+#    && apt-get update
+#
+#RUN apt-get install tensorrt
+#    && apt-get install python3-libnvinfer-dev
+
 LABEL ki.fh-swf.de.jupyterhub.namelabel="${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}"
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook with ${BUILD_CUDA_VARIANT}."
 LABEL org.opencontainers.image.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook with ${BUILD_CUDA_VARIANT}."
@@ -185,6 +192,46 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ${NV_LIBCUBLAS_DEV_PACKAGE} \
     ${NV_LIBNCCL_DEV_PACKAGE} \
     && rm -rf /var/lib/apt/lists/*
+
+
+# Install TensorRT
+ENV NV_TRT_VERSION 8.5.3
+ENV NV_TENSOR_RT_TAG 8.5.3-1+cuda11.8 
+ENV OS_RELEASE ubuntu2204
+
+# easy repo add
+RUN apt-get update && apt-get install -y software-properties-common 
+
+## Theese might change unexpectedly
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+RUN mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/7fa2af80.pub
+RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-certificates
+RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x536F8F1DE80F6A35' | gpg --import
+RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA4B469963BF863CC' | gpg --import
+RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
+RUN apt-get update
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
+RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
+RUN apt-get update
+
+RUN apt-get install -y libcudnn8-dev=8.5.0.96-1+cuda11.7
+RUN apt-get install -y libnvinfer8=${NV_TENSOR_RT_TAG} \
+    libnvinfer-plugin8=${NV_TENSOR_RT_TAG} \
+    libnvinfer-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-plugin-dev=${NV_TENSOR_RT_TAG} \
+    libnvonnxparsers8=${NV_TENSOR_RT_TAG} \
+    libnvonnxparsers-dev=${NV_TENSOR_RT_TAG} \
+    libnvparsers8=${NV_TENSOR_RT_TAG} \
+    libnvparsers-dev=${NV_TENSOR_RT_TAG} \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# trick tf to use newer rt version
+RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so.8 /usr/lib/x86_64-linux-gnu/libnvinfer.so.7 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so.8 /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so.7 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.8 /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.7 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libnvparsers.so.8 /usr/lib/x86_64-linux-gnu/libnvparsers.so.7
 
 # Keep apt from auto upgrading the cublas and nccl packages. See https://gitlab.com/nvidia/container-images/cuda/-/issues/88
 RUN apt-mark hold ${NV_LIBCUBLAS_DEV_PACKAGE_NAME} ${NV_LIBNCCL_DEV_PACKAGE_NAME}
@@ -256,8 +303,8 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && cd /tmp 
 
 RUN pip install \
-    jupyterlab-lsp \
-    jupyter-server-proxy \
+    jupyterlab-lsp==4.3.0 \
+    jupyter-server-proxy==4.0.0  \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
@@ -273,7 +320,6 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
 # conda install -c conda-forge texlab chktex
 
 # make /home group writable in case we want to move /home/$NB_USER
-# fix for https://github.com/jupyter/docker-stacks/issues/1923
 RUN chmod g+rwx /home
 # copy start scripts
 COPY rebind_home.sh /usr/local/bin/before-notebook.d/01_rebind_home.sh
@@ -292,6 +338,7 @@ RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && apt-get install -y --no-install-recommends \
     git-lfs zlib1g-dev git-core bash-completion \
+    libncurses-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
