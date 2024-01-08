@@ -291,7 +291,7 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && apt-get install -y --no-install-recommends \
-    git-lfs zlib1g-dev \
+    git-lfs zlib1g-dev git-core bash-completion \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
