@@ -30,6 +30,25 @@ RUN pip install multidict \
 
 # Tensor RT is now in vscode base
 
+# JAVA 1.8 for some old projects that need this runtime
+ENV JAVA_HOME /opt/java/openjdk
+ENV PATH $JAVA_HOME/bin:$PATH   
+ENV LC_ALL='en_US.UTF-8'
+ENV JAVA_VERSION jdk8u392-b08
+
+RUN wget -O /tmp/openjdk.tar.gz https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u392-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u392b08.tar.gz \
+    && mkdir -p "$JAVA_HOME" \
+    && tar --extract --file /tmp/openjdk.tar.gz --directory "$JAVA_HOME"  --strip-components 1 --no-same-owner \
+    && rm -f /tmp/openjdk.tar.gz ${JAVA_HOME}/lib/src.zip  \
+    && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
+    && ldconfig \
+    && java -Xshare:dump
+
+RUN apt-get update \
+    && apt-get install -yq --no-install-recommends \
+    maven \
+    && rm -rf /var/lib/apt/lists/*
+
 USER $NB_UID
 
 # prevent TF from allocating all VRAM
