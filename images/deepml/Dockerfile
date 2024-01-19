@@ -47,7 +47,7 @@ RUN wget -O /tmp/openjdk.tar.gz https://github.com/adoptium/temurin8-binaries/re
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends \
     maven \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /tmp/* /var/lib/apt/lists/*
 
 USER $NB_UID
 
