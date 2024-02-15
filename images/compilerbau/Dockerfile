@@ -10,6 +10,14 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # apt things here:
+    flex \
+    bison \
+    libfl-dev \
+    libbison-dev \
+    graphviz \
+    git \
+    gcc \
+    make \
     clang \
     default-jdk \
     javacc \
