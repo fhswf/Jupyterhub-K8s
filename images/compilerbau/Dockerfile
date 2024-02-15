@@ -21,7 +21,11 @@ USER $NB_UID
 RUN pip install \
     # python packages here:
     llvmlite \
-    && rm -rf /tmp/* $HOME/.cache
+    && rm -rf $HOME/.cache
+    
+USER root
+RUN rm -rf /tmp/*
+USER $NB_UID
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
