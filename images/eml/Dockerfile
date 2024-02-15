@@ -12,7 +12,7 @@ USER $NB_UID
 # Install PYthon Libs
 RUN pip install \
     matplotlib beautifulsoup4 wikipedia-api nose numpy pandas pydot requests seaborn \
-    scikit-learn tensorflow wget csv datetime gzip io math random tarfile time urllib3 \
+    scikit-learn tensorflow wget datetime gzip io math random tarfile time urllib3 \
     && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
