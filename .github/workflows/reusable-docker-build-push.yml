@@ -36,8 +36,8 @@ on:
 
 jobs:
   build-push:
-    runs-on: ubuntu-latest
-    #runs-on: self-hosted
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}

@@ -11,7 +11,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # for torch vision and huggingface nlp and opencv
-    libsndfile1 ffmpeg libsm6 libxext6 libgl1 \
+    libsndfile1 ffmpeg libsm6 libxext6 libgl1\
     # deps for nvidia nemo_toolkit 
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
     && apt-get clean \
