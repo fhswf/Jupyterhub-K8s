@@ -14,8 +14,8 @@ RUN apt-get update && \
     libsndfile1 ffmpeg libsm6 libxext6 libgl1\
     # deps for nvidia nemo_toolkit 
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # python wheels that get autocompiled when installed
 RUN pip install multidict \
@@ -47,6 +47,7 @@ RUN wget -O /tmp/openjdk.tar.gz https://github.com/adoptium/temurin8-binaries/re
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends \
     maven \
+    && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 USER $NB_UID
