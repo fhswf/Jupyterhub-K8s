@@ -63,10 +63,17 @@ RUN pip install \
 # Install Huggingface tensorflow and other libraries
 RUN pip install \
     nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
-    librosa gradio wandb Cython flair \ 
+    librosa gradio wandb Cython==0.29.36 flair \ 
     transformers datasets tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
-    spacy nltk gensim jiwer audiofile opencv-python tiktoken \
-    && rm -rf $HOME/.cache
+    nltk gensim jiwer audiofile opencv-python tiktoken \
+    && rm -rf /tmp/* $HOME/.cache
+
+# spacy needs Cython==0.29.36 for now to compile
+# see https://github.com/explosion/spaCy/discussions/12941
+RUN pip install \
+    spacy==3.0.6 \
+    --no-build-isolation \
+    && rm -rf /tmp/* $HOME/.cache
 
 # optional stuff not included currently
 # nemo_toolkit[all] 
