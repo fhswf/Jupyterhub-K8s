@@ -71,6 +71,13 @@ RUN pip install \
 # spacy needs Cython==0.29.36 for now to compile
 # see https://github.com/explosion/spaCy/discussions/12941
 RUN pip install \
+    "cymem>=2.0.2,<2.1.0" \
+    "preshed>=3.0.2,<3.1.0" \
+    "murmurhash>=0.28.0,<1.1.0" \
+    "thinc>=8.2.2,<8.3.0" \
+    && rm -rf /tmp/* $HOME/.cache
+    
+RUN pip install \
     spacy==3.0.6 \
     --no-build-isolation \
     && rm -rf /tmp/* $HOME/.cache
