@@ -66,7 +66,7 @@ RUN pip install \
     librosa gradio wandb Cython flair \ 
     transformers datasets tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
     spacy nltk gensim jiwer audiofile opencv-python tiktoken \
-    && rm -rf /tmp/* $HOME/.cache
+    && rm -rf $HOME/.cache
 
 # optional stuff not included currently
 # nemo_toolkit[all] 
