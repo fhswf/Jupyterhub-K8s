@@ -302,9 +302,13 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && fix-permissions $CODE_BUILTIN_EXTENSIONS_DIR \
     && cd /tmp 
 
+ADD https://api.github.com/repos/fhswf/jupyter-server-proxy/git/refs/heads/jsp_manager_v4_fix jupyter-server-proxy.version.json
+ADD https://api.github.com/repos/fhswf/Jupyterhub-K8s/git/refs/heads/main jupyter-server-proxy.version.json
+
 RUN pip install \
     jupyterlab-lsp==4.3.0 \
-    jupyter-server-proxy==4.0.0  \
+    # jupyter-server-proxy==4.0.0  \
+    git+https://github.com/fhswf/jupyter-server-proxy.git@jsp_manager_v4_fix  \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
@@ -342,6 +346,112 @@ RUN apt-get update \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+############
+# xpra vnc #
+############
+
+# ensure some debian/ubuntu env and global configs 
+# skip interactive configuration dialogs
+ENV DEBIAN_FRONTEND noninteractive 
+
+# xfce4 desktop
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    dbus-x11 supervisor xfce4 xfce4-terminal xterm xclip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# configure script
+COPY configure_desktop.sh /tmp/configure_desktop.sh
+RUN bash /tmp/configure_desktop.sh && rm -rf /tmp/configure_desktop.sh
+
+# TODO  xfce desktop configs xfce4-panel.xml xsettings.xml xfce4-session.xml xfce4-desktop.xml xfce4-keyboard-shortcuts.xml xfce4-panel.xml xfwm4.xml
+
+# add winswitch repository and install Xpra
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends openssl && \
+    UBUNTU_VERSION=$(cat /etc/os-release | grep UBUNTU_CODENAME | sed 's/UBUNTU_CODENAME=//') && \
+    curl http://xpra.org/gpg.asc | apt-key add - && \
+    echo "deb http://xpra.org/ $UBUNTU_VERSION main" >> /etc/apt/sources.list.d/xpra.list 
+
+RUN apt-get update && \
+    apt-get install -y \
+    xpra xvfb xterm sshfs llvm-dev \
+    gdm3 glances libqt5x11extras5 \
+    seahorse-nautilus software-properties-common tasksel \
+    && apt-get clean && \ 
+    rm -rf /var/lib/apt/lists/*
+
+# allow users to read default certificate
+RUN touch /etc/xpra/ssl-cert.pem && chmod 644 /etc/xpra/ssl-cert.pem
+# add xpra user
+RUN useradd --create-home --shell /bin/bash xpra --gid xpra --uid 2000
+
+# create run directory for xpra socket and set correct permissions for xpra user
+RUN  mkdir -p /run/user/2000/xpra && chown -R 2000 /run/user/2000
+# run file
+#WORKDIR /home/xpra
+COPY start_xpra.sh /usr/local/bin/start_xpra.sh
+RUN  chmod +x /usr/local/bin/start_xpra.sh
+
+# langs
+RUN apt-get update && apt-get install -y \
+    locales language-pack-en-base language-pack-de-base && \ 
+    locale-gen en_US.UTF-8 && \ 
+    locale-gen de_DE.UTF-8 && \ 
+    update-locale LANG="en_US.UTF-8" && \
+    update-locale LC_NUMERIC="de_DE.UTF-8" && \
+    update-locale LC_MONETARY="de_DE.UTF-8" && \
+    update-locale LC_PAPER="de_DE.UTF-8" && \
+    update-locale LC_NAME="de_DE.UTF-8" && \
+    update-locale LC_ADDRESS="de_DE.UTF-8" && \
+    update-locale LC_TELEPHONE="de_DE.UTF-8" && \
+    update-locale LC_MEASUREMENT="de_DE.UTF-8" && \
+    update-locale LC_IDENTIFICATION="de_DE.UTF-8" && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+    
+# timezone to berlin
+RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+# vnc gui add winswitch repository and install Xpra as html5 client
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends xpra-html5 python3-requests && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# copy xpra config file
+COPY xpra.conf /etc/xpra/xpra.conf
+# set default password
+ENV XPRA_PASSWORD xpra
+# not sure if specific one is required
+ENV DISPLAY=:100
+
+# GUI apps
+RUN apt-get update && \
+    apt-get install -y \
+    firefox \
+    && apt-get clean && \ 
+    rm -rf /var/lib/apt/lists/*
+
+# virtualgl???
+# => https://github.com/kasmtech/workspaces-core-images/blob/develop/src/ubuntu/install/virtualgl/install_virtualgl.sh
+
+# Install Orange3
+# RUN conda install orange3
+# RUN conda install -c defaults pyqt=5 qt
+RUN rm -rf /tmp/ /home/$NB_USER/.cache && fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+# COPY orange-canvas.desktop Desktop/orange-canvas.desktop
+
+# xpra start --bind-tcp=0.0.0.0:9876 --html=on --start-child=gnome-terminal --exit-with-children=no \
+#    --daemon=no --xvfb="/usr/bin/Xvfb +extension Composite -screen 0 1920x1080x24+32 \
+#    -nolisten tcp -noreset" --pulseaudio=no --notifications=no --bell=no :100
+
+## Install Go
+#RUN wget -c https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+## set path for Go
+#ENV PATH=$PATH:/opt/VirtualGL/bin/:/usr/local/go/bin 
+
+
+## FINALIZE LAUNCH
+
 # user 
 USER $NB_UID
 
@@ -350,19 +460,24 @@ RUN pip install bash_kernel \
     && rm -rf /tmp/* $HOME/.cache
 
 ## npm language servers:
-RUN npm install -g --save-dev \
-    bash-language-server \
-    pyright \
-    sql-language-server \
-    typescript-language-server \
-    unified-language-server \
-    vscode-css-languageserver-bin \
-    vscode-html-languageserver-bin \
-    yaml-language-server \
-    vscode-json-languageserver-bin \
-    && rm -rf /tmp/* $HOME/.cache
+# RUN npm install -g --save-dev \
+#     bash-language-server \
+#     pyright \
+#     sql-language-server \
+#     typescript-language-server \
+#     unified-language-server \
+#     vscode-css-languageserver-bin \
+#     vscode-html-languageserver-bin \
+#     yaml-language-server \
+#     vscode-json-languageserver-bin \
+#     && rm -rf /tmp/* $HOME/.cache
+# 
+# RUN npm config set cache /opt/conda/npm-cache --global
 
-RUN npm config set cache /opt/conda/npm-cache --global
+USER root
+RUN mkdir -p /tmp && chmod 777 -R /tmp /run/user
+
+USER $NB_UID
 
 LABEL ki.fh-swf.de.jupyterhub.namelabel="vscode-${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_VARIANT}"
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook VS Code and ${BUILD_CUDA_VARIANT}."
