@@ -325,6 +325,7 @@ RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
 
 # make /home group writable in case we want to move /home/$NB_USER
 RUN chmod g+rwx /home
+RUN chmod -R g+rwx /etc/ssl/private
 # copy start scripts
 COPY rebind_home.sh /usr/local/bin/before-notebook.d/01_rebind_home.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/01_rebind_home.sh
@@ -425,11 +426,17 @@ ENV XPRA_PASSWORD xpra
 ENV DISPLAY=:100
 
 # GUI apps
+COPY install_firefox.sh install_firefox.sh 
+RUN chmod +x install_firefox.sh && ./install_firefox.sh && rm install_firefox.sh
+
 RUN apt-get update && \
-    apt-get install -y \
-    firefox \
-    && apt-get clean && \ 
-    rm -rf /var/lib/apt/lists/*
+    wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb -O /tmp/libssl.deb && \
+    dpkg -i /tmp/libssl.deb && \
+    rm /tmp/libssl.deb && \
+    wget https://github.com/kasmtech/KasmVNC/releases/download/v1.3.1/kasmvncserver_focal_1.3.1_amd64.deb -O /tmp/kasmvncserver.deb && \
+    apt-get install /tmp/kasmvncserver.deb -y && \
+    apt-get clean && \ 
+    rm -rf  /tmp/* /var/lib/apt/lists/* 
 
 # virtualgl???
 # => https://github.com/kasmtech/workspaces-core-images/blob/develop/src/ubuntu/install/virtualgl/install_virtualgl.sh
@@ -476,6 +483,10 @@ RUN pip install bash_kernel \
 
 USER root
 RUN mkdir -p /tmp && chmod 777 -R /tmp /run/user
+RUN sed -i 's/require_ssl: true/require_ssl: false/' /usr/share/kasmvnc/kasmvnc_defaults.yaml
+
+RUN sed -i "s/UI.initSetting('path', 'websockify');/UI.initSetting('path', window.location.pathname.substring(1) + '\/..\/websockify');/" /usr/share/kasmvnc/www/app/ui.js
+RUN sed -i "s/UI.initSetting('path', 'websockify');/UI.initSetting('path', window.location.pathname.substring(1) + '\/..\/websockify');/" /usr/share/kasmvnc/www/dist/main.bundle.js
 
 USER $NB_UID
 
