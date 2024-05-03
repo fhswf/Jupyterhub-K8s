@@ -54,14 +54,14 @@ cat >>/etc/xdg/Thunar/accels.scm<<EOL
 EOL
 
 
-# Support desktop icon trust
-cat >>/etc/xdg/autostart/desktop-icons.desktop<<EOL
-[Desktop Entry]
-Type=Application
-Name=Desktop Icon Trust
-Exec=/dockerstartup/trustdesktop.sh
-EOL
-chmod +x /etc/xdg/autostart/desktop-icons.desktop
+## Support desktop icon trust
+#cat >>/etc/xdg/autostart/desktop-icons.desktop<<EOL
+#[Desktop Entry]
+#Type=Application
+#Name=Desktop Icon Trust
+#Exec=/dockerstartup/trustdesktop.sh
+#EOL
+#chmod +x /etc/xdg/autostart/desktop-icons.desktop
 
 
 # Remove screensaver and GUI Services

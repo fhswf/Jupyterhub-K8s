@@ -302,18 +302,6 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && fix-permissions $CODE_BUILTIN_EXTENSIONS_DIR \
     && cd /tmp 
 
-ADD https://api.github.com/repos/fhswf/jupyter-server-proxy/git/refs/heads/jsp_manager_v4_fix jupyter-server-proxy.version.json
-ADD https://api.github.com/repos/fhswf/Jupyterhub-K8s/git/refs/heads/main jupyter-server-proxy.version.json
-
-RUN pip install \
-    jupyterlab-lsp==4.3.0 \
-    # jupyter-server-proxy==4.0.0  \
-    git+https://github.com/fhswf/jupyter-server-proxy.git@jsp_manager_v4_fix  \
-    git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
-    jedi-language-server \
-    nbgitpuller \
-    && rm -rf /tmp/* $HOME/.cache
-
 # only install scilab-kernel for scipy notebooks
 RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
     then pip install scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
@@ -382,6 +370,23 @@ RUN apt-get update && \
     && apt-get clean && \ 
     rm -rf /var/lib/apt/lists/*
 
+
+ADD https://api.github.com/repos/fhswf/jupyter-server-proxy/git/refs/heads/jsp_manager_v4_fix jupyter-server-proxy.version.json
+ADD https://api.github.com/repos/fhswf/Jupyterhub-K8s/git/refs/heads/main jupyter-server-proxy.version.json
+ADD https://api.github.com/repos/fhswf/jupyter-xprahtml5-proxy/git/refs/heads/main jupyter-xprahtml5-proxy.version.json
+
+RUN pip install \
+    jupyterlab-lsp==4.3.0 \
+    # jupyter-server-proxy==4.0.0  \
+    git+https://github.com/fhswf/jupyter-server-proxy.git@jsp_manager_v4_fix  \
+    git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
+    git+https://github.com/fhswf/jupyter-xprahtml5-proxy.git \
+    jedi-language-server \
+    nbgitpuller \
+    && rm -rf /tmp/* $HOME/.cache
+
+# jupyter labextension install @jupyterlab/server-proxy
+
 # allow users to read default certificate
 RUN touch /etc/xpra/ssl-cert.pem && chmod 644 /etc/xpra/ssl-cert.pem
 # add xpra user
@@ -418,13 +423,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends xpra-html5 python3-requests && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# copy xpra config file
-COPY xpra.conf /etc/xpra/xpra.conf
-# set default password
-ENV XPRA_PASSWORD xpra
-# not sure if specific one is required
-ENV DISPLAY=:100
-
 # GUI apps
 COPY install_firefox.sh install_firefox.sh 
 RUN chmod +x install_firefox.sh && ./install_firefox.sh && rm install_firefox.sh
@@ -456,6 +454,11 @@ RUN rm -rf /tmp/ /home/$NB_USER/.cache && fix-permissions $HOME && fix-permissio
 ## set path for Go
 #ENV PATH=$PATH:/opt/VirtualGL/bin/:/usr/local/go/bin 
 
+# copy xpra config file
+# COPY xpra.conf /etc/xpra/xpra.conf not needed?
+ENV XPRA_START xfce4-session
+# not sure if specific one is required
+# ENV DISPLAY=:100
 
 ## FINALIZE LAUNCH
 
