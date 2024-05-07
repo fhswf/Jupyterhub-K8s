@@ -385,8 +385,6 @@ RUN pip install \
     nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
 
-# jupyter labextension install @jupyterlab/server-proxy
-
 # allow users to read default certificate
 RUN touch /etc/xpra/ssl-cert.pem && chmod 644 /etc/xpra/ssl-cert.pem
 # add xpra user
