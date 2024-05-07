@@ -37,7 +37,7 @@ on:
 jobs:
   build-push:
     runs-on: #gha-runner-scale-set-dind
-      group: default
+      group: organization/default
     #runs-on: self-hosted
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
