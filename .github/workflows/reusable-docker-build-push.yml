@@ -37,7 +37,8 @@ on:
 jobs:
   build-push:
     #runs-on: ubuntu-latest
-    runs-on: self-hosted
+    #runs-on: self-hosted
+    runs-on: gha-runner-scale-set-dind
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
