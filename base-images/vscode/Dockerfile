@@ -388,10 +388,10 @@ RUN pip install \
 # allow users to read default certificate
 RUN touch /etc/xpra/ssl-cert.pem && chmod 644 /etc/xpra/ssl-cert.pem
 # add xpra user
-RUN useradd --create-home --shell /bin/bash xpra --gid xpra --uid 2000
+#RUN useradd --create-home --shell /bin/bash xpra --gid xpra --uid 2000
 
 # create run directory for xpra socket and set correct permissions for xpra user
-RUN  mkdir -p /run/user/2000/xpra && chown -R 2000 /run/user/2000
+#RUN  mkdir -p /run/user/2000/xpra && chown -R 2000 /run/user/2000
 # run file
 #WORKDIR /home/xpra
 COPY start_xpra.sh /usr/local/bin/start_xpra.sh
