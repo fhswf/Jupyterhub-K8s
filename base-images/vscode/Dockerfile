@@ -452,7 +452,6 @@ RUN rm -rf /tmp/ /home/$NB_USER/.cache && fix-permissions $HOME && fix-permissio
 ## set path for Go
 #ENV PATH=$PATH:/opt/VirtualGL/bin/:/usr/local/go/bin 
 
-# copy xpra config file
 # COPY xpra.conf /etc/xpra/xpra.conf not needed?
 ENV XPRA_START xfce4-session
 # not sure if specific one is required
