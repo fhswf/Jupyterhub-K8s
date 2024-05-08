@@ -53,8 +53,8 @@ jobs:
         
       - name: debug env
         run: |
-          ifconfig
-          ip a
+          sudo apt update
+          sudo apt install iproute2 -y
           ip link
           
       - name: Set up Docker Buildx
