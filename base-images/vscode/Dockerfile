@@ -70,7 +70,6 @@ LABEL ki.fh-swf.de.jupyterhub.namelabel="${BUILD_JUPYTER_VARIANT}-${BUILD_CUDA_V
 LABEL ki.fh-swf.de.jupyterhub.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook with ${BUILD_CUDA_VARIANT}."
 LABEL org.opencontainers.image.description="Based on the original jupyterlab ${BUILD_JUPYTER_VARIANT}-notebook with ${BUILD_CUDA_VARIANT}."
 
-
 ###############
 #  cuda-runtime 
 ###############
