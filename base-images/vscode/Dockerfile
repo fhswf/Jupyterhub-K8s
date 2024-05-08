@@ -259,7 +259,7 @@ RUN apt-get update && \
 #  Code Server server-proxy/vscode-proxy from https://coder.com/docs/code-server/latest
 ENV CODE_VERSION=4.13.0
 
-ENV CODE_BUILTIN_EXTENSIONS_DIR=/usr/lib/code-server/lib/vscode/extensions/
+ENV CODE_BUILTIN_EXTENSIONS_DIR=/usr/lib/code-server/lib/vscode/extensions
 ENV PATH=/opt/code-server/bin:$PATH \
     CS_DISABLE_GETTING_STARTED_OVERRIDE=1
 
