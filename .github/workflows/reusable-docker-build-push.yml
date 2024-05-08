@@ -50,7 +50,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+        
+      - name: debug env
+        run: |
+          ip a
+          ip link
+          
       - name: Set up Docker Buildx
         # disable attestations for now, see https://github.com/orgs/community/discussions/45969
         uses: docker/setup-buildx-action@15c905b16b06416d2086efa066dd8e3a35cc7f98
