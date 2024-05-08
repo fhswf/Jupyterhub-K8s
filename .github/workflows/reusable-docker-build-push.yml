@@ -53,6 +53,7 @@ jobs:
         
       - name: debug env
         run: |
+          ifconfig
           ip a
           ip link
           
