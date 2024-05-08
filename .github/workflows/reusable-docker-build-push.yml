@@ -110,6 +110,8 @@ jobs:
       - name: pull to harbor
         if: ${{ github.event_name != 'pull_request' }}
         run: |
+          openssl s_client -showcerts -connect harbor.ki.fh-swf.de:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee /usr/local/share/ca-certificates/harbor.crt > /dev/null
+          sudo update-ca-certificates
           tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
           tags=$(echo "${{ steps.meta.outputs.tags }}")
           for tag in $tags 
