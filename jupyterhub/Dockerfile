@@ -16,6 +16,7 @@ ADD https://api.github.com/repos/fhswf/jupyterhub-announcement/git/refs/heads/ma
 RUN pip install \
     oauthenticator \
     jupyterhub-ltiauthenticator \
+    kubernetes
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
     nbgitpuller PyJWT \
     git+https://github.com/fhswf/jupyterhub-announcement.git@main 
