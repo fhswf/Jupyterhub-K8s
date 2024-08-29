@@ -318,29 +318,29 @@ RUN apt-get update
 #    && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get install -y \
-    libnvinfer-bin=${version} \
-    libnvinfer-dev=${version} \
-    libnvinfer-dispatch-dev=${version} \
-    libnvinfer-dispatch10=${version} \
-    libnvinfer-headers-dev=${version} \
-    libnvinfer-headers-plugin-dev=${version} \
-    libnvinfer-lean-dev=${version} \
-    libnvinfer-lean10=${version} \
-    libnvinfer-plugin-dev=${version} \
-    libnvinfer-plugin10=${version} \
-    libnvinfer-samples=${version} \
-    libnvinfer-vc-plugin-dev=${version} \
-    libnvinfer-vc-plugin10=${version} \
-    libnvinfer10=${version} \
-    libnvonnxparsers-dev=${version} \
-    libnvonnxparsers10=${version} \
-    python3-libnvinfer-dev=${version} \
-    python3-libnvinfer-dispatch=${version} \
-    python3-libnvinfer-lean=${version} \
-    python3-libnvinfer=${version} \
-    tensorrt-dev=${version} \
-    tensorrt-libs=${version} \
-    tensorrt=${version} \
+    libnvinfer-bin=${NV_TENSOR_RT_TAG} \
+    libnvinfer-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-dispatch-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-dispatch10=${NV_TENSOR_RT_TAG} \
+    libnvinfer-headers-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-headers-plugin-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-lean-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-lean10=${NV_TENSOR_RT_TAG} \
+    libnvinfer-plugin-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-plugin10=${NV_TENSOR_RT_TAG} \
+    libnvinfer-samples=${NV_TENSOR_RT_TAG} \
+    libnvinfer-vc-plugin-dev=${NV_TENSOR_RT_TAG} \
+    libnvinfer-vc-plugin10=${NV_TENSOR_RT_TAG} \
+    libnvinfer10=${NV_TENSOR_RT_TAG} \
+    libnvonnxparsers-dev=${NV_TENSOR_RT_TAG} \
+    libnvonnxparsers10=${NV_TENSOR_RT_TAG} \
+    python3-libnvinfer-dev=${NV_TENSOR_RT_TAG} \
+    python3-libnvinfer-dispatch=${NV_TENSOR_RT_TAG} \
+    python3-libnvinfer-lean=${NV_TENSOR_RT_TAG} \
+    python3-libnvinfer=${NV_TENSOR_RT_TAG} \
+    tensorrt-dev=${NV_TENSOR_RT_TAG} \
+    tensorrt-libs=${NV_TENSOR_RT_TAG} \
+    tensorrt=${NV_TENSOR_RT_TAG} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
