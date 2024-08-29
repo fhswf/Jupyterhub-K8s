@@ -293,6 +293,7 @@ ENV OS_RELEASE ubuntu2204
 RUN apt-get update && apt-get install -y software-properties-common 
 
 ## Theese might change unexpectedly
+# developer nvidia repo: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
 RUN mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub

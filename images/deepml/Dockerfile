@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-4dd0f7a
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-5a7bf90
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME deepml
@@ -57,12 +57,13 @@ ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
 # Install PyTorch
 RUN pip install \
-    torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
+    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+    #torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
     && rm -rf /tmp/* $HOME/.cache
 
 # Install Huggingface tensorflow and other libraries
 RUN pip install \
-    nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
+    nvidia-cudnn-cu12==9.2.1.18 tensorflow==2.17.* mysql-connector-python keras-tuner pymysql \
     librosa gradio wandb Cython==0.29.36 flair \ 
     transformers datasets tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
     nltk gensim jiwer audiofile opencv-python tiktoken \
@@ -78,7 +79,7 @@ RUN pip install \
     && rm -rf /tmp/* $HOME/.cache
     
 RUN pip install \
-    spacy==3.0.6 \
+    spacy==3.7.6 \
     --no-build-isolation \
     && rm -rf /tmp/* $HOME/.cache
 
