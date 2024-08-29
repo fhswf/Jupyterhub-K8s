@@ -60,7 +60,7 @@ RUN pip install \
     torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 \
     #torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
     
-RUN pip install flair no-dependencies && rm -rf /tmp/* $HOME/.cache
+RUN pip install flair --no-dependencies && rm -rf /tmp/* $HOME/.cache
 
 # Install Huggingface tensorflow and other libraries
 RUN pip install \
