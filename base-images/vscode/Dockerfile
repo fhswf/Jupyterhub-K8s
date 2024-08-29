@@ -286,7 +286,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV NV_TRT_VERSION 10.3.0
 # version="10.x.x.x-1+cudax.x"
 #ENV NV_TENSOR_RT_TAG 8.5.3-1+cuda11.8 
-ENV NV_TENSOR_RT_TAG 10.3.0-1+cuda12.5 
+ENV NV_TENSOR_RT_TAG 10.3.0.26-1+cuda12.5 
 ENV OS_RELEASE ubuntu2204
 
 # easy repo add
@@ -295,12 +295,10 @@ RUN apt-get update && apt-get install -y software-properties-common
 ## Theese might change unexpectedly
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
 RUN mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/7fa2af80.pub
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
 RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-certificates
 RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x536F8F1DE80F6A35' | gpg --import
 RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA4B469963BF863CC' | gpg --import
-RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
-RUN apt-get update
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
 RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
 RUN apt-get update
