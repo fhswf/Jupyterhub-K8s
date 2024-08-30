@@ -228,9 +228,10 @@ RUN mkdir -p /tmp/hls && cd /tmp/hls \
 #    && apt-get install swi-prolog \
 #    && rm -rf /var/lib/apt/lists/* 
 
+# swi prolog versions: https://www.swi-prolog.org/download/devel/src/
 ENV LANG C.UTF-8
 RUN set -eux \
-    && SWIPL_VER=9.1.10 \
+    && SWIPL_VER=9.1.22 \
     && SWIPL_CHECKSUM=16c0d014510f5e0c3b427d2842cac89fea0d4c136caabbeb698d578ee8126870 \
     && BUILD_DEPS='make cmake ninja-build gcc g++ wget git autoconf libarchive-dev libgmp-dev libossp-uuid-dev libxext-dev libice-dev libjpeg-dev libxinerama-dev libxft-dev libxpm-dev libxt-dev libpcre2-dev ncurses-dev  libreadline-dev libedit-dev libssl-dev zlib1g-dev libdb-dev unixodbc-dev libgoogle-perftools-dev libyaml-dev' \
     && apt-get update \
