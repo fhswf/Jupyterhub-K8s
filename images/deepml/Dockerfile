@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-ad95f82
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-f7a5a4b
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME deepml
@@ -10,12 +10,12 @@ USER root
 # Install apt prerequisits
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    # for torch vision and huggingface nlp
-    libsndfile1 ffmpeg \
+    # for torch vision and huggingface nlp and opencv
+    libsndfile1 ffmpeg libsm6 libxext6 libgl1\
     # deps for nvidia nemo_toolkit 
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # python wheels that get autocompiled when installed
 RUN pip install multidict \
@@ -30,22 +30,58 @@ RUN pip install multidict \
 
 # Tensor RT is now in vscode base
 
+# JAVA 1.8 for some old projects that need this runtime
+ENV JAVA_HOME /opt/java/openjdk
+ENV PATH $JAVA_HOME/bin:$PATH   
+ENV LC_ALL='en_US.UTF-8'
+ENV JAVA_VERSION jdk8u392-b08
+
+RUN wget -O /tmp/openjdk.tar.gz https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u392-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u392b08.tar.gz \
+    && mkdir -p "$JAVA_HOME" \
+    && tar --extract --file /tmp/openjdk.tar.gz --directory "$JAVA_HOME"  --strip-components 1 --no-same-owner \
+    && rm -f /tmp/openjdk.tar.gz ${JAVA_HOME}/lib/src.zip  \
+    && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
+    && ldconfig \
+    && java -Xshare:dump
+
+RUN apt-get update \
+    && apt-get install -yq --no-install-recommends \
+    maven \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/*
+
 USER $NB_UID
 
 # prevent TF from allocating all VRAM
 ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
-# Install PyTorch
-RUN pip install \
-    torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
-    && rm -rf /tmp/* $HOME/.cache
+#RUN pip install flair && rm -rf /tmp/* $HOME/.cache
 
 # Install Huggingface tensorflow and other libraries
 RUN pip install \
-    nvidia-cudnn-cu11==8.5.0.96 tensorflow==2.11.* mysql-connector-python keras-tuner pymysql \
-    librosa gradio wandb Cython flair \ 
+    nvidia-cudnn-cu12==9.2.1.18 tensorflow==2.17.* mysql-connector-python keras-tuner pymysql \
+    librosa gradio wandb Cython==0.29.36 \ 
     transformers datasets tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
-    spacy nltk gensim jiwer audiofile opencv-python tiktoken \
+    nltk gensim flair jiwer audiofile opencv-python tiktoken \
+    && rm -rf /tmp/* $HOME/.cache
+
+# Install PyTorch
+RUN pip install \
+    torch==2.4.0+cu124 torchvision==0.19.0+cu124 torchaudio==2.4.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+    #torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
+
+# spacy needs Cython==0.29.36 for now to compile
+# see https://github.com/explosion/spaCy/discussions/12941
+RUN pip install \
+    "cymem>=2.0.2,<2.1.0" \
+    "preshed>=3.0.2,<3.1.0" \
+    "murmurhash>=0.28.0,<1.1.0" \
+    "thinc>=8.2.2,<8.3.0" \
+    && rm -rf /tmp/* $HOME/.cache
+    
+RUN pip install \
+    spacy==3.7.6 \
+    --no-build-isolation \
     && rm -rf /tmp/* $HOME/.cache
 
 # optional stuff not included currently
