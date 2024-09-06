@@ -17,8 +17,8 @@ setup_args = dict(
     python_requires=">=3.8",
     include_package_data=True,
     #package_data={"jupyter_vscodeserver_proxy": ["icons/*"]},
-    entry_points={"jupyter_serverproxy_servers": ["start_sidecar = jupyter_command_launcher:start"], 
-                  "jupyter_serverproxy_servers": ["stop_sidecar = jupyter_command_launcher:stop"] }
+    entry_points={"jupyter_serverproxy_servers": ["sidecar_controle = jupyter_command_launcher:start"], 
+        }
 )
 
 setup_args['install_requires'] = install_requires = []

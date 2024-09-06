@@ -13,13 +13,11 @@ process = None
 #env for apps:
 #export JUPYTER_COMMAND_LAUNCHER_APPS='{"app1": "http://external-api-url/app1", "app2": "http://external-api-url/app2"}'
 
-def create_app(API_URL):
+def create_app():
     app = Flask(__name__)
-    if API_URL is None:
-        apps_config = os.getenv('JUPYTER_COMMAND_LAUNCHER_APPS', '{"default": "http://localhost:4990"}')
-        apps = json.loads(apps_config)
-    else:
-        apps = {"default": "http://localhost:4990"}
+    apps_config = os.getenv('JUPYTER_COMMAND_LAUNCHER_APPS', "{}")
+    apps = json.loads(apps_config)
+
     # HTML template for the UI
     HTML_TEMPLATE = '''
     <!DOCTYPE html>
@@ -43,6 +41,30 @@ def create_app(API_URL):
         <script>
             const appNames = {{ app_names|tojson }};
             
+            // Function to create control buttons dynamically
+            function createButtons() {
+                const controlsDiv = document.getElementById('controls');
+                appNames.forEach(app => {
+                    const startButton = document.createElement('button');
+                    startButton.innerText = `Start ${app}`;
+                    startButton.onclick = () => sendRequest(`/start/${app}`);
+                    
+                    const stopButton = document.createElement('button');
+                    stopButton.innerText = `Stop ${app}`;
+                    stopButton.onclick = () => sendRequest(`/stop/${app}`);
+
+                    // Append the buttons to the controls div
+                    controlsDiv.appendChild(startButton);
+                    controlsDiv.appendChild(stopButton);
+                    controlsDiv.appendChild(document.createElement('br')); // Line break for clarity
+
+                    // Add a status placeholder for each app
+                    const statusDiv = document.createElement('div');
+                    statusDiv.id = app;
+                    controlsDiv.appendChild(statusDiv);
+                });
+            }
+
             function sendRequest(endpoint) {
                 fetch(endpoint)
                     .then(response => {
@@ -52,10 +74,10 @@ def create_app(API_URL):
                         return response.json();
                     })
                     .then(data => {
-                        document.getElementById('response').innerText = data.message;
+                        document.getElementById('status').innerText = data.message;
                     })
                     .catch(error => {
-                        document.getElementById('response').innerText = 'Error: ' + error.message;
+                        document.getElementById('status').innerText = 'Error: ' + error.message;
                     });
             }
 
@@ -80,7 +102,8 @@ def create_app(API_URL):
             // Automatically refresh status every 10 seconds
             setInterval(getStatus, 10000);
             // Initial status fetch
-            getStatus();
+            createButtons();  // Create buttons dynamically
+            getStatus();      // Initial status fetch
         </script>
     </body>
     </html>
@@ -141,12 +164,12 @@ def main():
                             help='Host (default is 127.0.0.1)')
         parser.add_argument('--port', type=int, default=4900,
                             help='Port (default is 4900)')
-        parser.add_argument(name_or_flags='--server', help="api server to talk to  (default is None => config via json env JUPYTER_COMMAND_LAUNCHER_APPS)", default=None)
+        #parser.add_argument(name_or_flags='--server', help="api server to talk to  (default is None => config via json env JUPYTER_COMMAND_LAUNCHER_APPS)", default=None)
         parser.add_argument(name_or_flags='--debug', help="debug", default=False, type=bool)
         
         args = parser.parse_args()
         
-        app = create_app(args.server)
+        app = create_app()
         app.run(host=args.host, port=args.port,debug=args.debug)
         
     except Exception as e: 

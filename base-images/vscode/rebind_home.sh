@@ -6,7 +6,8 @@ if [[ -w /etc/passwd ]] && [[ -w /home ]]; then
     if [[ "${NB_USER}" != "jovyan" ]]; then
          _log "creating enw home for user ${NB_USER}"
         mkdir -p /home/${NB_USER};
-        head -n -1 /etc/passwd > /tmp/passwd;
+        cp /etc/passwd /tmp/passwd;
+        sed -i '/jovyan:x:1000:100/d' /tmp/passwd
         echo "creating passwd entry ${NB_USER}:x:$(id -u):$(id -g):,,,:/home/${NB_USER}:/bin/bash";
         echo "${NB_USER}:x:$(id -u):$(id -g):,,,:/home/${NB_USER}:/bin/bash" >> /tmp/passwd;
         cat /tmp/passwd > /etc/passwd;
