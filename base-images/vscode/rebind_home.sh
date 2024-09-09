@@ -4,7 +4,7 @@ set -e
 # works for command: docker run --user 5000:100 --group-add root --group-add 1000 -e NB_USER="myuser" ...
 if [[ -w /etc/passwd ]] && [[ -w /home ]]; then
     if [[ "${NB_USER}" != "jovyan" ]]; then
-         _log "creating enw home for user ${NB_USER}"
+        # _log "creating enw home for user ${NB_USER}"
         mkdir -p /home/${NB_USER};
         cp /etc/passwd /tmp/passwd;
         sed -i '/jovyan:x:1000:100/d' /tmp/passwd
