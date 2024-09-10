@@ -337,6 +337,8 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
 RUN pip install \
     jupyterlab-lsp \
     jupyter-server-proxy \
+    jupyterlab-night \
+    jupyter-collaboration \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
