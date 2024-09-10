@@ -1,7 +1,7 @@
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
 
-FROM jupyter/${JUPYTER_VARIANT}-notebook:lab-3.6.3 as nocuda
+FROM jupyter/${JUPYTER_VARIANT}-notebook:ubuntu-22.04 as nocuda
 
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
@@ -335,8 +335,8 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && cd /tmp 
 
 RUN pip install \
-    jupyterlab-lsp==4.3.0 \
-    jupyter-server-proxy==4.0.0  \
+    jupyterlab-lsp \
+    jupyter-server-proxy \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
