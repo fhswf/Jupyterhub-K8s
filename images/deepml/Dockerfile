@@ -58,7 +58,7 @@ ENV TF_FORCE_GPU_ALLOW_GROWTH true
 # Install tensorflow and for some reason we still need nvidia-cudnn-cu12...
 RUN pip install \
     #nvidia-cudnn-cu12==9.2.1.18 \
-    tensorflow==2.17.* mysql-connector-python keras-tuner \
+    tensorflow[and-cuda]==2.17.* mysql-connector-python keras-tuner \
     && rm -rf /tmp/* $HOME/.cache
 
 # Install PyTorch
