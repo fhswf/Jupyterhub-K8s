@@ -61,7 +61,7 @@ ENV TF_FORCE_GPU_ALLOW_GROWTH true
 RUN pip install \
     nvidia-cudnn-cu12==9.2.1.18 tensorflow==2.17.* mysql-connector-python keras-tuner pymysql \
     librosa gradio wandb Cython==0.29.36 \ 
-    transformers datasets tokenizers evaluate adapter-transformers diffusers[torch] accelerate \
+    transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
     nltk gensim flair jiwer audiofile opencv-python tiktoken \
     && rm -rf /tmp/* $HOME/.cache
 
