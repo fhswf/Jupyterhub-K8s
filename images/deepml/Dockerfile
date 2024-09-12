@@ -70,6 +70,12 @@ RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
     tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken \
     pymysql librosa gradio wandb Cython==0.29.36 \
+    && rm -rf /tmp/* $HOME/.cache#
+
+# Reinstall tf the fix deps
+RUN pip install \
+    #nvidia-cudnn-cu12==9.2.1.18 \
+    tensorflow[and-cuda]==2.17.* mysql-connector-python keras-tuner \
     && rm -rf /tmp/* $HOME/.cache
 
 # spacy needs Cython==0.29.36 for now to compile
