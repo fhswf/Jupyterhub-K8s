@@ -55,20 +55,22 @@ USER $NB_UID
 # prevent TF from allocating all VRAM
 ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
-#RUN pip install flair && rm -rf /tmp/* $HOME/.cache
-
-# Install Huggingface tensorflow and other libraries
+# Install tensorflow and for some reason we still need nvidia-cudnn-cu12...
 RUN pip install \
-    nvidia-cudnn-cu12==9.2.1.18 tensorflow==2.17.* mysql-connector-python keras-tuner pymysql \
-    librosa gradio wandb Cython==0.29.36 \ 
-    transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
-    nltk gensim flair jiwer audiofile opencv-python tiktoken \
+    #nvidia-cudnn-cu12==9.2.1.18 \
+    tensorflow==2.17.* mysql-connector-python keras-tuner \
     && rm -rf /tmp/* $HOME/.cache
 
 # Install PyTorch
 RUN pip install \
     torch==2.4.0+cu124 torchvision==0.19.0+cu124 torchaudio==2.4.0+cu124 --index-url https://download.pytorch.org/whl/cu124
-    #torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117 \
+
+# Install Huggingface and other libraries
+RUN pip install \
+    transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
+    tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken \
+    pymysql librosa gradio wandb Cython==0.29.36 \
+    && rm -rf /tmp/* $HOME/.cache
 
 # spacy needs Cython==0.29.36 for now to compile
 # see https://github.com/explosion/spaCy/discussions/12941
