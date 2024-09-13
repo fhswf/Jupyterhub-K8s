@@ -55,15 +55,9 @@ USER $NB_UID
 # prevent TF from allocating all VRAM
 ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
-# Install tensorflow and for some reason we still need nvidia-cudnn-cu12...
-RUN pip install \
-    #nvidia-cudnn-cu12==9.2.1.18 \
-    tensorflow[and-cuda]==2.17.* mysql-connector-python keras-tuner \
-    && rm -rf /tmp/* $HOME/.cache
-
 # Install PyTorch
 RUN pip install \
-    torch==2.4.0+cu124 torchvision==0.19.0+cu124 torchaudio==2.4.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+    torch==2.4.0+cu121 torchvision==0.19.0+cu121 torchaudio==2.4.0+cu121 --index-url https://download.pytorch.org/whl/cu121
 
 # Install Huggingface and other libraries
 RUN pip install \
@@ -75,7 +69,7 @@ RUN pip install \
 # Reinstall tf the fix deps
 RUN pip install \
     #nvidia-cudnn-cu12==9.2.1.18 \
-    tensorflow[and-cuda]==2.17.* mysql-connector-python keras-tuner \
+    tensorflow[and-cuda]==2.15.* mysql-connector-python keras-tuner \
     && rm -rf /tmp/* $HOME/.cache
 
 # spacy needs Cython==0.29.36 for now to compile
