@@ -9,7 +9,9 @@ USER root
 
 # note that follwing packages after nbgrader are just dependencies of it
 RUN pip install --no-deps \          
-    ngshare_exchange nbgrader==0.8.5 rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
+    #nbgrader==0.8.5 \
+    git+https://github.com/jeflem/nbgrader.git@ananke_0.5 \
+    rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
     && rm -rf /tmp/* $HOME/.cache
 
 COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
@@ -19,8 +21,8 @@ USER $NB_UID
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
-LABEL ki.fh-swf.de.jupyterhub.description="Image for nbgrader admins"
-LABEL org.opencontainers.image.description="Image for nbgrader admins"
+LABEL ki.fh-swf.de.jupyterhub.description="DEV Image for nbgrader admins"
+LABEL org.opencontainers.image.description="DEV Image for nbgrader admins"
 LABEL org.opencontainers.image.authors="Fachhoschschule Südwestfalen"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.base.name=$BASE_CONTAINER
