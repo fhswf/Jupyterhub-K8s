@@ -115,8 +115,6 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 # TEST
 # ---------------------------------
 
-RUN pip install open-webui
-
 RUN pip install \
 jupyterlab-lsp \
 jupyter-server-proxy \
