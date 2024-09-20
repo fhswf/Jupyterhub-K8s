@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+import os
 
 with open("README.md", encoding="utf8") as f:
     readme = f.read()
@@ -19,6 +20,10 @@ setup_args = dict(
     package_data={"huggingface_chat_ui": ["icons/*"]},
     entry_points={"jupyter_serverproxy_servers": ["hf_chat_ui = huggingface_chat_ui:run_chat_ui"] }
 )
+
+print("="*20000)
+
+print(os.getcwd())
 
 setup_args['install_requires'] = install_requires = []
 with open('requirements.txt') as f:
