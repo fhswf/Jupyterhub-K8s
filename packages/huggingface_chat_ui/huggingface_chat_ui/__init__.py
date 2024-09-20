@@ -1,7 +1,7 @@
 import os
 
 
-def run_vscode():
+def run_chat_ui():
     return {
         "command": "xdg-open http://localhost:5173",
         "timeout": 300,
