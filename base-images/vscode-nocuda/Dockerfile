@@ -104,6 +104,21 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 
+
+# ---------------------------------
+# TEST
+# ---------------------------------
+
+RUN pip install \
+jupyterlab-lsp \
+jupyter-server-proxy \
+git+https://github.com/fhswf/Jupyterhub-K8s.git@heller-dev#subdirectory=packages/huggingface_chat_ui  \
+jedi-language-server \
+nbgitpuller \
+&& rm -rf /tmp/* $HOME/.cache
+
+# ---------------------------------
+
 # git LFS and other extras
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
