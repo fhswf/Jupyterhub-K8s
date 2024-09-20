@@ -17,7 +17,7 @@ setup_args = dict(
     python_requires=">=3.8",
     include_package_data=True,
     package_data={"huggingface_chat_ui": ["icons/*"]},
-    entry_points={"jupyter_serverproxy_servers": ["vscode = huggingface_chat_ui:run_vscode"] }
+    entry_points={"jupyter_serverproxy_servers": ["hf_chat_ui = huggingface_chat_ui:run_chat_ui"] }
 )
 
 setup_args['install_requires'] = install_requires = []
