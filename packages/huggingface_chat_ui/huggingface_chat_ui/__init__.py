@@ -3,7 +3,7 @@ import os
 
 def run_chat_ui():
     return {
-        "command": "xdg-open http://localhost:5173",
+        "command": "xdg-open https://github.com/huggingface/chat-ui",
         "timeout": 300,
         "new_browser_tab": True,
         "launcher_entry": {

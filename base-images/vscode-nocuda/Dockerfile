@@ -34,6 +34,12 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+
+### huggingface/chat-ui install
+
+# RUN npm install -g @huggingface/chat-ui
+
+
 #  Code Server server-proxy/vscode-proxy from https://coder.com/docs/code-server/latest
 ENV CODE_VERSION=4.21.0
 
