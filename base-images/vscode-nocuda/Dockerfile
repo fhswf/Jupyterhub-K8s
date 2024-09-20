@@ -78,7 +78,7 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
 RUN pip install \
     jupyterlab-lsp \
     jupyter-server-proxy \
-    git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
+    git+https://github.com/fhswf/Jupyterhub-K8s.git@heller-dev#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache

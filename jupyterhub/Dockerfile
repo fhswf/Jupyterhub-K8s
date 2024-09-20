@@ -17,7 +17,7 @@ RUN pip install \
     oauthenticator \
     jupyterhub-ltiauthenticator \
     kubernetes \
-    git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
+    git+https://github.com/fhswf/Jupyterhub-K8s.git@heller-dev#subdirectory=packages/multiauthenticator \
     nbgitpuller PyJWT \
     git+https://github.com/fhswf/jupyterhub-announcement.git@main 
 
