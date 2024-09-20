@@ -16,8 +16,8 @@ setup_args = dict(
     license="MIT",
     python_requires=">=3.8",
     include_package_data=True,
-    package_data={"jupyter_vscodeserver_proxy": ["icons/*"]},
-    entry_points={"jupyter_serverproxy_servers": ["vscode = jupyter_vscodeserver_proxy:run_vscode"] }
+    package_data={"huggingface_chat_ui": ["icons/*"]},
+    entry_points={"jupyter_serverproxy_servers": ["vscode = huggingface_chat_ui:run_vscode"] }
 )
 
 setup_args['install_requires'] = install_requires = []
