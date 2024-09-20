@@ -24,6 +24,7 @@ setup_args = dict(
 print("="*20000)
 
 print(os.getcwd())
+input("STOP")
 
 setup_args['install_requires'] = install_requires = []
 with open('requirements.txt') as f:
