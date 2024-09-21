@@ -84,7 +84,12 @@ RUN pip install \
     nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
 
-RUN apt-get -y install podman
+RUN . /etc/os-release \
+    && echo "deb http://deb.debian.org/debian $VERSION_CODENAME-backports main" > /etc/apt/sources.list.d/backports.list \
+    && curl -fsSL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$ID_$VERSION_ID/Release.key | gpg --dearmor -o /usr/share/keyrings/libcontainers-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/libcontainers-archive-keyring.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$ID_$VERSION_ID/ /" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
+    && apt-get update \
+    && apt-get -y install podmanRUN apt-get -y install podman
 
 RUN podman run -d \
   -p 9123:8080 \
