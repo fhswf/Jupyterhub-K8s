@@ -118,9 +118,9 @@ jedi-language-server \
 nbgitpuller \
 && rm -rf /tmp/* $HOME/.cache
 
-git clone https://github.com/huggingface/chat-ui
-cd chat-ui
-npm install
+RUN git clone https://github.com/huggingface/chat-ui \
+&& cd chat-ui \
+&& npm install
 
 # ---------------------------------
 
