@@ -86,9 +86,10 @@ RUN pip install \
 
 RUN curl -fsSL https://get.docker.com | sh
 
-RUN docker run -d \
+RUN docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock my-container
+
+RUN docker run --rm -it -d \
     -p 9123:8080 \
-    -v ~/my-conf.yml:/app/user-data/conf.yml \
     --name my-dashboard \
     --restart=always \
     lissy93/dashy:latest
