@@ -84,13 +84,14 @@ RUN pip install \
     nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
 
-RUN curl -fsSL https://get.docker.com | sh
+RUN apt-get -y install podman
 
-RUN docker run --rm -it -d \
-    -p 9123:8080 \
-    --name my-dashboard \
-    --restart=always \
-    lissy93/dashy:latest
+RUN podman run -d \
+  -p 9123:8080 \
+  --name my-dashboard \
+  --restart=always \
+  lissy93/dashy:latest
+
 
 # only install scilab-kernel for scipy notebooks
 RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
