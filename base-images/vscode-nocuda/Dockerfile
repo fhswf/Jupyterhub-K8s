@@ -118,7 +118,10 @@ jedi-language-server \
 nbgitpuller \
 && rm -rf /tmp/* $HOME/.cache
 
-RUN git clone https://github.com/huggingface/chat-ui \
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash \
+&& nvm install latest \
+&& nvm use latest
+&& git clone https://github.com/huggingface/chat-ui \
 && cd chat-ui \
 && npm install
 
