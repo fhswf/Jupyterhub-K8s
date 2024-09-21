@@ -128,14 +128,6 @@ RUN apt-get update \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir ~/chat_ui && cd ~/chat_ui \
-&& python3 -m venv .venv \
-&& source .venv/bin/activate \
-&& pip install open-webui \
-&& deactivate && cd
-
-
-
 # user 
 USER $NB_UID
 

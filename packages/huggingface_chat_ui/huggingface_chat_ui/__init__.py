@@ -3,7 +3,7 @@ import os
 
 def run_chat_ui():
     return {
-        "command": "cd ~/chat_ui && open-webui serve",
+        "command": "xdg-open localhost:9888",
         "timeout": 300,
         "new_browser_tab": True,
         "launcher_entry": {
