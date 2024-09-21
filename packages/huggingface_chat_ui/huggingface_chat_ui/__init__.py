@@ -3,7 +3,7 @@ import os
 
 def run_chat_ui():
     return {
-        "command": "open-webui serve",
+        "command": "<START HUGGINGFACE CHAT UI>",
         "timeout": 300,
         "new_browser_tab": True,
         "launcher_entry": {

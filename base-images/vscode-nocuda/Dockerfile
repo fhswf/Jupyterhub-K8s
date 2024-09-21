@@ -35,12 +35,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-## huggingface/chat-ui install
-
-# git clone https://github.com/huggingface/chat-ui
-# cd chat-ui
-# npm install
-
 #  Code Server server-proxy/vscode-proxy from https://coder.com/docs/code-server/latest
 ENV CODE_VERSION=4.21.0
 
@@ -113,7 +107,7 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 
 
 # ---------------------------------
-# TEST
+# Huggingface Chat UI
 # ---------------------------------
 
 RUN pip install \
