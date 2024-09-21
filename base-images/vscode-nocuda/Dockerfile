@@ -86,8 +86,6 @@ RUN pip install \
 
 RUN curl -fsSL https://get.docker.com | sh
 
-RUN docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock my-container
-
 RUN docker run --rm -it -d \
     -p 9123:8080 \
     --name my-dashboard \
