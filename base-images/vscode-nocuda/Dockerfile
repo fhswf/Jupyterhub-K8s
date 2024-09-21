@@ -119,11 +119,14 @@ nbgitpuller \
 && rm -rf /tmp/* $HOME/.cache
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash \
-&& nvm install latest \
-&& nvm use latest \
-&& git clone https://github.com/huggingface/chat-ui \
-&& cd chat-ui \
-&& npm install
+    && export NVM_DIR="$HOME/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \
+    && nvm install latest \
+    && nvm use latest \
+    && git clone https://github.com/huggingface/chat-ui \
+    && cd chat-ui \
+    && npm install
+
 
 # ---------------------------------
 
