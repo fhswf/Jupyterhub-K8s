@@ -3,7 +3,7 @@ import os
 
 def run_chat_ui():
     return {
-        "command": "cd ~/chat-ui && npm run dev -- --open",
+        "command": "cd ~/chat_ui && open-webui serve",
         "timeout": 300,
         "new_browser_tab": True,
         "launcher_entry": {

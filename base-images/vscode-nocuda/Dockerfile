@@ -117,17 +117,6 @@ git+https://github.com/fhswf/Jupyterhub-K8s.git@heller-dev#subdirectory=packages
 jedi-language-server \
 nbgitpuller \
 && rm -rf /tmp/* $HOME/.cache
-
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash \
-    && export NVM_DIR="$HOME/.nvm" \
-    && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \
-    && nvm install latest \
-    && nvm use latest \
-    && git clone https://github.com/huggingface/chat-ui \
-    && cd chat-ui \
-    && npm install
-
-
 # ---------------------------------
 
 # git LFS and other extras
@@ -138,6 +127,14 @@ RUN apt-get update \
     libncurses-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN mkdir ~/chat_ui && cd ~/chat_ui \
+&& python3 -m venv .venv \
+&& source .venv/bin/activate \
+&& pip install open-webui \
+&& deactivate && cd
+
+
 
 # user 
 USER $NB_UID
