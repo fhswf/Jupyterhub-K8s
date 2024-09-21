@@ -84,6 +84,13 @@ RUN pip install \
     nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
 
+RUN docker run -d \
+    -p 9123:8080 \
+    -v ~/my-conf.yml:/app/user-data/conf.yml \
+    --name my-dashboard \
+    --restart=always \
+    lissy93/dashy:latest
+
 # only install scilab-kernel for scipy notebooks
 RUN if [ "$JUPYTER_VARIANT" = "scipy" ]; \
     then pip install scilab-kernel && rm -rf /tmp/* $HOME/.cache; \
