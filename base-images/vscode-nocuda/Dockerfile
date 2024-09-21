@@ -84,6 +84,8 @@ RUN pip install \
     nbgitpuller \
     && rm -rf /tmp/* $HOME/.cache
 
+RUN curl -fsSL https://get.docker.com | sh
+
 RUN docker run -d \
     -p 9123:8080 \
     -v ~/my-conf.yml:/app/user-data/conf.yml \
