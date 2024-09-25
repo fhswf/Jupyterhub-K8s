@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [[ ! -f "$HOME/PICO" ]] ; then
+if [[ ! -d "$HOME/PICO" ]] ; then
     echo "cping /opt/PICO";
     cp -R  /opt/PICO/* $HOME/PICO
 else
