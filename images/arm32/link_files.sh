@@ -2,8 +2,8 @@
 set -e
 
 if [[ ! -f "$HOME/PICO" ]] ; then
-    echo "linking /opt/PICO";
-    ln -s  /opt/PICO/ $HOME/PICO
+    echo "cping /opt/PICO";
+    cp -r  /home/jovyan/PICO $HOME/PICO
 else
     echo "/opt/PICO found in $HOME";
 fi
