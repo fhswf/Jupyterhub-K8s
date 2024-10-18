@@ -63,7 +63,7 @@ RUN pip install \
 RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
     tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken \
-    pymysql librosa gradio wandb Cython==0.29.36 \
+    pymysql librosa gradio wandb libcusparselt0 libcusparselt-dev Cython==0.29.36 \
     && rm -rf /tmp/* $HOME/.cache#
 
 # Reinstall tf the fix deps
@@ -80,7 +80,7 @@ RUN pip install \
     "murmurhash>=0.28.0,<1.1.0" \
     "thinc>=8.2.2,<8.3.0" \
     && rm -rf /tmp/* $HOME/.cache
-    
+
 RUN pip install \
     spacy==3.7.6 \
     --no-build-isolation \
