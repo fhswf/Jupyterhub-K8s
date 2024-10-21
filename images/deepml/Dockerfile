@@ -11,7 +11,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # for torch vision and huggingface nlp and opencv
-    libsndfile1 ffmpeg libsm6 libxext6 libgl1\
+    libsndfile1 ffmpeg libsm6 libxext6 libgl1 pkg-config libcusparselt0 libcusparselt-dev \
     # deps for nvidia nemo_toolkit 
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
     && apt-get clean \
@@ -46,7 +46,7 @@ RUN wget -O /tmp/openjdk.tar.gz https://github.com/adoptium/temurin8-binaries/re
 
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends \
-    maven libcusparselt0 libcusparselt-dev \
+    maven \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
