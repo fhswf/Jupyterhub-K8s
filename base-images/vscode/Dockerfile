@@ -248,6 +248,8 @@ RUN apt-get install -y \
     libnvinfer10=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers-dev=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers10=${NV_TENSOR_RT_TAG} \
+    libcusparselt0 \
+    libcusparselt-dev \
     python3-libnvinfer-dev=${NV_TENSOR_RT_TAG} \
     python3-libnvinfer-dispatch=${NV_TENSOR_RT_TAG} \
     python3-libnvinfer-lean=${NV_TENSOR_RT_TAG} \

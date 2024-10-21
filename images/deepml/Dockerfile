@@ -46,7 +46,7 @@ RUN wget -O /tmp/openjdk.tar.gz https://github.com/adoptium/temurin8-binaries/re
 
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends \
-    maven \
+    maven libcusparselt0 libcusparselt-dev \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
@@ -63,7 +63,7 @@ RUN pip install \
 RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
     tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken \
-    pymysql librosa gradio wandb libcusparselt0 libcusparselt-dev Cython==0.29.36 \
+    pymysql librosa gradio wandb Cython==0.29.36 \
     && rm -rf /tmp/* $HOME/.cache#
 
 # Reinstall tf the fix deps
