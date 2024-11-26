@@ -56,7 +56,7 @@ USER $NB_UID
 ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
 # Install PyTorch
-RUN pip install \
+RUN pip install --upgrade \
     torch==2.4.0+cu124 torchvision==0.19.0+cu124 torchaudio==2.4.0+cu124 --index-url https://download.pytorch.org/whl/cu124
 
 # Torch Lightning
