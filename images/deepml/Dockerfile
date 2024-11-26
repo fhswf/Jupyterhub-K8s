@@ -57,7 +57,10 @@ ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
 # Install PyTorch
 RUN pip install \
-    torch==2.4.0+cu121 torchvision==0.19.0+cu121 torchaudio==2.4.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+    torch==2.4.0+cu124 torchvision==0.19.0+cu124 torchaudio==2.4.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+
+# Torch Lightning
+RUN python -m pip install lightning==2.4.0
 
 # Install Huggingface and other libraries
 RUN pip install \
