@@ -69,11 +69,11 @@ RUN pip install \
     pymysql librosa gradio wandb Cython==0.29.36 \
     && rm -rf /tmp/* $HOME/.cache#
 
-# Reinstall tf the fix deps
-RUN pip install \
-    #nvidia-cudnn-cu12==9.2.1.18 \
-    tensorflow[and-cuda]==2.15.* mysql-connector-python keras-tuner \
-    && rm -rf /tmp/* $HOME/.cache
+## Reinstall tf the fix deps
+#RUN pip install \
+#    #nvidia-cudnn-cu12==9.2.1.18 \
+#    tensorflow[and-cuda]==2.18.* mysql-connector-python keras-tuner \
+#    && rm -rf /tmp/* $HOME/.cache
 
 # spacy needs Cython==0.29.36 for now to compile
 # see https://github.com/explosion/spaCy/discussions/12941
