@@ -58,7 +58,7 @@ ENV TF_FORCE_GPU_ALLOW_GROWTH true
 # Install Huggingface and other libraries
 RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
-    tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken \
+    tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken wandb \
     pymysql librosa gradio wandb Cython==0.29.36 \
     && rm -rf /tmp/* $HOME/.cache#
 
@@ -85,6 +85,7 @@ RUN pip install \
 
 # optional stuff not included currently
 # nemo_toolkit[all] 
+RUN pip install tf-keras
 
 # see here: https://github.com/tensorflow/tensorflow/issues/58681
 # bugfix for ${CUDA_DIR}/nvvm/libdevice.

@@ -65,7 +65,7 @@ RUN python -m pip install lightning==2.4.0
 # Install Huggingface and other libraries
 RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
-    tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken \
+    tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken wandb \
     pymysql librosa gradio wandb Cython==0.29.36 \
     && rm -rf /tmp/* $HOME/.cache#
 
