@@ -1,8 +1,8 @@
-FROM wbitt/network-multitool:e21fa4b
+FROM wbitt/network-multitool:fedora
 
 USER root
 
-RUN apk add unzip
+# RUN apk add unzip
 
 RUN setcap cap_chown,cap_fowner,cap_dac_read_search,cap_dac_override,cap_fsetid,cap_setuid,cap_setgid+ep /bin/chown
 RUN setcap cap_chown,cap_fowner,cap_dac_read_search,cap_dac_override,cap_fsetid,cap_setuid,cap_setgid+ep /bin/chmod
