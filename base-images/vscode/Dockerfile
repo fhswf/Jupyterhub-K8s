@@ -362,12 +362,16 @@ COPY rebind_home.sh /usr/local/bin/before-notebook.d/01_rebind_home.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/01_rebind_home.sh
 COPY setup_env.sh /usr/local/bin/before-notebook.d/10_setup_env.sh  
 RUN  chmod +x /usr/local/bin/before-notebook.d/10_setup_env.sh
+COPY create_idfile.sh /usr/local/bin/before-notebook.d/20_create_idfile.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/20_create_idfile.sh
 COPY clean_runtime.sh /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 COPY configure_cuda.sh /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
+
+
 
 # git LFS and other extras
 RUN apt-get update \
