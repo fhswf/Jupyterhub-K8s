@@ -368,8 +368,8 @@ COPY clean_runtime.sh /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
-COPY configure_cuda.sh /usr/local/bin/before-notebook.d/80_configure_cuda.sh
-RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
+# COPY configure_cuda.sh /usr/local/bin/before-notebook.d/80_configure_cuda.sh
+# RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 
 
 
