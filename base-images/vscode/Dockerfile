@@ -364,6 +364,8 @@ COPY setup_env.sh /usr/local/bin/before-notebook.d/10_setup_env.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/10_setup_env.sh
 COPY create_idfile.sh /usr/local/bin/before-notebook.d/20_create_idfile.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/20_create_idfile.sh
+COPY link_backup_folders.sh /usr/local/bin/before-notebook.d/30_link_backup_folders.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/30_link_backup_folders.sh
 COPY clean_runtime.sh /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
