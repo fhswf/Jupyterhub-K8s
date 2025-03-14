@@ -1,7 +1,7 @@
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
 
-FROM jupyter/${JUPYTER_VARIANT}-notebook:lab-3.6.3 as nocuda
+FROM jupyter/${JUPYTER_VARIANT}-notebook:ubuntu-22.04 as nocuda
 
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
@@ -248,6 +248,8 @@ RUN apt-get install -y \
     libnvinfer10=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers-dev=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers10=${NV_TENSOR_RT_TAG} \
+    libcusparselt0 \
+    libcusparselt-dev \
     python3-libnvinfer-dev=${NV_TENSOR_RT_TAG} \
     python3-libnvinfer-dispatch=${NV_TENSOR_RT_TAG} \
     python3-libnvinfer-lean=${NV_TENSOR_RT_TAG} \
@@ -335,8 +337,10 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && cd /tmp 
 
 RUN pip install \
-    jupyterlab-lsp==4.3.0 \
-    jupyter-server-proxy==4.0.0  \
+    jupyterlab-lsp \
+    jupyter-server-proxy \
+    jupyterlab-night \
+    jupyter-collaboration \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
@@ -358,6 +362,10 @@ COPY rebind_home.sh /usr/local/bin/before-notebook.d/01_rebind_home.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/01_rebind_home.sh
 COPY setup_env.sh /usr/local/bin/before-notebook.d/10_setup_env.sh  
 RUN  chmod +x /usr/local/bin/before-notebook.d/10_setup_env.sh
+COPY create_idfile.sh /usr/local/bin/before-notebook.d/20_create_idfile.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/20_create_idfile.sh
+COPY link_backup_folders.sh /usr/local/bin/before-notebook.d/30_link_backup_folders.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/30_link_backup_folders.sh
 COPY clean_runtime.sh /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
@@ -365,12 +373,14 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 # COPY configure_cuda.sh /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 # RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 
+
+
 # git LFS and other extras
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && apt-get install -y --no-install-recommends \
     git-lfs zlib1g-dev git-core bash-completion \
-    libncurses-dev \
+    libncurses-dev pkg-config \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
