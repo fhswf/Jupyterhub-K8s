@@ -107,15 +107,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: ${{ inputs.buildargs }}
           
-      - name: pull to harbor
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
-          tags=$(echo "${{ steps.meta.outputs.tags }}")
-          for tag in $tags 
-          do 
-          docker image pull harbor.ki.fh-swf.de/$tag
-          done
+      #- name: pull to harbor
+      #  if: ${{ github.event_name != 'pull_request' }}
+      #  run: |
+      #    tag=$(echo "${{ steps.meta.outputs.tags }}" | grep sha | head -n 1 | awk -F ':' '{print $2}')
+      #    tags=$(echo "${{ steps.meta.outputs.tags }}")
+      #    for tag in $tags 
+      #    do 
+      #    docker image pull harbor.ki.fh-swf.de/$tag
+      #    done
           
       #- name: setoutput
       #  id: setoutput
