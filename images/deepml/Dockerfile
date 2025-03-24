@@ -14,6 +14,8 @@ RUN apt-get update && \
     libsndfile1 ffmpeg libsm6 libxext6 libgl1 pkg-config libcusparselt0 libcusparselt-dev \
     # deps for nvidia nemo_toolkit 
     libsndfile1 sox libfreetype6 swig libavdevice-dev \
+    # sim for x-server
+    xvfb libgl1-mesa-dri \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
