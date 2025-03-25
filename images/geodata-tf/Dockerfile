@@ -5,7 +5,21 @@ ENV BUILD_IMAGE_NAME geodata
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# USER root
+USER root
+
+# dev dependencies for geopandas
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libproj-dev proj-data proj-bin \
+    libgeos-dev libgeos++-dev \
+    libgdal-dev gdal-bin \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/*
+
+# Install Postgres Client
+RUN apt install libpq-dev \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/*
 
 USER $NB_UID
 
