@@ -391,6 +391,9 @@ RUN pip install bash_kernel \
     && python -m bash_kernel.install --prefix /opt/conda \
     && rm -rf /tmp/* $HOME/.cache
 
+
+RUN  fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+
 # install nbgrader    
 RUN pip install --no-deps \          
     #nbgrader==0.8.5 \ # use fork instead
