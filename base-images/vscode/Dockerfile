@@ -391,8 +391,10 @@ RUN pip install bash_kernel \
     && python -m bash_kernel.install --prefix /opt/conda \
     && rm -rf /tmp/* $HOME/.cache
 
-
+USER root
 RUN  fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+ 
+USER $NB_UID
 
 # install nbgrader    
 RUN pip install --no-deps \          
