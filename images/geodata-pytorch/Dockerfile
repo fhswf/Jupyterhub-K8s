@@ -12,7 +12,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libproj-dev proj-data proj-bin \
     libgeos-dev libgeos++-dev \
-    libgdal-dev gdal-bin \
+    libgdal-dev=3.10.2+dfsg-1 gdal-bin \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
