@@ -391,6 +391,16 @@ RUN pip install bash_kernel \
     && python -m bash_kernel.install --prefix /opt/conda \
     && rm -rf /tmp/* $HOME/.cache
 
+# install nbgrader    
+RUN pip install --no-deps \          
+    #nbgrader==0.8.5 \ # use fork instead
+    git+https://github.com/jeflem/nbgrader.git@ananke_0.5 \
+    # not sure if we need the kore-extension, does not have extra deps?
+    # git+https://github.com/marcwit/kore-extension.git@ananke_0.5 \
+    # nbgrader dependencies
+    rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
+    && rm -rf /tmp/* $HOME/.cache
+
 ## npm language servers:
 RUN npm install -g --save-dev \
     bash-language-server \
