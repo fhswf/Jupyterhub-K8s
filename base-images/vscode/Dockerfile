@@ -396,6 +396,12 @@ RUN  fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /hom
  
 USER $NB_UID
 
+
+# install nose    
+RUN pip install \
+    nose \
+    && rm -rf /tmp/* $HOME/.cache
+
 # install nbgrader    
 RUN pip install --no-deps \          
     #nbgrader==0.8.5 \ # use fork instead
