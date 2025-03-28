@@ -7,14 +7,14 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 
-# dev dependencies for geopandas
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    libproj-dev proj-data proj-bin \
-    libgeos-dev libgeos++-dev \
-    libgdal-dev=3.10.2+dfsg-1 gdal-bin \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/lib/apt/lists/*
+# # dev dependencies for geopandas
+# RUN apt-get update \
+#     && apt-get install -y --no-install-recommends \
+#     libproj-dev proj-data proj-bin \
+#     libgeos-dev libgeos++-dev \
+#     libgdal-dev=3.10.2+dfsg-1 gdal-bin \
+#     && apt-get clean \
+#     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Install Postgres Client
 RUN apt install libpq-dev \
@@ -25,7 +25,7 @@ USER $NB_UID
 
 # Install Python Libs
 RUN pip install \
-    sqlalchemy psycopg2 GeoAlchemy2 gdal geopandas shapely fiona rasterio osgeo rasterio.transform rasterio.warp folium pyproj requests tsfresh\
+    sqlalchemy psycopg2-binary GeoAlchemy2 gdal geopandas shapely fiona rasterio osgeo rasterio.transform rasterio.warp folium pyproj requests tsfresh\
     && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
