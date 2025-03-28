@@ -1,7 +1,7 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-622f43f
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-7ad53bf
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
-ENV BUILD_IMAGE_NAME deepml
+ENV BUILD_IMAGE_NAME deeplearningtf
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
