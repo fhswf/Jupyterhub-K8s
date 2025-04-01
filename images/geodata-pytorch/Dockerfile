@@ -17,7 +17,7 @@ USER root
 #     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Install Postgres Client
-RUN apt get update && apt install libpq-dev \
+RUN apt-get update && apt install libpq-dev \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
