@@ -23,7 +23,7 @@ RUN apt-get update && apt install libpq-dev -y \
 
 USER $NB_UID
 
-RUN conda install -c conda-forge geopandas gdal osgeo && rm -rf /tmp/* $HOME/.cache
+RUN conda install -c conda-forge geopandas gdal && rm -rf /tmp/* $HOME/.cache
 
 # Install Python Libs
 RUN pip install \
