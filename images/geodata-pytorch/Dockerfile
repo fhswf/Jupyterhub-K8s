@@ -23,12 +23,13 @@ RUN apt-get update && apt install libpq-dev -y \
 
 USER $NB_UID
 
+RUN conda install -c conda-forge geopandas gdal && rm -rf /tmp/* $HOME/.cache 
+
 # Install Python Libs
 RUN pip install \
-    sqlalchemy psycopg2-binary GeoAlchemy2 shapely fiona rasterio osgeo rasterio.transform rasterio.warp folium pyproj requests tsfresh\
+    sqlalchemy psycopg2-binary GeoAlchemy2 shapely fiona rasterio osgeo folium pyproj requests tsfresh\
     && rm -rf /tmp/* $HOME/.cache
 
-RUN conda install -c conda-forge geopandas gdal && rm -rf /tmp/* $HOME/.cache
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="NVIDIA-GPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
