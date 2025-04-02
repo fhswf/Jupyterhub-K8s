@@ -1,4 +1,4 @@
-I'mARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/deeplearningtf:sha-7343713
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/deeplearningtf:sha-7343713
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME geodata
