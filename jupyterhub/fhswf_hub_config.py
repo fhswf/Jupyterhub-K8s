@@ -3,7 +3,8 @@ import logging
 import traitlets.log
 
 # load the config object (satisfies linters)
-c = get_config()  # noqa
+c # noqa
+# k8s_config = get_config("key") # noqa
 logger = traitlets.log.get_logger()
 
 # ===========================================================================

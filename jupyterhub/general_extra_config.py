@@ -1,6 +1,8 @@
 
 # load the config object (satisfies linters)
-c = get_config()  # noqa
+# traitlets config
+c # noqa
+# k8s_config = get_config("key") # noqa
 
 # ===========================================================================
 #         Extra Configuration for a general z2jh extended Image  
