@@ -18,8 +18,8 @@ RUN mkdir -p /usr/local/etc/jupyterhub/jupyterhub_config.d
 RUN mkdir -p /opt/jupyterhub/hub/templates
 
 # extra configs for general execution
-COPY general_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/40_general_extra_config.py
-RUN  chmod +x /usr/local/etc/jupyterhub/jupyterhub_config.d/40_general_extra_config.py
+# COPY general_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/40_general_extra_config.py
+# RUN  chmod +x /usr/local/etc/jupyterhub/jupyterhub_config.d/40_general_extra_config.py
 # extra config for ananake fork
 # COPY lti_auth_extension.py /usr/local/etc/jupyterhub/jupyterhub_config.d/50_lti_auth_extension.py
 # RUN  chmod +x /usr/local/etc/jupyterhub/jupyterhub_config.d/50_lti_auth_extension.py
