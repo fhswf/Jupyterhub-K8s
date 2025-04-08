@@ -1,4 +1,7 @@
-FROM jupyterhub/k8s-hub:3.2.1 
+FROM quay.io/jupyterhub/k8s-hub:4.1.0
+# hub 5.2.1
+
+# FROM jupyterhub/k8s-hub:3.2.1 
 # hub 4.0.2
 # FROM jupyterhub/k8s-hub:2.0.1-0.dev.git.6026.h0e7347d
 
