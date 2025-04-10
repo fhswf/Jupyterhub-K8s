@@ -35,7 +35,7 @@ RUN pip install \
     kubernetes \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@develop#subdirectory=packages/multiauthenticator \
     nbgitpuller PyJWT \
-    git+https://github.com/fhswf/jupyterhub-announcement.git@main 
+    git+https://github.com/fhswf/jupyterhub-announcement.git@b4d1d5812bfe276a1a77c2f7b888bf14e451d5a2
 
 # ADD https://api.github.com/repos/fhswf/ngshare/git/refs/heads/master ngshare.version.json
 # RUN pip install --no-deps git+https://github.com/fhswf/ngshare.git@master
