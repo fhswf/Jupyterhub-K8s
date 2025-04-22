@@ -52,7 +52,7 @@
 
 <script>
   $("input").change(function () {
-    console.log ($(this).val ())
+    $(this).parents ("div.card").addClass ("border-primary")
   })
 </script>
 
