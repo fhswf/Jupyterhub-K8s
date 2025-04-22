@@ -13,6 +13,34 @@
           class="btn-check"
         >
         <label for="profile-item-{{ profile.slug }}" class="btn btn-outline-primary">Ausw&auml;hlen</label>
+        {%- if profile.profile_options %}
+          {%- for k, option in profile.profile_options.items() %}
+            <label for="profile-option-{{ profile.slug }}--{{ k }}">{{ option.display_name }}</label>
+            <select name="profile-option-{{ profile.slug }}--{{ k }}" class="form-select">
+              {%- for k, choice in option['choices'].items() %}
+                <option value="{{ k }}" {% if choice.default %}selected{% endif %}>{{ choice.display_name }}</option>
+              {%- endfor %}
+              {%- if option['unlisted_choice']['enabled'] %}
+                <option value="unlisted-choice">{{ option['unlisted_choice']['display_name_in_choices'] }}</option>
+              {%- endif %}
+            </select>
+                <!--
+                {%- if option['unlisted_choice']['enabled'] %}
+                  <div class="option hidden js-other-input-container">
+                    <label for="profile-option-{{ profile.slug }}--{{ k }}--unlisted-choice">
+                      {{ option['unlisted_choice']['display_name'] }}
+                    </label>
+                    <input data-name="profile-option-{{ profile.slug }}--{{ k }}--unlisted-choice"
+                           {%- if option['unlisted_choice']['validation_regex'] %}
+                           pattern="{{ option['unlisted_choice']['validation_regex'] }}"
+                           {%- endif %}
+                           title="{{ option['unlisted_choice']['validation_message'] }}"
+                           class="form-control js-other-input" />
+                  </div>
+                {%- endif %}
+                -->
+            {%- endfor %}
+        {%- endif %}
       </div>
     </div>
   </div>
