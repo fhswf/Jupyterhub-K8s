@@ -24,6 +24,9 @@ COPY general_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/40_ge
 # COPY lti_auth_extension.py /usr/local/etc/jupyterhub/jupyterhub_config.d/50_lti_auth_extension.py
 # RUN  chmod +x /usr/local/etc/jupyterhub/jupyterhub_config.d/50_lti_auth_extension.py
 
+# templates
+COPY profile_list.html /opt/jupyterhub/hub/templates/kubespawner/form.html
+
 USER ${NB_USER}
 
 ADD https://api.github.com/repos/fhswf/Jupyterhub-K8s/git/refs/heads/develop Jupyterhub-K8s.version.json
