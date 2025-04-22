@@ -1,11 +1,18 @@
-<div class="row row-cols-1 row-cols-md-3">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ profile.display_name }}</h5>
-        <input type="radio" name="profile" id="profile-item-{{ profile.slug }}" value="{{ profile.slug }}">
-        <label for="profile-item-{{ profile.slug }}">{{ profile.description }}</label>
+        <p class="card-text">{{ profile.description }}</p>
+        <input 
+          type="radio" 
+          name="profile" 
+          id="profile-item-{{ profile.slug }}" 
+          value="{{ profile.slug }}"
+          class="btn-check"
+        >
+        <label for="profile-item-{{ profile.slug }}" class="btn btn-outline-primary">Ausw&auml;hlen</label>
       </div>
     </div>
   </div>
