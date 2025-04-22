@@ -1,4 +1,4 @@
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
+<div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
     <div class="card">
@@ -27,7 +27,7 @@
                 <option value="unlisted-choice">{{ option['unlisted_choice']['display_name_in_choices'] }}</option>
               {%- endif %}
             </select>
-                <!--
+                {#
                 {%- if option['unlisted_choice']['enabled'] %}
                   <div class="option hidden js-other-input-container">
                     <label for="profile-option-{{ profile.slug }}--{{ k }}--unlisted-choice">
@@ -41,7 +41,7 @@
                            class="form-control js-other-input" />
                   </div>
                 {%- endif %}
-                -->
+                #}
             {%- endfor %}
         </div>
       {%- endif %}
@@ -50,7 +50,7 @@
   {%- endfor %}
 </div>
 
-<!--
+{#
 <script>
   $('.js-profile-option-select, .js-profile-option-label').click(function() {
     // we need this bit of JS to select the profile when a <select> inside is clicked.
@@ -95,4 +95,4 @@
   });
 
 </script>
--->
+#}
