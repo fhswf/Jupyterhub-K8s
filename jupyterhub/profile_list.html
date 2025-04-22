@@ -1,3 +1,8 @@
+<script>
+  function test () {
+    console.log ($(this).val ())
+  }
+</script>
 <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
@@ -11,6 +16,7 @@
           id="profile-item-{{ profile.slug }}" 
           value="{{ profile.slug }}"
           {% if profile.default %}checked{% endif %}
+          onchange="test ()"
           class="btn-check"
         >
         <label for="profile-item-{{ profile.slug }}" class="btn btn-outline-primary">Ausw&auml;hlen</label>
