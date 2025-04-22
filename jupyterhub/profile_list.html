@@ -11,7 +11,6 @@
           id="profile-item-{{ profile.slug }}" 
           value="{{ profile.slug }}"
           {% if profile.default %}checked{% endif %}
-          onchange="test ()"
           class="btn-check"
         >
         <label for="profile-item-{{ profile.slug }}" class="btn btn-outline-primary">Ausw&auml;hlen</label>
@@ -52,7 +51,7 @@
 </div>
 
 <script>
-  $("input").change(() => {
+  $("input").change(function () {
     console.log ($(this).val ())
   })
 </script>
