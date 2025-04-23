@@ -1,7 +1,7 @@
 <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
-    <div class="js-card card h-100 {% if profile.default %}border-primary {% endif %}">
+    <div class="profile-list-card card h-100 {% if profile.default %}border-primary {% endif %}">
       <div class="card-body">
         <h5 class="card-title">{{ profile.display_name }}</h5>
         <p class="card-text">{{ profile.description }}</p>
@@ -32,19 +32,22 @@
 </div>
 
 <style>
-  div.card:hover {
-	  background-color: rgba(var(--bs-primary-rgb), 0.1);
+  div.profile-list-card {
+    cursor: pointer;
+  }
+  div.profile-list-card:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
   }
 </style>
 
 <script>
-  $("div.js-card").click (function (e) {
+  $("div.profile-list-card").click (function () {
     $(this).find ('input[type="radio"]').prop ("checked", true).trigger ("change")
   })
   
   $('input[type="radio"]').change (function () {
-    $("div.js-card").removeClass ("border-primary", "border-3")
+    $("div.profile-list-card").removeClass ("border-primary", "border-3")
     
-    $(this).parents ("div.card").addClass ("border-primary", "border-3")
+    $(this).parents ("div.profile-list-card").addClass ("border-primary", "border-3")
   })
 </script>
