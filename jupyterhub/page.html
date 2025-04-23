@@ -7,7 +7,7 @@
 <script>
   const path = "{{ base_url[:-5] + "/services/announcement/latest" }}"
   
-  $.get("{{path}}", function(data) {
+  $.get(path, function(data) {
     const announcement = data["announcement"];
     
     if (announcement) {
