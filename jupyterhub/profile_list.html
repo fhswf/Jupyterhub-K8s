@@ -1,7 +1,7 @@
 <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
-    <div class="js-card card {% if profile.default %}border-primary {% endif %}">
+    <div class="js-card card h-100 {% if profile.default %}border-primary {% endif %}">
       <div class="card-body">
         <h5 class="card-title">{{ profile.display_name }}</h5>
         <p class="card-text">{{ profile.description }}</p>
@@ -25,9 +25,11 @@
               {%- for k, choice in option['choices'].items() %}
                 <option value="{{ k }}" {% if choice.default %}selected{% endif %}>{{ choice.display_name }}</option>
               {%- endfor %}
+              {#
               {%- if option['unlisted_choice']['enabled'] %}
                 <option value="unlisted-choice">{{ option['unlisted_choice']['display_name_in_choices'] }}</option>
               {%- endif %}
+              #}
             </select>
                 {#
                 {%- if option['unlisted_choice']['enabled'] %}
