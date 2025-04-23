@@ -13,7 +13,9 @@
           {% if profile.default %}checked{% endif %}
           class="btn-check"
         >
-        <label for="profile-item-{{ profile.slug }}" class="js-label btn btn-outline-primary">Ausw&auml;hlen</label>
+        <label for="profile-item-{{ profile.slug }}" class="js-label btn btn-outline-primary">
+          {% if profile.default %}Ausgew&auml;hlt{% else %}Ausw&auml;hlen{% endif %}
+        </label>
       </div>
       {%- if profile.profile_options %}
         <div class="card-body">
@@ -53,9 +55,10 @@
 <script>
   $('input[type="radio"]').change(function () {
     $("div.js-card").removeClass ("border-primary")
-    $("label.js-label").text ("Ausw&auml;hlen")
+    $("label.js-label").text ("Auswählen")
+    
     $(this).parents ("div.card").addClass ("border-primary")
-    $(this).next ("label.js-label").text ("Ausgew&auml;hlt")
+    $(this).next ("label.js-label").text ("Ausgewählt")
   })
 </script>
 
