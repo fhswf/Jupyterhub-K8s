@@ -11,11 +11,8 @@
           id="profile-item-{{ profile.slug }}" 
           value="{{ profile.slug }}"
           {% if profile.default %}checked{% endif %}
-          class="btn-check"
+          class="hidden"
         >
-        <label for="profile-item-{{ profile.slug }}" class="js-label btn btn-outline-primary">
-          {% if profile.default %}Ausgew&auml;hlt{% else %}Ausw&auml;hlen{% endif %}
-        </label>
       </div>
       {%- if profile.profile_options %}
         <div class="card-body">
@@ -25,27 +22,7 @@
               {%- for k, choice in option['choices'].items() %}
                 <option value="{{ k }}" {% if choice.default %}selected{% endif %}>{{ choice.display_name }}</option>
               {%- endfor %}
-              {#
-              {%- if option['unlisted_choice']['enabled'] %}
-                <option value="unlisted-choice">{{ option['unlisted_choice']['display_name_in_choices'] }}</option>
-              {%- endif %}
-              #}
             </select>
-                {#
-                {%- if option['unlisted_choice']['enabled'] %}
-                  <div class="option hidden js-other-input-container">
-                    <label for="profile-option-{{ profile.slug }}--{{ k }}--unlisted-choice">
-                      {{ option['unlisted_choice']['display_name'] }}
-                    </label>
-                    <input data-name="profile-option-{{ profile.slug }}--{{ k }}--unlisted-choice"
-                           {%- if option['unlisted_choice']['validation_regex'] %}
-                           pattern="{{ option['unlisted_choice']['validation_regex'] }}"
-                           {%- endif %}
-                           title="{{ option['unlisted_choice']['validation_message'] }}"
-                           class="form-control js-other-input" />
-                  </div>
-                {%- endif %}
-                #}
             {%- endfor %}
         </div>
       {%- endif %}
@@ -54,59 +31,20 @@
   {%- endfor %}
 </div>
 
+<style>
+  div.card:hover {
+	  background-color: rgba(var(--bs-primary-rgb), 0.1);
+  }
+</style>
+
 <script>
-  $('input[type="radio"]').change(function () {
+  $("div.js-card").click (function (e) {
+    $(this).find ('input[type="radio"]').prop ("checked", true).trigger ("change")
+  })
+  
+  $('input[type="radio"]').change (function () {
     $("div.js-card").removeClass ("border-primary")
-    $("label.js-label").text ("Auswählen")
     
     $(this).parents ("div.card").addClass ("border-primary")
-    $(this).next ("label.js-label").text ("Ausgewählt")
   })
 </script>
-
-{#
-<script>
-  $('.js-profile-option-select, .js-profile-option-label').click(function() {
-    // we need this bit of JS to select the profile when a <select> inside is clicked.
-    $(this).parents('.js-profile-label')
-      .find('input[type=radio]')
-      .prop('checked', true);
-  });
-
-  // If the user selects "Other" in the dropdown, show the free text field
-  $('.js-profile-option-select').change(function() {
-    const selectionValue = $(this).val();
-    const $otherInputContainer = $(this).parents('.js-options-container').find('.js-other-input-container');
-    const $otherInput = $(this).parents('.js-options-container').find('.js-other-input');
-    if (selectionValue === 'unlisted-choice') {
-
-      // if the Select box is selected with a value that is not 'unlisted-choice',
-      // we remove the "name" attribute for the unlisted-choice input
-      // and vice-versa, so that we only submit valid form values
-      // and don't leave the complexity of figuring out which value
-      // to use to the back-end.
-
-      // This can probably be done cleaner by completely refactoring
-      // how we send values from the frontend.
-      $(this).data('name', $(this).attr('name'));
-      $(this).removeAttr('name');
-      $otherInput.attr('name', $otherInput.data('name'));
-      $otherInputContainer.removeClass('hidden');
-    } else {
-      $otherInput.removeAttr('name');
-      $(this).attr('name', $(this).data('name'));
-      $otherInputContainer.addClass('hidden');
-    }
-  });
-
-  // wrapping in a document.ready to make clear this is executed once
-  // on page load
-  $(document).ready(() => {
-    // trigger the `change` event on the select inputs,
-    // so that if "Other" is selected on page load, the corresponding
-    // free-text input shows
-    $('.js-profile-option-select').trigger('change');
-  });
-
-</script>
-#}
