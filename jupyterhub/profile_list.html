@@ -1,7 +1,7 @@
 <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
-    <div class="profile-list-card card h-100 {% if profile.default %}border-primary {% endif %}">
+    <div class="profile-list-card card h-100 {% if profile.default %}border-primary border-2 {% endif %}">
       <div class="card-body">
         <h5 class="card-title">{{ profile.display_name }}</h5>
         <p class="card-text">{{ profile.description }}</p>
@@ -46,8 +46,8 @@
   })
   
   $('input[type="radio"]').change (function () {
-    $("div.profile-list-card").removeClass ("border-primary border-3")
+    $("div.profile-list-card").removeClass ("border-primary border-2")
     
-    $(this).parents ("div.profile-list-card").addClass ("border-primary border-3")
+    $(this).parents ("div.profile-list-card").addClass ("border-primary border-2")
   })
 </script>
