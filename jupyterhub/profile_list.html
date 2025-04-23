@@ -43,8 +43,8 @@
   })
   
   $('input[type="radio"]').change (function () {
-    $("div.js-card").removeClass ("border-primary")
+    $("div.js-card").removeClass ("border-primary", "border-3")
     
-    $(this).parents ("div.card").addClass ("border-primary")
+    $(this).parents ("div.card").addClass ("border-primary", "border-3")
   })
 </script>
