@@ -25,6 +25,7 @@ COPY general_extra_config.py /usr/local/etc/jupyterhub/jupyterhub_config.d/40_ge
 # RUN  chmod +x /usr/local/etc/jupyterhub/jupyterhub_config.d/50_lti_auth_extension.py
 
 # templates
+COPY page.html         /opt/jupyterhub/hub/templates/page.html
 COPY profile_list.html /opt/jupyterhub/hub/templates/kubespawner/form.html
 
 USER ${NB_USER}
