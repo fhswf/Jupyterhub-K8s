@@ -5,7 +5,7 @@
 {% block script %}
 {{ super() }}
 <script>
-  const path = {{ base_url[:-5] + "/services/announcement/latest" }}
+  const path = "{{ base_url[:-5] + "/services/announcement/latest" }}"
   
   $.get("{{path}}", function(data) {
     const announcement = data["announcement"];
