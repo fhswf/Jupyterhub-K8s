@@ -1,7 +1,7 @@
 <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
-    <div class="card {% if profile.default %}border-primary {% endif %}">
+    <div class="js-card card {% if profile.default %}border-primary {% endif %}">
       <div class="card-body">
         <h5 class="card-title">{{ profile.display_name }}</h5>
         <p class="card-text">{{ profile.description }}</p>
@@ -13,7 +13,7 @@
           {% if profile.default %}checked{% endif %}
           class="btn-check"
         >
-        <label for="profile-item-{{ profile.slug }}" class="btn btn-outline-primary">Ausw&auml;hlen</label>
+        <label for="profile-item-{{ profile.slug }}" class="js-label btn btn-outline-primary">Ausw&auml;hlen</label>
       </div>
       {%- if profile.profile_options %}
         <div class="card-body">
@@ -52,8 +52,10 @@
 
 <script>
   $('input[type="radio"]').change(function () {
-    $("div.card").removeClass ("border-primary")
+    $("div.js-card").removeClass ("border-primary")
+    $("label.js-label").text ("Ausw&auml;hlen")
     $(this).parents ("div.card").addClass ("border-primary")
+    $(this).next ("label.js-label").text ("Ausgew&auml;hlt")
   })
 </script>
 
