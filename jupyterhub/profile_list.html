@@ -18,7 +18,7 @@
         <div class="card-body">
           {%- for k, option in profile.profile_options.items() %}
             <label for="profile-option-{{ profile.slug }}--{{ k }}">{{ option.display_name }}</label>
-            <select name="profile-option-{{ profile.slug }}--{{ k }}" class="form-select">
+            <select name="profile-option-{{ profile.slug }}--{{ k }}" class="form-select profile-list-select">
               {%- for k, choice in option['choices'].items() %}
                 <option value="{{ k }}" {% if choice.default %}selected{% endif %}>{{ choice.display_name }}</option>
               {%- endfor %}
@@ -42,6 +42,10 @@
   div.profile-list-card.selected {
     outline: 3px solid rgba(var(--bs-primary-rgb));
     border-color: rgba(0, 0, 0, 0);
+  }
+
+  select.profile-list-select {
+    font-size: 0.75rem;
   }
 </style>
 
