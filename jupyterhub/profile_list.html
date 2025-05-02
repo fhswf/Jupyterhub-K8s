@@ -1,7 +1,7 @@
 <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
   {%- for profile in profile_list %}
   <div class="col">
-    <div class="profile-list-card card h-100{% if profile.default %} no-border selected{% endif %}">
+    <div class="profile-list-card card h-100{% if profile.default %} selected{% endif %}">
       <div class="card-body">
         <h5 class="card-title">{{ profile.display_name }}</h5>
         <p class="card-text mb-0">{{ profile.description }}</p>
@@ -39,8 +39,9 @@
     background-color: rgba(var(--bs-primary-rgb), 0.1);
   }
 
-  div.card.selected {
-	  outline: 3px solid rgba(var(--bs-primary-rgb));
+  div.profile-list-card.selected {
+    outline: 3px solid rgba(var(--bs-primary-rgb));
+    border-color: rgba(0, 0, 0, 0);
   }
 </style>
 
@@ -50,8 +51,8 @@
   })
   
   $('input[type="radio"]').change (function () {
-    $("div.profile-list-card").removeClass ("no-border selected")
+    $("div.profile-list-card").removeClass ("selected")
     
-    $(this).parents ("div.profile-list-card").addClass ("no-border selected")
+    $(this).parents ("div.profile-list-card").addClass ("selected")
   })
 </script>
