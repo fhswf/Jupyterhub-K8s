@@ -211,24 +211,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # extra Install TensorRT
-ENV NV_TRT_VERSION 10.3.0
+ENV NV_TRT_VERSION 10.10.0
 # version="10.x.x.x-1+cudax.x"
-ENV NV_TENSOR_RT_TAG 10.3.0.26-1+cuda12.5 
-ENV OS_RELEASE ubuntu2204
+ENV NV_TENSOR_RT_TAG 10.10.0.31-1+cuda12.9
+ENV OS_RELEASE ubuntu2404
 
 # easy repo add
 RUN apt-get update && apt-get install -y software-properties-common 
 
 ## Theese might change unexpectedly
 # developer nvidia repo: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
-RUN mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/cuda-${OS_RELEASE}.pin
+RUN mv cuda-${OS_RELEASE}.pin /etc/apt/preferences.d/cuda-repository-pin-600
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/3bf863cc.pub
 RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-certificates
 RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x536F8F1DE80F6A35' | gpg --import
 RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA4B469963BF863CC' | gpg --import
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
-RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/3bf863cc.pub
+RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/ /"
 RUN apt-get update
 
 RUN apt-get install -y \
@@ -257,6 +257,9 @@ RUN apt-get install -y \
     tensorrt-dev=${NV_TENSOR_RT_TAG} \
     tensorrt-libs=${NV_TENSOR_RT_TAG} \
     tensorrt=${NV_TENSOR_RT_TAG} \
+    libnvinfer-win-builder-resource10=${NV_TENSOR_RT_TAG} \
+    libnvinfer-headers-python-plugin-dev=${NV_TENSOR_RT_TAG} \
+
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
