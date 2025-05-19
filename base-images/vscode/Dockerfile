@@ -411,6 +411,10 @@ RUN pip install \
 #     rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
 #     && rm -rf /tmp/* $HOME/.cache
 
+# install nodejs
+RUN . /opt/conda/bin/activate && \
+    mamba install -y -q "nodejs>=22"
+
 ## npm language servers:
 RUN npm install -g --save-dev \
     bash-language-server \
