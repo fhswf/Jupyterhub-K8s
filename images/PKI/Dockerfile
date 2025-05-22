@@ -1,7 +1,7 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-nocuda:sha-7ad53bf
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-nocuda:sha-b613e07
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
-ENV BUILD_IMAGE_NAME pki
+ENV BUILD_IMAGE_NAME=pki
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
