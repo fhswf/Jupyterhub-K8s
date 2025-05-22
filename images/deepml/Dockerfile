@@ -68,7 +68,7 @@ RUN python -m pip install lightning==2.4.0
 RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
     tiktoken nltk gensim flair jiwer audiofile opencv-python tiktoken wandb \
-    pymysql librosa gradio wandb Cython==0.29.36 \
+    pymysql librosa gradio wandb Cython==0.29.36 audioread==3.0.1 \
     && rm -rf /tmp/* $HOME/.cache#
 
 ## Reinstall tf the fix deps
