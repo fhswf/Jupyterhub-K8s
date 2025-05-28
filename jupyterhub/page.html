@@ -1,0 +1,23 @@
+{% extends "templates/page.html" %}
+{% block announcement %}
+<div class="container announcement d-flex justify-content-center"></div>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script>
+  const path = "{{ base_url[:-5] + "/services/announcement/latest" }}"
+  
+  $.get(path, function(data) {
+    const announcement = data["announcement"];
+    
+    if (announcement) {
+      $(".announcement").html (`
+        <div class="alert alert-warning mb-4 w-75">
+          <h4 class="alert-heading">Announcement</h4>
+          <p class="mb-0">${announcement}</p>     
+        </div>
+      `);
+    }
+  });
+</script>
+{% endblock %}

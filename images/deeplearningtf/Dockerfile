@@ -1,7 +1,7 @@
 ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-cuda-devel:sha-b613e07
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
-ENV BUILD_IMAGE_NAME deepml
+ENV BUILD_IMAGE_NAME deeplearningtf
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -57,13 +57,6 @@ USER $NB_UID
 # prevent TF from allocating all VRAM
 ENV TF_FORCE_GPU_ALLOW_GROWTH true
 
-# Install PyTorch
-RUN pip install --upgrade \
-    torch==2.4.0+cu124 torchvision==0.19.0+cu124 torchaudio==2.4.0+cu124 --index-url https://download.pytorch.org/whl/cu124
-
-# Torch Lightning
-RUN python -m pip install lightning==2.4.0
-
 # Install Huggingface and other libraries
 RUN pip install \
     transformers datasets tokenizers evaluate adapter-transformers diffusers accelerate \
@@ -71,11 +64,11 @@ RUN pip install \
     pymysql librosa gradio wandb Cython==0.29.36 audioread==3.0.1 \
     && rm -rf /tmp/* $HOME/.cache#
 
-## Reinstall tf the fix deps
-#RUN pip install \
-#    #nvidia-cudnn-cu12==9.2.1.18 \
-#    tensorflow[and-cuda]==2.18.* mysql-connector-python keras-tuner \
-#    && rm -rf /tmp/* $HOME/.cache
+# Reinstall tf the fix deps
+RUN pip install \
+    #nvidia-cudnn-cu12==9.2.1.18 \
+    tensorflow[and-cuda]==2.18.* mysql-connector-python keras-tuner \
+    && rm -rf /tmp/* $HOME/.cache
 
 # spacy needs Cython==0.29.36 for now to compile
 # see https://github.com/explosion/spaCy/discussions/12941
@@ -94,6 +87,7 @@ RUN pip install \
 
 # optional stuff not included currently
 # nemo_toolkit[all] 
+RUN pip install tf-keras
 
 # see here: https://github.com/tensorflow/tensorflow/issues/58681
 # bugfix for ${CUDA_DIR}/nvvm/libdevice.
