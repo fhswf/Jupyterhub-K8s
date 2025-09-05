@@ -10,6 +10,9 @@ USER root
 
 USER $NB_UID
 
+# Debug
+RUN python --version
+
 # Add Langflow proxy
 RUN pip install git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_langflow_proxy
 

@@ -14,7 +14,7 @@ setup_args = dict(
     author_email="gawron.christian@fh-swf.de",
     url="https://github.com/fhswf",
     license="MIT",
-    python_requires=">=3.8",
+    python_requires=">=3.11",
     include_package_data=True,
     package_data={"jupyter_langflow_proxy": ["icons/*"]},
     entry_points={"jupyter_serverproxy_servers": ["langflow = jupyter_langflow_proxy:run_langflow"] }
