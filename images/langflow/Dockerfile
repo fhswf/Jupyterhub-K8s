@@ -1,5 +1,5 @@
-#ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-nocuda:sha-2c18bf4
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-docker-stacks/scipy-notebook:latest
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-scipy-nocuda:sha-b613e07
+#ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-b613e07
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME langflow
