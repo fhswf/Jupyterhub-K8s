@@ -9,7 +9,12 @@ USER root
 
 USER $NB_UID
 
-RUN pip install langflow jhsingle-native-proxy
+# Add Langflow proxy
+RUN pip install git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_langflow_proxy
+
+ENV LANGFLOW_AUTO_LOGIN="true"
+ENV AUTHENTICATION_DISABLED="true"
+ENV DO_NOT_TRACK="true"
 
 # Patch BASE-HREF in der built index.html
 # RUN sed -i 's|<base href="/" />|<base href="./" />|' \
@@ -29,20 +34,6 @@ RUN pip install langflow jhsingle-native-proxy
 #    -e 's|/health_check|./health_check|g' \
 #{} +
 
-
-ENV LANGFLOW_AUTO_LOGIN="true"
-ENV AUTHENTICATION_DISABLED="true"
-ENV DO_NOT_TRACK="true"
-
-EXPOSE 8888
-
-CMD ["jhsingle-native-proxy", \
-     "--port", "8888", \
-     "--destport", "7860", \
-     "--request-timeout", "600", \
-     "--ready-timeout", "60", \
-     "--", \
-     "python", "-m", "langflow", "run", "--host", "0.0.0.0", "--port", "7860"]
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
