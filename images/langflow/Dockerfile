@@ -35,7 +35,6 @@ ENV DO_NOT_TRACK="true"
 #    -e 's|/health_check|./health_check|g' \
 #{} +
 
-
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
 LABEL ki.fh-swf.de.jupyterhub.description="Langflow JupyterHub"
