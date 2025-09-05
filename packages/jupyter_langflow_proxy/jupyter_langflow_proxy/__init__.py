@@ -26,7 +26,6 @@ def run_langflow():
         if extra_args:
             cmd.extend(resolve_envs(extra_args.split(":")))
 
-        cmd.append(working_dir)
         print("launching langflow server", cmd)
         return cmd
 

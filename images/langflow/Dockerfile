@@ -18,7 +18,7 @@ RUN pip install git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirector
 
 ENV LANGFLOW_AUTO_LOGIN="true"
 ENV AUTHENTICATION_DISABLED="true"
-ENV DO_NOT_TRACK="true"
+ENV DO_NOT_TRACK="false"
 
 # Patch BASE-HREF in der built index.html
 # RUN sed -i 's|<base href="/" />|<base href="./" />|' \
