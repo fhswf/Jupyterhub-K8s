@@ -11,8 +11,6 @@ def resolve_envs(ss:List[str]) -> List[str]:
 
 def run_langflow():
     def _get_langflow_cmd(port):
-        if not shutil.which(executable):
-            raise FileNotFoundError("Can not find code-server in PATH")
             
         # Start vscode in CODE_WORKINGDIR env variable if set
         # If not, start in 'current directory', which is $REPO_DIR in mybinder
@@ -37,7 +35,7 @@ def run_langflow():
         "timeout": 300,
         "new_browser_tab": True,
         "launcher_entry": {
-            "title": "VS Code",
+            "title": "Langflow",
             "icon_path": os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons", "langflow-icon-black-transparent.svg" ),
         }
     }
