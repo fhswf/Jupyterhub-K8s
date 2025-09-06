@@ -28,15 +28,15 @@ ENV DO_NOT_TRACK="false"
 #   /app/.venv/lib/python3.12/site-packages/langflow/frontend/assets/*.js
 
 # 2) Frontend‐Assets patchen:
-#ARG SITE_PACKAGES=.venv/lib/python3.12/site-packages
-#RUN sed -i 's|<base href="/" />|<base href="./" />|' "$SITE_PACKAGES/langflow/frontend/index.html"
-#RUN find "$SITE_PACKAGES/langflow/frontend/assets" -type f -name '*.js' -exec sed -i \
-#    -e 's|http://localhost:[0-9]\+|.|g' \
-#    -e 's|fetch("/|fetch("./|g' \
-#    -e 's|axios\.\(get\|post\)("/|axios.\1("./|g' \
-#    -e 's|/api/|./api/|g' \
-#    -e 's|/health_check|./health_check|g' \
-#{} +
+ARG SITE_PACKAGES=/opt/conda/lib/python3.12/site-packages
+RUN sed -i 's|<base href="/" />|<base href="./" />|' "$SITE_PACKAGES/langflow/frontend/index.html"
+RUN find "$SITE_PACKAGES/langflow/frontend/assets" -type f -name '*.js' -exec sed -i \
+    -e 's|http://localhost:[0-9]\+|.|g' \
+    -e 's|fetch("/|fetch("./|g' \
+    -e 's|axios\.\(get\|post\)("/|axios.\1("./|g' \
+    -e 's|/api/|./api/|g' \
+    -e 's|/health_check|./health_check|g' \
+{} +
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
