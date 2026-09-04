@@ -10,9 +10,14 @@ USER root
 USER $NB_UID
 
 # Install PYthon Libs
-RUN pip install \
-    ipyturtle3 wikipedia-api beautifulsoup4 nose \
-    && rm -rf /tmp/* $HOME/.cache
+RUN python -m pip install --no-cache-dir \
+    ipyturtle3==0.1.4 \
+    jupyturtle \
+    wikipedia-api==0.8.1 \
+    beautifulsoup4==4.12.2 \
+    nose==1.3.7 \
+    geojson \
+    && rm -rf /tmp/* "$HOME/.cache"
 
 LABEL ki.fh-swf.de.jupyterhub.runtime="CPU"
 LABEL ki.fh-swf.de.jupyterhub.namelabel="$BUILD_IMAGE_NAME"
