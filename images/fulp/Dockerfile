@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-4dd0f7a
+ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-b613e07
 FROM $BASE_CONTAINER
 ARG BASE_CONTAINER
 ENV BUILD_IMAGE_NAME fulp
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
 RUN conda install --quiet --yes \
 # ihaskell-widgets needs ipywidgets
 # https://github.com/IHaskell/IHaskell/issues/1380
-    'ipywidgets=7.7.1' && \
+    'ipywidgets=8.1.7' && \
 # ihaskell-hvega doesn't need an extension. https://github.com/jupyterlab/jupyter-renderers
 #    'jupyterlab-vega3' && \
     conda clean --all -f -y && \
@@ -57,8 +57,7 @@ ENV STACK_ROOT=/opt/stack
 RUN mkdir -p $STACK_ROOT
 RUN fix-permissions $STACK_ROOT
 
-# latest stack version as of 2023/05/24
-ARG STACK_VERSION="2.11.1"
+ARG STACK_VERSION="3.5.1"
 ARG STACK_BINDIST="stack-${STACK_VERSION}-linux-x86_64"
 RUN    cd /tmp \
     && curl -sSL --output ${STACK_BINDIST}.tar.gz https://github.com/commercialhaskell/stack/releases/download/v${STACK_VERSION}/${STACK_BINDIST}.tar.gz \
@@ -100,18 +99,18 @@ ENV PATH ${PATH}:/opt/bin
 # The resolver for all stack builds will be chosen from
 # the IHaskell/stack.yaml in this commit.
 # https://github.com/gibiansky/IHaskell/commits/master
-# IHaskell 2022-12-19
-ARG IHASKELL_COMMIT=1c22a874ac0c8ed019229f4a0cd5a0bfda017357
+# IHaskell  2025-05-04
+ARG IHASKELL_COMMIT=08686e821f93fde0bcecf82b9febc4135b22bb8a
 
 
 ## vega
 # Specify a git branch for hvega
 # https://github.com/DougBurke/hvega/commits/main
-# hvega 2022-06-16
-# hvega-0.12.0.3
-# ihaskell-hvega-0.5.0.3
+# hvega 2025-03-12
+# hvega-0.12.0.7
+# ihaskell-hvega-0.5.0.6
 
-ARG HVEGA_COMMIT=2b453c230294b889564339853de02b0c1829a081
+ARG HVEGA_COMMIT=5e18d53b7748dc5e23c6cd6c38dc722f01e2dde6
 
 # Clone IHaskell and install ghc from the IHaskell resolver
 RUN    cd /opt \
@@ -123,8 +122,8 @@ RUN    cd /opt \
     && fix-permissions $STACK_ROOT \
     && fix-permissions /opt/hvega \
     && stack setup \
-    && fix-permissions $STACK_ROOT \
-    && rm /opt/stack/programs/x86_64-linux/ghc*.tar.xz
+    && fix-permissions $STACK_ROOT
+    # && rm /opt/stack/programs/x86_64-linux/ghc*.tar.xz
 
 # Build IHaskell
 #
@@ -136,25 +135,27 @@ RUN    stack build $STACK_ARGS ihaskell \
 
 # Install IHaskell.Display libraries
 # https://github.com/gibiansky/IHaskell/tree/master/ihaskell-display
-#RUN    stack build $STACK_ARGS ihaskell-aeson \
-#    && stack build $STACK_ARGS ihaskell-blaze \
-#    && stack build $STACK_ARGS ihaskell-charts \
-#    && stack build $STACK_ARGS ihaskell-diagrams \
-#    && stack build $STACK_ARGS ihaskell-gnuplot \
-#    && stack build $STACK_ARGS ihaskell-graphviz \
-#    && stack build $STACK_ARGS ihaskell-hatex \
-#    && stack build $STACK_ARGS ihaskell-juicypixels \
-##   && stack build $STACK_ARGS ihaskell-magic \
-#    && stack build $STACK_ARGS ihaskell-plot \
-##   && stack build $STACK_ARGS ihaskell-rlangqq \
-##   && stack build $STACK_ARGS ihaskell-static-canvas \
-#    && stack build $STACK_ARGS ihaskell-widgets \
-#    && stack build $STACK_ARGS hvega \
-#    && stack build $STACK_ARGS ihaskell-hvega \
-#    && fix-permissions $STACK_ROOT \
-## Fix for https://github.com/IHaskell/ihaskell-notebook/issues/14#issuecomment-636334824
-#    && fix-permissions /opt/IHaskell \
-#    && fix-permissions /opt/hvega
+RUN    stack build $STACK_ARGS ihaskell-aeson \
+    && stack build $STACK_ARGS ihaskell-blaze \
+    # && stack build $STACK_ARGS ihaskell-charts \
+    && stack build $STACK_ARGS ihaskell-diagrams \
+    # && stack build $STACK_ARGS ihaskell-gnuplot \
+    # && stack build $STACK_ARGS ihaskell-graphviz \
+    && stack build $STACK_ARGS ihaskell-hatex \
+    && stack build $STACK_ARGS ihaskell-juicypixels \
+#   && stack build $STACK_ARGS ihaskell-magic \
+    # && stack build $STACK_ARGS ihaskell-plot \
+#   && stack build $STACK_ARGS ihaskell-rlangqq \
+#   && stack build $STACK_ARGS ihaskell-static-canvas \
+    && stack build $STACK_ARGS ihaskell-widgets \
+    && stack build $STACK_ARGS hvega \
+    && stack build $STACK_ARGS ihaskell-hvega \
+    && fix-permissions $STACK_ROOT \
+# Fix for https://github.com/IHaskell/ihaskell-notebook/issues/14#issuecomment-636334824
+    && fix-permissions /opt/IHaskell \
+    && fix-permissions /opt/hvega
+
+
 
 # Cleanup
 # Clean of IHaskell/.stack-work  causes https://github.com/IHaskell/ihaskell-notebook/issues/5

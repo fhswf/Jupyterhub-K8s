@@ -1,7 +1,7 @@
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
 
-FROM jupyter/${JUPYTER_VARIANT}-notebook:lab-3.6.3 as nocuda
+FROM quay.io/jupyter/${JUPYTER_VARIANT}-notebook:2025-05-12 as nocuda
 
 ARG JUPYTER_VARIANT
 ARG CUDA_VARIANT
@@ -211,24 +211,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # extra Install TensorRT
-ENV NV_TRT_VERSION 10.3.0
+ENV NV_TRT_VERSION 10.10.0
 # version="10.x.x.x-1+cudax.x"
-ENV NV_TENSOR_RT_TAG 10.3.0.26-1+cuda12.5 
-ENV OS_RELEASE ubuntu2204
+ENV NV_TENSOR_RT_TAG 10.10.0.31-1+cuda12.9
+ENV OS_RELEASE ubuntu2404
 
 # easy repo add
 RUN apt-get update && apt-get install -y software-properties-common 
 
 ## Theese might change unexpectedly
 # developer nvidia repo: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
-RUN mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/cuda-${OS_RELEASE}.pin
+RUN mv cuda-${OS_RELEASE}.pin /etc/apt/preferences.d/cuda-repository-pin-600
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/3bf863cc.pub
 RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-certificates
 RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x536F8F1DE80F6A35' | gpg --import
 RUN curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA4B469963BF863CC' | gpg --import
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
-RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/3bf863cc.pub
+RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/${OS_RELEASE}/x86_64/ /"
 RUN apt-get update
 
 RUN apt-get install -y \
@@ -248,6 +248,8 @@ RUN apt-get install -y \
     libnvinfer10=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers-dev=${NV_TENSOR_RT_TAG} \
     libnvonnxparsers10=${NV_TENSOR_RT_TAG} \
+    libcusparselt0 \
+    libcusparselt-dev \
     python3-libnvinfer-dev=${NV_TENSOR_RT_TAG} \
     python3-libnvinfer-dispatch=${NV_TENSOR_RT_TAG} \
     python3-libnvinfer-lean=${NV_TENSOR_RT_TAG} \
@@ -255,6 +257,9 @@ RUN apt-get install -y \
     tensorrt-dev=${NV_TENSOR_RT_TAG} \
     tensorrt-libs=${NV_TENSOR_RT_TAG} \
     tensorrt=${NV_TENSOR_RT_TAG} \
+    libnvinfer-win-builder-resource10=${NV_TENSOR_RT_TAG} \
+    libnvinfer-headers-python-plugin-dev=${NV_TENSOR_RT_TAG} \
+
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -335,8 +340,9 @@ RUN code-server --extensions-dir ${CODE_BUILTIN_EXTENSIONS_DIR} --install-extens
     && cd /tmp 
 
 RUN pip install \
-    jupyterlab-lsp==4.3.0 \
-    jupyter-server-proxy==4.0.0  \
+    jupyterlab-lsp \
+    jupyter-server-proxy \
+    jupyter-collaboration \
     git+https://github.com/fhswf/Jupyterhub-K8s.git@main#subdirectory=packages/jupyter_vscodeserver_proxy  \
     jedi-language-server \
     nbgitpuller \
@@ -358,6 +364,10 @@ COPY rebind_home.sh /usr/local/bin/before-notebook.d/01_rebind_home.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/01_rebind_home.sh
 COPY setup_env.sh /usr/local/bin/before-notebook.d/10_setup_env.sh  
 RUN  chmod +x /usr/local/bin/before-notebook.d/10_setup_env.sh
+COPY create_idfile.sh /usr/local/bin/before-notebook.d/20_create_idfile.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/20_create_idfile.sh
+COPY link_backup_folders.sh /usr/local/bin/before-notebook.d/30_link_backup_folders.sh
+RUN  chmod +x /usr/local/bin/before-notebook.d/30_link_backup_folders.sh
 COPY clean_runtime.sh /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 RUN  chmod +x /usr/local/bin/before-notebook.d/40_clean_runtime.sh
 COPY launch_services.sh /usr/local/bin/before-notebook.d/60_launch_services.sh
@@ -365,12 +375,14 @@ RUN  chmod +x /usr/local/bin/before-notebook.d/60_launch_services.sh
 # COPY configure_cuda.sh /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 # RUN  chmod +x /usr/local/bin/before-notebook.d/80_configure_cuda.sh
 
+
+
 # git LFS and other extras
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && apt-get install -y --no-install-recommends \
     git-lfs zlib1g-dev git-core bash-completion \
-    libncurses-dev \
+    libncurses-dev pkg-config \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -380,6 +392,31 @@ USER $NB_UID
 RUN pip install bash_kernel \
     && python -m bash_kernel.install --prefix /opt/conda \
     && rm -rf /tmp/* $HOME/.cache
+
+USER root
+RUN  fix-permissions $HOME && fix-permissions $CONDA_DIR && fix-permissions /home/$NB_USER
+ 
+USER $NB_UID
+
+
+# install nose    
+RUN pip install \
+    nose \
+    && rm -rf /tmp/* $HOME/.cache
+
+# # install nbgrader    
+# RUN pip install --no-deps \          
+#     #nbgrader==0.8.5 \ # use fork instead
+#     git+https://github.com/jeflem/nbgrader.git@ananke_0.5 \
+#     # not sure if we need the kore-extension, does not have extra deps?
+#     # git+https://github.com/marcwit/kore-extension.git@ananke_0.5 \
+#     # nbgrader dependencies
+#     rapidfuzz hatchling>=1.10.0 editables pathspec trove-classifiers \
+#     && rm -rf /tmp/* $HOME/.cache
+
+# install nodejs
+RUN . /opt/conda/bin/activate && \
+    mamba install -y -q "nodejs>=22"
 
 ## npm language servers:
 RUN npm install -g --save-dev \
