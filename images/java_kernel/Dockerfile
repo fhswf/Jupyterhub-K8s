@@ -3,7 +3,7 @@ ARG BASE_CONTAINER=ghcr.io/fhswf/jupyterhub-k8s/vscode-minimal-nocuda:sha-f7a5a4
 FROM $BASE_CONTAINER
 
 ARG BASE_CONTAINER
-ENV BUILD_IMAGE_NAME=programmierung
+ENV BUILD_IMAGE_NAME=java_programmierung
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
